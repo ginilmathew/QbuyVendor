@@ -24,7 +24,7 @@ const Profile = ({ navigation }) => {
             console.log("response=>>> ", response.data);
             setProfile(response?.data?.data)
         } catch (error) {
-            console.log("error=>", error)
+            console.log("error<=>", error)
             Toast.show({
                 type: 'error',
                 text1: error

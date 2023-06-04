@@ -64,7 +64,7 @@ const CustomSearch
                     <Ionicons name='search' color='#fff'  size={25}/> 
 
                 </View> */}
-                <CommonSquareButton iconName={'search'}/>
+                <CommonSquareButton onPress={onpress} iconName={'search'}/>
             </View>
             {error && <Text fontFamily={"body"} fontWeight={500} color={"red.500"} fontSize={11}>{error?.message}</Text>}
             </>
