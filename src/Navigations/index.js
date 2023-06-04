@@ -20,14 +20,14 @@ const Stack = createStackNavigator();
 
 const Navigation = () => {
     const [initialScreen, setInitialScreen] = useState(null)
-    useEffect(() => { 
-        checkLogin();   
+    useEffect(() => {
+        checkLogin();
     }, [])
-    const checkLogin = async() => {
+    const checkLogin = async () => {
         // await AsyncStorage.clear()
         const token = await AsyncStorage.getItem("token");
         // reactotron.log({token})
-        if(token){
+        if (token) {
             // const user = await AsyncStorage.getItem("user");
             setInitialScreen('TabNavigator');
             // if(user){
@@ -40,31 +40,28 @@ const Navigation = () => {
             //     setInitialScreen('AppIntro');
             // }
         }
-        else{
+        else {
             setInitialScreen('Login');
         }
     }
-    if(!initialScreen){
-        return(
-            <SplashScreen/>
+    if (!initialScreen) {
+        return (
+            <SplashScreen />
         )
     }
 
 
-	return (
+    return (
         <NavigationContainer ref={navigationRef}>
             <Stack.Navigator initialRouteName={initialScreen} screenOptions={{ headerShown: false }}>
-
                 <Stack.Screen name="SplashScreen" component={SplashScreen} />
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Otp" component={Otp} />
                 <Stack.Screen name="Register" component={Register} />
                 <Stack.Screen name="TabNavigator" component={TabNavigator} />
-
-
             </Stack.Navigator>
         </NavigationContainer>
-	)
+    )
 }
 
 export default Navigation

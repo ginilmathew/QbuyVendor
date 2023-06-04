@@ -13,6 +13,7 @@ import CommonTexts from '../../../Components/CommonTexts';
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import AuthContext from '../../../contexts/Auth';
 import LoaderContext from '../../../contexts/Loader';
+import customAxios from '../../../CustomeAxios';
 
 
 const Login = ({ navigation }) => {
@@ -23,7 +24,7 @@ const Login = ({ navigation }) => {
 	let loader = loadingg?.loading
 
 	let user = loginUser?.login
-	console.log({user})
+	console.log({ user })
 
 
 	const schema = yup.object({
@@ -37,14 +38,18 @@ const Login = ({ navigation }) => {
 
 
 	const register = useCallback(() => {
-        navigation.navigate('Register')
-    }, [])
+		navigation.navigate('Register')
+	}, [])
 
-	const onSubmit = useCallback((data) => {
-        navigation.navigate('Otp')
+	const onSubmit = useCallback(async (data) => {
+		//7952124568
+		const response = await customAxios.post("auth/vendorloginotp", data)
+		console.log("response ", response.data);
+
+		/* navigation.navigate('Otp')
 		// loadingg.setLoading(true)
-		loginUser.setLogin(data)
-    }, [])
+		loginUser.setLogin(data) */
+	}, [])
 
 
 	return (
