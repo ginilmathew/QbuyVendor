@@ -4,6 +4,7 @@ import Navigation from './Navigations'
 import AuthProvider from './contexts/Auth/AuthContext'
 import LoadProvider from './contexts/Loader/loaderContext'
 import { Provider } from 'react-redux'
+import Toast from 'react-native-toast-message';
 import store from './Redux/store'
 
 
@@ -13,6 +14,10 @@ const App = () => {
             <LoadProvider>
                 <AuthProvider>
                     <Navigation />
+                    <Toast
+                        position='bottom'
+                        bottomOffset={20}
+                    />
                 </AuthProvider>
             </LoadProvider>
         </Provider>

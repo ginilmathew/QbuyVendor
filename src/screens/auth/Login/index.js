@@ -3,6 +3,9 @@ import React, { useCallback, useContext } from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import Toast from 'react-native-toast-message'
+import Fontisto from 'react-native-vector-icons/Fontisto'
+
 import CommonAuthBg from '../CommonAuthBg';
 import CommonInput from '../../../Components/CommonInput';
 import CommonAuthHeading from '../CommonAuthHeading';
@@ -10,7 +13,6 @@ import TermsAndPrivacyText from './TermsAndPrivacyText';
 import CustomButton from '../../../Components/CustomButton';
 import HelpAndSupportText from './HelpAndSupportText';
 import CommonTexts from '../../../Components/CommonTexts';
-import Fontisto from 'react-native-vector-icons/Fontisto'
 import AuthContext from '../../../contexts/Auth';
 import LoaderContext from '../../../contexts/Loader';
 import customAxios from '../../../CustomeAxios';
@@ -28,7 +30,7 @@ const Login = ({ navigation }) => {
 
 
 	const schema = yup.object({
-		mobile: yup.string().required('Phone number is required'),
+		mobile: yup.string().required('Phone number is required').min(8).max(10),
 	}).required();
 
 	const { control, handleSubmit, formState: { errors }, setValue } = useForm({
@@ -42,13 +44,27 @@ const Login = ({ navigation }) => {
 	}, [])
 
 	const onSubmit = useCallback(async (data) => {
+		loadingg.setLoading(true)
 		//7952124568
-		const response = await customAxios.post("auth/vendorloginotp", data)
-		console.log("response ", response.data);
-
-		/* navigation.navigate('Otp')
-		// loadingg.setLoading(true)
-		loginUser.setLogin(data) */
+		try {
+			const response = await customAxios.post("auth/vendorloginotp", data)
+			if (response) {
+				loginUser.setLogin(data)
+				navigation.navigate('Otp')
+			}
+			loadingg.setLoading(false)
+		} catch (error) {
+			loadingg.setLoading(false)
+			if (error?.include("Vendor Not Found")) {
+				loginUser.setLogin(data)
+				navigation.navigate('Register')
+			} else {
+				Toast.show({
+					type: 'error',
+					text1: error
+				});
+			}
+		}
 	}, [])
 
 
