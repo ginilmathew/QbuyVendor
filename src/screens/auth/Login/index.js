@@ -54,8 +54,9 @@ const Login = ({ navigation }) => {
 			}
 			loadingg.setLoading(false)
 		} catch (error) {
+			console.log("error", error);
 			loadingg.setLoading(false)
-			if (error?.include("Vendor Not Found")) {
+			if (error?.includes("Vendor Not Found")) {
 				loginUser.setLogin(data)
 				navigation.navigate('Register')
 			} else {
@@ -105,7 +106,7 @@ const Login = ({ navigation }) => {
 				<CustomButton
 					onPress={handleSubmit(onSubmit)}
 					bg='#58D36E'
-					label={'Sign In'}
+					label={'Verify'}
 					mt={20}
 					loading={loader}
 				/>
@@ -114,11 +115,11 @@ const Login = ({ navigation }) => {
 
 				<HelpAndSupportText />
 
-				<Text style={styles.textLight}>{"New to the family?"}</Text>
+				{/* <Text style={styles.textLight}>{"New to the family?"}</Text>
 
 				<TouchableOpacity onPress={register}>
 					<Text style={styles.textRegister}>{"Register Here"}</Text>
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 
 			</ScrollView>
 
