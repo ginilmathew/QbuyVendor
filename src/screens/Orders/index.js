@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native'
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../Components/HeaderWithTitle'
 import CommonOrderCard from './CommonOrderCard'
 import SelectTab from '../../Components/SelectTab'
@@ -8,22 +8,49 @@ import OrderHistoryCard from './OrderHistoryCard'
 import CommonDatePicker from '../../Components/CommonDatePicker'
 import moment from 'moment';
 import OrderHistoryDetailsBox from './OrderHistoryDetailsBox'
+import Toast from 'react-native-toast-message'
+import LoaderContext from '../../contexts/Loader'
+import customAxios from '../../CustomeAxios'
+import isEmpty from 'lodash/isEmpty'
+import has from 'lodash/has'
+
+const filter = [
+    {
+        name: 'All',
+        value: "all"
+    },
+    {
+        name: 'New',
+        value: "new"
+    },
+    {
+        name: 'Preparing',
+        value: "preparing"
+    },
+    {
+        name: 'Ready',
+        value: "ready"
+    },
+    {
+        name: 'Picked Up',
+        value: "pickedup"
+    },
+]
 
 const Orders = ({ navigation, route }) => {
 
     const [currentTab, setCurrentTab] = useState(0)
 
-    const [selected, setSelected] = useState(0)
+    const [selected, setSelected] = useState("all")
 
-    const [date, setDate] = useState(new Date())
+    const [date, setDate] = useState(null)
     const [openCalendar, setOpenCalendar] = useState(false)
+    const [orders, setOrders] = useState([])
+    const [orderHistory, setOrderHistory] = useState({})
 
     const { width, height } = useWindowDimensions()
-
+    const loadingg = useContext(LoaderContext)
     const mode = route?.params?.mode
-
-    console.log({ mode })
-
 
     useEffect(() => {
         if (mode === 'complete') {
@@ -31,112 +58,10 @@ const Orders = ({ navigation, route }) => {
         }
     }, [mode === 'complete'])
 
-    const orders = [
-        {
-            id: '1',
-            customerName: 'Raj',
-            addr: 'Neendakara - Chinnakkada Rd, Kavanad, Kollam, Kerala 691003',
-            name: '#10765',
-            hotel: [
-                {
-                    id: '1',
-                    name: 'Brinjal',
-                    qty: 1,
-                    rate: 120
-                },
-                {
-                    id: '2',
-                    name: 'Tomato',
-                    qty: 1,
-                    rate: 110
-                },
-            ],
-        },
-        {
-            id: '2',
-            name: '#87452',
-            hotel: [
-                {
-                    id: '1',
-                    name: 'Cabbage',
-                    qty: 1,
-                    rate: 150
-                },
-            ],
-        },
-        {
-            id: '3',
-            name: '#87452',
-            hotel: [
-                {
-                    id: '1',
-                    name: 'Cabbage',
-                    qty: 1,
-                    rate: 150
-                },
-            ],
-        },
-        {
-            id: '4',
-            name: '#87452',
-            hotel: [
-                {
-                    id: '1',
-                    name: 'Cabbage',
-                    qty: 1,
-                    rate: 150
-                },
-            ],
-        },
-
-    ]
-
-    let filter = [
-        {
-            name: 'All'
-        },
-        {
-            name: 'New'
-        },
-        {
-            name: 'Preparing'
-        },
-        {
-            name: 'Ready'
-        },
-        {
-            name: 'Picked Up'
-        },
-    ]
-
-    let orderHistory = [
-        {
-            id: '1',
-            date: '22/05/2022',
-            rate: 250
-        },
-        {
-            id: '2',
-            date: '28/03/2022',
-            rate: 125
-        },
-        {
-            id: '3',
-            date: '12/11/2022',
-            rate: 51
-        },
-        {
-            id: '4',
-            date: '02/03/2023',
-            rate: 329
-        },
-        {
-            id: '5',
-            date: '01/02/2023',
-            rate: 297
-        },
-    ]
-
+    useEffect(() => {
+        setOrders([])
+        getOrdersData(selected)
+    }, [selected])
 
     const openDrawer = useCallback(() => {
         navigation.openDrawer()
@@ -165,10 +90,53 @@ const Orders = ({ navigation, route }) => {
         setDate(date)
     }, [])
 
+    const getOrdersData = async (url) => {
+        //loadingg.setLoading(true)
+        try {
+            const response = await customAxios.get(`vendor/orders/${url}`)
+            if (response && has(response, "data.data") && !isEmpty(response.data.data)) {
+                // console.log(response.data);
+                setOrders(response.data.data)
+            }
+            //  loadingg.setLoading(false)
+        } catch (error) {
+            console.log("error", error);
+            // loadingg.setLoading(false)
+            Toast.show({
+                type: 'error',
+                text1: error
+            });
+        }
+    }
+
+    useEffect(() => {
+        setOrderHistory({})
+        getOrdersHistoryData(date)
+    }, [date])
+
+    const getOrdersHistoryData = async (date) => {
+        //loadingg.setLoading(true)
+        try {
+            const response = date ? await customAxios.post(`vendor/orders-history-filter`, { date: moment(date).format("DD-MM-YYYY") }) : await customAxios.get(`vendor/orders-history`)
+            if (response && has(response, "data.data") && !isEmpty(response.data.data)) {
+                // console.log(response.data);
+                setOrderHistory(response.data.data)
+            }
+            //  loadingg.setLoading(false)
+        } catch (error) {
+            console.log("error", error);
+            // loadingg.setLoading(false)
+            Toast.show({
+                type: 'error',
+                text1: error
+            });
+        }
+    }
+
     return (
         <>
             <HeaderWithTitle title={'Orders'} drawerOpen={openDrawer} />
-            <View style={{ backgroundColor: '#F3F3F3', paddingHorizontal: 15, flex:1}}>
+            <View style={{ backgroundColor: '#F3F3F3', paddingHorizontal: 15, flex: 1 }}>
                 <View style={{ marginTop: 15, flexDirection: 'row', justifyContent: 'space-between', }}>
                     <SelectTab
                         label={"New Orders"}
@@ -185,21 +153,23 @@ const Orders = ({ navigation, route }) => {
                         fontSize={16}
                     />
                 </View>
-                <View style={{ backgroundColor: '#00000014', height: 2, marginTop: -1.5,  }} />
+                <View style={{ backgroundColor: '#00000014', height: 2, marginTop: -1.5, }} />
 
                 {currentTab === 0 &&
                     <>
-                        <ScrollView horizontal={true} style={{marginTop:5}}>
-                            {filter?.map((item, index) => (
-                                <FilterBox
-                                    key={index}
-                                    item={item}
-                                    onPress={() => setSelected(item?.name)}
-                                    selected={selected}
-                                />
-                            ))}
-                        </ScrollView>
-                        <ScrollView style={{ paddingTop: 15, marginBottom:80}} showsVerticalScrollIndicator={false}>
+                        <View>
+                            <ScrollView horizontal={true} style={{ marginTop: 5 }}>
+                                {filter?.map((item, index) => (
+                                    <FilterBox
+                                        key={index}
+                                        item={item}
+                                        onPress={() => setSelected(item?.value)}
+                                        selected={selected}
+                                    />
+                                ))}
+                            </ScrollView>
+                        </View>
+                        <ScrollView style={{ paddingTop: 15, marginBottom: 80 }} showsVerticalScrollIndicator={false}>
                             {orders?.map((item) => (
                                 <CommonOrderCard key={item?.id} item={item} />
                             ))}
@@ -212,18 +182,21 @@ const Orders = ({ navigation, route }) => {
                         <CommonDatePicker
                             onPress={calendarOpen}
                             date={date ? date : new Date()}
-                            label={moment(date).format("DD-MM-YYYY")}
+                            label={date ? moment(date).format("DD-MM-YYYY") : null}
                             openCalendar={openCalendar}
                             onConfirm={selectDate}
                             onCancel={calendarClose}
                             mt={15}
+                            clearAction={() => {
+                                selectDate(null)
+                            }}
                         />
-                        <ScrollView style={{ paddingTop: 10, marginBottom:80 }} showsVerticalScrollIndicator={false}>
-                            <OrderHistoryDetailsBox/>
-                            {orderHistory?.map((item) => (
+                        <ScrollView style={{ paddingTop: 10, marginBottom: 80 }} showsVerticalScrollIndicator={false}>
+                            <OrderHistoryDetailsBox data={orderHistory} />
+                            {orderHistory?.orders?.map((item) => (
                                 <OrderHistoryCard item={item} key={item?.id} />
                             ))}
-                            
+
                         </ScrollView>
                     </>
                 }

@@ -9,6 +9,7 @@ import CommonStatusCard from '../../Components/CommonStatusCard';
 import CommonItems from './CommonItems';
 import TableHeading from './TableHeading';
 import TotalBill from './TotalBill';
+import moment from 'moment';
 
 const CommonOrderCard = memo(({ item }) => {
 
@@ -53,7 +54,7 @@ const CommonOrderCard = memo(({ item }) => {
                 return (
 
                     <CustomButton
-                        onPress={() => navigation.navigate('Orders', {mode: 'complete'})}
+                        onPress={() => navigation.navigate('Orders', { mode: 'complete' })}
                         label={'Order Picked up'} bg='#FF7B7B' mx={8}
                     />
 
@@ -91,25 +92,27 @@ const CommonOrderCard = memo(({ item }) => {
                 )
         }
     }
-
+    console.log(JSON.stringify(item));
     return (
         <>
             <View style={{ marginBottom: 20, paddingHorizontal: 1 }}>
-                <Text style={styles.dateText}>{"22/05/2022 10:30am"}</Text>
+                <Text style={styles.dateText}>{moment(item?.created_at).format("DD-MM-YYYY hh:mm A")}</Text>
                 <View key={item?.id} style={styles.container}>
                     <View style={styles.containerHead}>
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={styles.orderIdLabel}>{"Order ID "}</Text>
-                            <Text style={styles.orderId}>{item?.name}</Text>
+                            <Text style={styles.orderId}>{item?.order_id}</Text>
                         </View>
                         {renderStatusLabel(status)}
                     </View>
 
-                    <TableHeading/>
+                    <TableHeading />
 
-                    {item?.hotel?.map((item, index) => (<CommonItems item={item} key={index}/>))}
+                    {item?.product_details?.map((item, index) => (<CommonItems item={item} key={index} />))}
 
-                    <TotalBill total={230}/>
+                    {/*  <TotalBill value={item?.total_amount} label="Item Total" containerStyle={{ marginTop: 0, paddingVertical: 0 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} />
+                    <TotalBill value={item?.delivery_charge} label="Delivery Fee" containerStyle={{ margin: 0, paddingVertical: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} /> */}
+                    <TotalBill value={item?.grand_total} />
 
                     {renderButton(status)}
 
