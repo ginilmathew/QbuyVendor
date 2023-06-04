@@ -1,5 +1,5 @@
 import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, SafeAreaView } from 'react-native'
-import React, { useCallback, useContext, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { BlurView } from "@react-native-community/blur";
 import TotalCard from './TotalCard';
 import CommonTexts from '../../Components/CommonTexts';
@@ -9,14 +9,18 @@ import dark from '../../Images/dark.png'
 import light from '../../Images/light.png'
 import LoaderContext from '../../contexts/Loader';
 import reactotron from '../../ReactotronConfig';
+import Toast from 'react-native-toast-message';
+import { useIsFocused } from '@react-navigation/native';
+import customAxios from '../../CustomeAxios';
 
 
 const Home = ({ navigation, }) => {
 
-    const{height} = useWindowDimensions()
+    const { height } = useWindowDimensions()
 
     const loadingg = useContext(LoaderContext)
 
+    const isFocused = useIsFocused()
 
     const orders = [
         {
@@ -83,33 +87,46 @@ const Home = ({ navigation, }) => {
         },
 
     ]
-
+    const getHomeDetails = async () => {
+        try {
+            const response = await customAxios.get("vendor/home")
+            console.log("response=>>> ", response.data);
+        } catch (error) {
+            console.log("error=>", error)
+            Toast.show({
+                type: 'error',
+                text1: error
+            });
+        }
+    }
 
     const ViewAllOrders = useCallback(() => {
         navigation.navigate('Orders')
     }, [])
-
+    useEffect(() => {
+        getHomeDetails()
+    }, [isFocused])
     return (
         <>
-            <SafeAreaView style={{flex:1, backgroundColor:'#fff'}}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
 
-                <ScrollView 
-                    style={{ backgroundColor: '#fff', paddingHorizontal: 15, }} 
+                <ScrollView
+                    style={{ backgroundColor: '#fff', paddingHorizontal: 15, }}
                     showsVerticalScrollIndicator={false}
                 >
-                    <UserImageName/>
-                    <TotalCard label={'Orders Today'} count={251} bg='#58D36E' bgImg={light}/>
-                    <TotalCard label={'Revenue'} count={'₹ 5250'} bg='#58D39D' bgImg={dark}/>
+                    <UserImageName />
+                    <TotalCard label={'Orders Today'} count={251} bg='#58D36E' bgImg={light} />
+                    <TotalCard label={'Revenue'} count={'₹ 5250'} bg='#58D39D' bgImg={dark} />
                     <View style={styles.newOrders}>
                         <CommonTexts label={'New Orders'} fontSize={18} />
                         <TouchableOpacity onPress={ViewAllOrders}>
                             <Text style={styles.viewAllText}>{"View All >>"}</Text>
                         </TouchableOpacity>
                     </View>
-                    {orders?.map((item)=>(
-                        <CommonOrderCard key={item?.id} item={item}/>
+                    {orders?.map((item) => (
+                        <CommonOrderCard key={item?.id} item={item} />
                     ))}
-                    <View style={{height:80}}/>
+                    <View style={{ height: 80 }} />
                 </ScrollView>
 
             </SafeAreaView>
@@ -136,11 +153,11 @@ const styles = StyleSheet.create({
         fontSize: 11,
     },
 
-    newOrders: { 
-        flexDirection: 'row', 
-        marginTop: 10, 
-        justifyContent: 'space-between', 
+    newOrders: {
+        flexDirection: 'row',
+        marginTop: 10,
+        justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom:10
+        marginBottom: 10
     }
 })
