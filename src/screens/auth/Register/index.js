@@ -28,7 +28,7 @@ const Register = ({ navigation }) => {
 	];
 
 	// console.log({values})
-	
+
 
 
 	const schema = yup.object({
@@ -53,14 +53,14 @@ const Register = ({ navigation }) => {
 	const onSubmit = useCallback((data) => {
 
 		let datas = {
-			storeName : data?.storeName,
-			location : data?.location,
-			ownerName : data?.ownerName,
-			storeCat : data?.storeCategory,
-			lNumber : data?.lNumber
+			storeName: data?.storeName,
+			location: data?.location,
+			ownerName: data?.ownerName,
+			storeCat: data?.storeCategory,
+			lNumber: data?.lNumber
 		}
 
-		console.log({datas})
+		console.log({ datas })
 		navigation.navigate('Login')
 
 	}, [])
@@ -89,12 +89,32 @@ const Register = ({ navigation }) => {
 				<CommonInput
 					leftElement
 					control={control}
-					error={errors.storeName}
-					fieldName="storeName"
+					error={errors.store_name}
+					fieldName="store_name"
 					placeholder='Store Name'
 					inputMode={'numeric'}
 					mt={20}
 					icon={<Image source={require('../../../Images/storeIcon.jpeg')} style={{ width: 25, height: 25 }} resizeMode='contain' />}
+				/>
+				<CommonInput
+					leftElement
+					control={control}
+					error={errors.vendor_name}
+					fieldName="vendor_name"
+					placeholder='Owner Name'
+					inputMode={'numeric'}
+					mt={20}
+					icon={<Ionicons name='person' color='#58D36E' size={25} />}
+				/>
+				<CommonInput
+					leftElement
+					control={control}
+					error={errors.vendor_email}
+					fieldName="vendor_email"
+					placeholder='Owner Name'
+					inputMode={'numeric'}
+					mt={20}
+					icon={<Ionicons name='person' color='#58D36E' size={25} />}
 				/>
 				<CommonInput
 					leftElement
@@ -105,30 +125,20 @@ const Register = ({ navigation }) => {
 					mt={20}
 					icon={<Ionicons name='location' color='#58D36E' size={25} />}
 				/>
-				<CommonInput
-					leftElement
-					control={control}
-					error={errors.ownerName}
-					fieldName="ownerName"
-					placeholder='Owner Name'
-					inputMode={'numeric'}
-					mt={20}
-					icon={<Ionicons name='person' color='#58D36E' size={25} />}
-				/>
-		
+
 				<CommonSelectDropdown
 					data={data}
 					value={values}
 					// setValue={setValues}
 					placeholder='Store Category'
-					leftIcon={<MaterialCommunityIcons name='shape' color='#58D36E' size={22} marginRight={10}  marginLeft={-3}/>}
+					leftIcon={<MaterialCommunityIcons name='shape' color='#58D36E' size={22} marginRight={10} marginLeft={-3} />}
 					mt={7}
 					onChange={item => {
 						setValues(item.label);
-						setValue('storeCategory',item.label)
-                    	setError('storeCategory','')
+						setValue('storeCategory', item.label)
+						setError('storeCategory', '')
 					}}
-					
+
 				/>
 
 				<CommonInput
