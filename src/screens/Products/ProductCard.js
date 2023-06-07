@@ -1,7 +1,7 @@
 import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect, useCallback, memo } from 'react'
 import CommonTexts from '../../Components/CommonTexts'
-import  Toast  from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 import customAxios from '../../CustomeAxios';
 
 const ProductCard = memo(({ item }) => {
@@ -41,9 +41,9 @@ const ProductCard = memo(({ item }) => {
             <View style={{ justifyContent: 'space-between', marginLeft: 10, flex: 1 }}>
                 <View>
                     <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 13, color: isEnabled ? '#23233C' : '#A5A5A5' }}>{item?.name}</Text>
-                    <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 13, color: isEnabled ? '#23233C' : '#A5A5A5' }}>{/* Vegetables */}{item?.category}</Text>
+                    <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 13, color: isEnabled ? '#23233C' : '#A5A5A5' }}>{item?.category?.name}</Text>
                 </View>
-                <Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 14, color: isEnabled ? '#089321' : '#A5A5A5' }} > ₹ {/* 48 */}{item?.regular_price}</Text>
+                <Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 14, color: isEnabled ? '#089321' : '#A5A5A5' }} > ₹ {item?.seller_price}</Text>
             </View>
 
             {item?.status ? <View style={{ justifyContent: 'space-between', alignItems: 'center' }}>

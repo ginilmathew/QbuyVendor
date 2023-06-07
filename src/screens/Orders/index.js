@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native'
+import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../Components/HeaderWithTitle'
 import CommonOrderCard from './CommonOrderCard'
@@ -170,13 +170,14 @@ const Orders = ({ navigation, route }) => {
                             </ScrollView>
                         </View>
                         <ScrollView style={{ paddingTop: 15, marginBottom: 80 }} showsVerticalScrollIndicator={false}>
-                            {orders?.map((item) => (
+                            {orders.length > 0 ? orders?.map((item) => (
                                 <CommonOrderCard key={item?.id} item={item} />
-                            ))}
+                            )) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.5 }}>
+                                <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
+                            </View>}
                         </ScrollView>
                     </>
                 }
-
                 {currentTab === 1 &&
                     <>
                         <CommonDatePicker
@@ -193,10 +194,9 @@ const Orders = ({ navigation, route }) => {
                         />
                         <ScrollView style={{ paddingTop: 10, marginBottom: 80 }} showsVerticalScrollIndicator={false}>
                             <OrderHistoryDetailsBox data={orderHistory} />
-                            {orderHistory?.orders?.map((item) => (
-                                <OrderHistoryCard item={item} key={item?.id} />
-                            ))}
-
+                            {orderHistory?.orders?.length > 0 ? orderHistory?.orders?.map((item) => <OrderHistoryCard item={item} key={item?.id} />) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.4 }}>
+                                <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
+                            </View>}
                         </ScrollView>
                     </>
                 }

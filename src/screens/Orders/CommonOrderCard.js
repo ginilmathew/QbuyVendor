@@ -17,7 +17,6 @@ const CommonOrderCard = memo(({ item }) => {
 
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
-    const [status, setStatus] = useState(1);
 
     const openModal = useCallback(() => {
         setModalVisible(true)
@@ -29,12 +28,11 @@ const CommonOrderCard = memo(({ item }) => {
 
     const onSubmit = useCallback(() => {
         setModalVisible(false)
-        setStatus(2)
     }, [])
 
     const renderButton = (status) => {
         switch (status) {
-            case 1:
+            case "created":
                 return (
                     <CustomButton
                         onPress={openModal}
@@ -46,11 +44,11 @@ const CommonOrderCard = memo(({ item }) => {
                 return (
 
                     <CustomButton
-                        onPress={() => setStatus(3)}
+                        onPress={() => { }}
                         label={'Order Ready'} bg='#C7B63E' mx={8}
                     />
                 )
-            case 3:
+            case "completed":
                 return (
 
                     <CustomButton
@@ -64,7 +62,7 @@ const CommonOrderCard = memo(({ item }) => {
             default:
                 return (
                     <CustomButton
-                        onPress={() => setStatus(2)}
+                        onPress={() => { }}
                         label={'Confirm Restaurant'}
                         bg='#58D36E'
                     />
@@ -74,7 +72,7 @@ const CommonOrderCard = memo(({ item }) => {
 
     const renderStatusLabel = (status) => {
         switch (status) {
-            case 1:
+            case "created":
                 return (
                     null
                 )
@@ -92,7 +90,7 @@ const CommonOrderCard = memo(({ item }) => {
                 )
         }
     }
-    console.log(JSON.stringify(item));
+
     return (
         <>
             <View style={{ marginBottom: 20, paddingHorizontal: 1 }}>
@@ -103,7 +101,7 @@ const CommonOrderCard = memo(({ item }) => {
                             <Text style={styles.orderIdLabel}>{"Order ID "}</Text>
                             <Text style={styles.orderId}>{item?.order_id}</Text>
                         </View>
-                        {renderStatusLabel(status)}
+                        {renderStatusLabel(item?.status)}
                     </View>
 
                     <TableHeading />
@@ -114,7 +112,7 @@ const CommonOrderCard = memo(({ item }) => {
                     <TotalBill value={item?.delivery_charge} label="Delivery Fee" containerStyle={{ margin: 0, paddingVertical: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} /> */}
                     <TotalBill value={item?.grand_total} />
 
-                    {renderButton(status)}
+                    {renderButton(item?.status)}
 
                 </View>
             </View>

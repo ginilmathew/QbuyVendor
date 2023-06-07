@@ -12,6 +12,7 @@ import reactotron from '../../ReactotronConfig';
 import Toast from 'react-native-toast-message';
 import { useIsFocused } from '@react-navigation/native';
 import customAxios from '../../CustomeAxios';
+import has from 'lodash/has';
 
 
 const Home = ({ navigation, }) => {
@@ -21,6 +22,8 @@ const Home = ({ navigation, }) => {
     const loadingg = useContext(LoaderContext)
 
     const isFocused = useIsFocused()
+
+    const [homeData, setHomeData] = useState({})
 
     const orders = [
         {
@@ -90,7 +93,9 @@ const Home = ({ navigation, }) => {
     const getHomeDetails = async () => {
         try {
             const response = await customAxios.get("vendor/home")
-            console.log("response=>>> ", response.data);
+            if (response && has(response, "data.data")) {
+                setHomeData(response.data.data)
+            }
         } catch (error) {
             console.log("error=>", error)
             Toast.show({
@@ -115,17 +120,17 @@ const Home = ({ navigation, }) => {
                     showsVerticalScrollIndicator={false}
                 >
                     <UserImageName />
-                    <TotalCard label={'Orders Today'} count={251} bg='#58D36E' bgImg={light} />
-                    <TotalCard label={'Revenue'} count={'₹ 5250'} bg='#58D39D' bgImg={dark} />
+                    <TotalCard label={'Orders Today'} count={homeData?.total_order || 0} bg='#58D36E' bgImg={light} />
+                    <TotalCard label={'Revenue'} count={`₹ ${homeData?.total_revenue || 0}`} bg='#58D39D' bgImg={dark} />
                     <View style={styles.newOrders}>
                         <CommonTexts label={'New Orders'} fontSize={18} />
                         <TouchableOpacity onPress={ViewAllOrders}>
                             <Text style={styles.viewAllText}>{"View All >>"}</Text>
                         </TouchableOpacity>
                     </View>
-                    {orders?.map((item) => (
-                        <CommonOrderCard key={item?.id} item={item} />
-                    ))}
+                    {homeData?.orders?.length > 0 ? homeData?.orders?.map((item) => <CommonOrderCard key={item?.id} item={item} />) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.4 }}>
+                        <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
+                    </View>}
                     <View style={{ height: 80 }} />
                 </ScrollView>
 

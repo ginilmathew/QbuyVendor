@@ -10,9 +10,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 const App = () => {
-    useEffect(async () => {
-         await AsyncStorage.removeItem("token")
-    }, []) 
+    /*     useEffect(async () => {
+             await AsyncStorage.removeItem("token")
+        }, [])  */
 
     return (
         <Provider store={store}>
