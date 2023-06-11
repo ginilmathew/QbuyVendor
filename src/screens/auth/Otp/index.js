@@ -52,7 +52,7 @@ const Otp = ({ navigation }) => {
 			console.log("response ", response.data);
 			if (response?.data?.access_token) {
 				const { access_token } = response?.data
-				navigation.navigate('TabNavigator')
+				navigation.replace('TabNavigator')
 				await AsyncStorage.setItem("token", access_token);
 				userOtp.getProfileDetails()
 			}

@@ -60,7 +60,7 @@ const Navigation = () => {
 
     return (
         <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator initialRouteName={initialScreen} screenOptions={{ headerShown: false }}>
+            <Stack.Navigator initialRouteName={initialScreen} screenOptions={{ headerShown: false,gestureEnabled:false }}>
                 <Stack.Screen name="SplashScreen" component={SplashScreen} />
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Otp" component={Otp} />

@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react'
 import { Controller } from 'react-hook-form'
 
 
-const CommonInput = ({ placeholder, control, fieldName, error, inputMode, mt, icon, backgroundColor, topLabel, mb, placeholderTextColor, width, fontFamily, top, height, rightIcon }) => {
+const CommonInput = ({ placeholder, control, fieldName, error, inputMode, mt, icon, backgroundColor, topLabel, mb, placeholderTextColor, width, fontFamily, top, height, rightIcon,maxLength=10 }) => {
 
 
     return (
@@ -56,6 +56,7 @@ const CommonInput = ({ placeholder, control, fieldName, error, inputMode, mt, ic
                             color='#23233C'
                             width={ width ? width :'100%'}
                             marginTop={Platform.OS === 'android' ? 5 : 1}
+                            maxLength={maxLength}
                         />
                     )}
                     name={fieldName}

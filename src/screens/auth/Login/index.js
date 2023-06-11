@@ -54,9 +54,9 @@ const Login = ({ navigation }) => {
 			}
 			loadingg.setLoading(false)
 		} catch (error) {
-			console.log("error", error);
+			console.log("error=>", error);
 			loadingg.setLoading(false)
-			if (error?.includes("Vendor Not Found")) {
+			if (!error?.user_exist) {
 				loginUser.setLogin(data)
 				navigation.navigate('Register')
 			} else {
@@ -98,6 +98,7 @@ const Login = ({ navigation }) => {
 					placeholder='Mobile Number'
 					inputMode={'numeric'}
 					mt={20}
+					maxLength={10}
 					icon={<Fontisto name='mobile' color='#58D36E' size={25} />}
 				/>
 
