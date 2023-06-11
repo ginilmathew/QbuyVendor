@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react'
 import { Controller } from 'react-hook-form'
 
 
-const CommonInput = ({ placeholder, control, fieldName, error, inputMode, mt, icon, backgroundColor, topLabel, mb, placeholderTextColor, width, fontFamily, top, height, rightIcon,maxLength=10 }) => {
+const CommonInput = ({ placeholder, control, fieldName, error, inputMode, mt, icon, backgroundColor, topLabel, mb, placeholderTextColor, width, fontFamily, top, height, rightIcon,maxLength=50 }) => {
 
 
     return (
