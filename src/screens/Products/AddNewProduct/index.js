@@ -19,7 +19,7 @@ import LoaderContext from '../../../contexts/Loader';
 const AddNewProduct = ({ navigation }) => {
 
     const { width } = useWindowDimensions()
-    const { vendorCategoryList = [] } = useContext(AuthContext)
+    const { vendorCategoryList = [], userData } = useContext(AuthContext)
     const { setLoading, loading } = useContext(LoaderContext)
 
     const [filePath, setFilePath] = useState(null);
@@ -80,8 +80,8 @@ const AddNewProduct = ({ navigation }) => {
         try {
             let body = new FormData()
             body.append("type", mode)
-            body.append("store", JSON.stringify({ "_id": "646b146b1c9d7d6fac0d9463", "name": "G-Store" }))
-            body.append("franchisee", JSON.stringify({ "_id": "646b12d5adbbc8eaaa0bcd15", "name": "Test Franchise" }))
+            body.append("store", JSON.stringify(userData?.store))
+            body.append("franchisee", JSON.stringify(userData?.franchisee))
             body.append("name", data.name)
             body.append("category", JSON.stringify(data.category))
             body.append("price", data.price)

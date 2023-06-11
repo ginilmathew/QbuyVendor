@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback, memo } from 'react'
 import CommonTexts from '../../Components/CommonTexts'
 import Toast from 'react-native-toast-message';
 import customAxios from '../../CustomeAxios';
+import { IMG_URL } from '../../config/constants';
 
 const ProductCard = memo(({ item }) => {
 
@@ -28,6 +29,7 @@ const ProductCard = memo(({ item }) => {
             });
         }
     }
+    console.log(item);
 
     return (
         <View
@@ -35,7 +37,7 @@ const ProductCard = memo(({ item }) => {
         >
             <Image
                 style={{ width: 70, height: 70, borderRadius: 10, }}
-                source={require('../../Images/tomato.jpeg')}
+                source={{ uri: IMG_URL + item?.product_image }}
 
             />
             <View style={{ justifyContent: 'space-between', marginLeft: 10, flex: 1 }}>

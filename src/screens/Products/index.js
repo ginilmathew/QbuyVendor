@@ -79,11 +79,7 @@ const Products = ({ navigation }) => {
 
     const getProductHistory = async () => {
         try {
-            const response = await customAxios.post("vendor/product/list", {
-                "type": mode,
-                "category_id": "646b13a57d0889e00305c162"
-            })
-
+            const response = await customAxios.post("vendor/product/history-list", { "type": mode })
             if (response && has(response, "data.data")) {
                 setProductHistory(response?.data?.data)
             }
@@ -171,7 +167,7 @@ const Products = ({ navigation }) => {
                         <Text
                             style={{ fontFamily: 'Poppins-LightItalic', fontSize: 11, color: '#23233C', textAlign: 'right', marginRight: 20 }}
                         >{`${filterResult.length} of ${filterResult.length} items`}</Text>
-                        <ScrollView style={{ marginBottom: 80, height: '100%' }}>
+                        <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 80, height: '100%' }}>
                             {filterResult.length > 0 ? filterResult?.map((item, index) => (<ProductCard item={item} key={index} />)) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.40 }}>
                                 <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
                             </View>}
@@ -189,8 +185,8 @@ const Products = ({ navigation }) => {
                             placeholder='Search...'
                             onChangeText={(value) => setHistorySearch(value)}
                         />
-                        <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 11, color: '#23233C', textAlign: 'right', marginRight: 20, marginTop: 10 }}>2 of 2 items</Text>
-                        <ScrollView style={{ marginBottom: 80 }}>
+                        <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 11, color: '#23233C', textAlign: 'right', marginRight: 20, marginTop: 10 }}>{filterHistory().length} of {filterHistory().length} items</Text>
+                        <ScrollView style={{ marginBottom: 80 }} showsVerticalScrollIndicator={false}>
                             {filterHistory().length > 0 ? filterHistory()?.map((item, index) => (<ProductCard item={item} key={index} />)) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.40 }}>
                                 <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
                             </View>}

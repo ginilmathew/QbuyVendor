@@ -22,23 +22,19 @@ const Register = ({ navigation }) => {
 	const [values, setValues] = useState(null);
 
 	const data = [
-		{ label: 'cat1', value: '1' },
-		{ label: 'cat2', value: '2' },
-		{ label: 'cat3', value: '3' },
+		{ label: 'Green', value: 'green' },
+		{ label: 'Fashion', value: 'fashion' },
+		{ label: 'Panda', value: 'panda' },
 	];
 
-	// console.log({values})
-
-
-
 	const schema = yup.object({
+		vendor_name: yup.string().required('Vendor name is required'),
+		vendor_email: yup.string().email().required('Vendor name is required'),
 		storeName: yup.string().required('Store name is required'),
 		location: yup.string().required('Location is required'),
 		ownerName: yup.string().required('Owner name is required'),
 		lNumber: yup.string().required('License number is required'),
 		storeCategory: yup.string().required('Store category is required'),
-
-
 	}).required();
 
 	const { control, handleSubmit, formState: { errors }, setValue, setError } = useForm({
@@ -85,7 +81,26 @@ const Register = ({ navigation }) => {
 					label={'Fill in the required details to register'}
 					mt={2}
 				/>
-
+				<CommonInput
+					leftElement
+					control={control}
+					error={errors.vendor_name}
+					fieldName="vendor_name"
+					placeholder='Vendor Name'
+					inputMode={'numeric'}
+					mt={20}
+					icon={<Ionicons name='person' color='#58D36E' size={25} />}
+				/>
+				<CommonInput
+					leftElement
+					control={control}
+					error={errors.vendor_email}
+					fieldName="vendor_email"
+					placeholder='Vendor Email'
+					inputMode={'email'}
+					mt={20}
+					icon={<Ionicons name='mail' color='#58D36E' size={25} />}
+				/>
 				<CommonInput
 					leftElement
 					control={control}
@@ -99,33 +114,12 @@ const Register = ({ navigation }) => {
 				<CommonInput
 					leftElement
 					control={control}
-					error={errors.vendor_name}
-					fieldName="vendor_name"
-					placeholder='Owner Name'
-					inputMode={'numeric'}
-					mt={20}
-					icon={<Ionicons name='person' color='#58D36E' size={25} />}
-				/>
-				<CommonInput
-					leftElement
-					control={control}
-					error={errors.vendor_email}
-					fieldName="vendor_email"
-					placeholder='Owner Name'
-					inputMode={'numeric'}
-					mt={20}
-					icon={<Ionicons name='person' color='#58D36E' size={25} />}
-				/>
-				<CommonInput
-					leftElement
-					control={control}
 					error={errors.location}
 					fieldName="location"
 					placeholder='Location'
 					mt={20}
 					icon={<Ionicons name='location' color='#58D36E' size={25} />}
 				/>
-
 				<CommonSelectDropdown
 					data={data}
 					value={values}
@@ -138,7 +132,6 @@ const Register = ({ navigation }) => {
 						setValue('storeCategory', item.label)
 						setError('storeCategory', '')
 					}}
-
 				/>
 
 				<CommonInput
@@ -159,13 +152,10 @@ const Register = ({ navigation }) => {
 					mt={30}
 				/>
 
-				<Text style={styles.lightText}>Already part of the Qbuy Panda family?</Text>
-				<TouchableOpacity onPress={onLogin}>
+				{/* <Text style={styles.lightText}>Already part of the Qbuy Panda family?</Text><TouchableOpacity onPress={onLogin}>
 					<Text style={styles.textBold}>{"Login Here"}</Text>
-				</TouchableOpacity>
-
+				</TouchableOpacity>*/}
 			</ScrollView>
-
 		</CommonAuthBg>
 	)
 }
