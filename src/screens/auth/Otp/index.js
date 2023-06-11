@@ -22,7 +22,6 @@ const Otp = ({ navigation }) => {
 
 	let loader = loadingg?.loading
 	let mobileNo = userOtp.login.mobile
-	let token = 'drglisbgifiuefojejoiwe'
 
 	let otpss = userOtp?.otp
 
@@ -55,6 +54,7 @@ const Otp = ({ navigation }) => {
 				const { access_token } = response?.data
 				navigation.navigate('TabNavigator')
 				await AsyncStorage.setItem("token", access_token);
+				userOtp.getProfileDetails()
 			}
 		} catch (error) {
 			console.log("error", error)

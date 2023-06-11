@@ -1,5 +1,5 @@
 import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, Modal, } from 'react-native'
-import React, { useState, memo, useCallback } from 'react'
+import React, { useState, memo, useCallback, useContext, useEffect } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/native';
 import CustomButton from '../../Components/CustomButton';
@@ -10,60 +10,103 @@ import CommonItems from './CommonItems';
 import TableHeading from './TableHeading';
 import TotalBill from './TotalBill';
 import moment from 'moment';
+import LoaderContext from '../../contexts/Loader';
+import customAxios from '../../CustomeAxios';
+import Toast from 'react-native-toast-message'
+import isEmpty from 'lodash/isEmpty'
+import has from 'lodash/has'
 
-const CommonOrderCard = memo(({ item }) => {
+const CommonOrderCard = memo((props) => {
 
+    const { item, onRefresh } = props
     const { width } = useWindowDimensions()
 
     const navigation = useNavigation();
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState({ visible: false });
+    const loadingg = useContext(LoaderContext)
 
-    const openModal = useCallback(() => {
-        setModalVisible(true)
-    }, [])
+    const openModal = (data) => {
+        console.log("data ==>", data);
+        setModalVisible({ visible: true, ...data })
+    }
+
+    useEffect(() => {
+        console.log("modalVisible ==>", modalVisible);
+    }, [modalVisible])
+
 
     const closeModal = useCallback(() => {
-        setModalVisible(false)
+        setModalVisible({ visible: false })
     }, [])
 
-    const onSubmit = useCallback(() => {
-        setModalVisible(false)
+    const onSubmit = useCallback(async () => {
+        loadingg.setLoading(true)
+        console.log({
+            "id": item?._id,
+            "status": modalVisible?.status
+        }, modalVisible);
+        try {
+            /* const response = await customAxios.post(`vendor/order-accept`, {
+                "id": item?._id,
+                "status": modalVisible?.status
+            })
+            if (response && has(response, "data.data") && !isEmpty(response.data.data)) {
+                Toast.show({
+                    text1: response?.data?.message || "Order status changed successfully !!!"
+                });
+            } */
+            onRefresh && onRefresh()
+            loadingg.setLoading(false)
+            // closeModal()
+        } catch (error) {
+            console.log("error", error);
+            loadingg.setLoading(false)
+            Toast.show({
+                type: 'error',
+                text1: error
+            });
+        }
     }, [])
 
     const renderButton = (status) => {
         switch (status) {
             case "created":
-                return (
+                return (<View style={{ flexDirection: "row" }}>
                     <CustomButton
-                        onPress={openModal}
-                        label={'Accept Order'} bg='#576FD0' mx={8}
+                        onPress={() => openModal({ title: "Are you sure you want to accept this order?", bgColor: "#576FD0", status: "pending" })}
+                        label={'Accept Order'} bg='#576FD0' ml={8}
+                        style={{ flex: 1 }}
                     />
-                )
-
-            case 2:
-                return (
-
                     <CustomButton
-                        onPress={() => { }}
-                        label={'Order Ready'} bg='#C7B63E' mx={8}
+                        style={{ flex: 1 }}
+                        onPress={() => openModal({ title: "Are you sure you want to cancel this order?", bgColor: "#FF7B7B", status: "cancelled" })}
+                        label={'Cancel Order'} bg='#FF7B7B' mx={8}
                     />
-                )
+                </View>)
+
+            case "pending":
+                return (<CustomButton
+                    onPress={() => openModal({ title: "Are you sure you want to complete this order?", bgColor: "#58D36E", status: "completed" })}
+                    label={'Complete Order'} bg='#C7B63E' mx={8}
+                />)
+
             case "completed":
-                return (
+                return (<CustomButton
+                    onPress={() => navigation.navigate('Orders', { mode: 'complete' })}
+                    label={'Order Completed'} bg='#58D36E' mx={8}
+                />)
 
-                    <CustomButton
-                        onPress={() => navigation.navigate('Orders', { mode: 'complete' })}
-                        label={'Order Picked up'} bg='#FF7B7B' mx={8}
-                    />
-
-                )
-
+            case "cancelled":
+                return (<CustomButton
+                    onPress={() => navigation.navigate('Orders', { mode: 'complete' })}
+                    label={'Order Cancelled'} bg='#FF7B7B' mx={8}
+                />)
 
             default:
                 return (
                     <CustomButton
                         onPress={() => { }}
-                        label={'Confirm Restaurant'}
+                        label={status}
                         bg='#58D36E'
                     />
                 )
@@ -73,21 +116,15 @@ const CommonOrderCard = memo(({ item }) => {
     const renderStatusLabel = (status) => {
         switch (status) {
             case "created":
-                return (
-                    null
-                )
-            case 2:
-                return (
-                    <CommonStatusCard label={'Preparing'} bg='#BCE4FF' labelColor={'#0098FF'} />
-                )
-            case 3:
-                return (
-                    <CommonStatusCard label={'Ready'} bg='#FFF082' labelColor={'#95840C'} />
-                )
+                return <CommonStatusCard label={status} bg='#BCE4FF' labelColor={'#0098FF'} />
+            case "pending":
+                return <CommonStatusCard label={status} bg='#FFF082' labelColor={'#A99500'} />
+            case "completed":
+                return <CommonStatusCard label={status} bg='#CCF1D3' labelColor={'#58D36E'} />
+            case "cancelled":
+                return <CommonStatusCard label={status} bg='#FFC9C9' labelColor={'#FF7B7B'} />
             default:
-                return (
-                    null
-                )
+                return <CommonStatusCard label={status} bg='#FFF082' labelColor={'#A99500'} />
         }
     }
 
@@ -98,7 +135,7 @@ const CommonOrderCard = memo(({ item }) => {
                 <View key={item?.id} style={styles.container}>
                     <View style={styles.containerHead}>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={styles.orderIdLabel}>{"Order ID "}</Text>
+                            <Text style={styles.orderIdLabel}>{"Order ID :"}</Text>
                             <Text style={styles.orderId}>{item?.order_id}</Text>
                         </View>
                         {renderStatusLabel(item?.status)}
@@ -118,17 +155,19 @@ const CommonOrderCard = memo(({ item }) => {
             </View>
 
             <CommonModal
-                visible={modalVisible}
-                onClose={closeModal}
+                visible={modalVisible?.visible}
+                onClose={() => closeModal()}
             >
                 <Ionicons name={'ios-alert-circle'} size={40} color={'#FF0000'} alignSelf='center' marginTop={-10} />
-                <Text style={styles.lightText}>{'Are you sure you want to accept this order?'}</Text>
+                <Text style={styles.lightText}>{modalVisible?.title || ""}</Text>
                 <CustomButton
                     onPress={onSubmit}
-                    label={'Confirm'} bg='#58D36E'
+                    label={'Confirm'}
+                    bg={modalVisible?.bgColor || '#58D36E'}
                     width={width / 3.5}
                     alignSelf='center'
                     my={10}
+                    loading={loadingg?.loading}
                 />
             </CommonModal>
 

@@ -3,7 +3,7 @@ import React from 'react'
 
 const UserImageName = () => {
     return (
-        <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'flex-end', paddingHorizontal: 15, }}>
             <Image
                 style={styles.imgBox}
                 source={require('../../Images/vegies.png')} alt='img'
@@ -19,11 +19,11 @@ const UserImageName = () => {
 export default UserImageName
 
 const styles = StyleSheet.create({
-    imgBox: { 
-        width: 80, 
-        height: 80, 
-        borderRadius: 12, 
-        marginTop: 15 
+    imgBox: {
+        width: 80,
+        height: 80,
+        borderRadius: 12,
+        marginTop: 15
     },
     textBold: {
         fontFamily: 'Poppins-Bold',

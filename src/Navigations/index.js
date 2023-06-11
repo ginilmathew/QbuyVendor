@@ -11,6 +11,7 @@ import SplashScreen from '../screens/SplashScreen';
 import TabNavigator from './TabNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import reactotron from '../ReactotronConfig';
+import AuthContext from '../contexts/Auth';
 
 
 // import Menu from './Menu';
@@ -19,8 +20,11 @@ import reactotron from '../ReactotronConfig';
 const Stack = createStackNavigator();
 
 const Navigation = () => {
+    const authContext = useContext(AuthContext)
     const [initialScreen, setInitialScreen] = useState(null)
+
     useEffect(() => {
+        authContext.getOrderStatus()
         checkLogin();
     }, [])
     const checkLogin = async () => {
@@ -28,6 +32,9 @@ const Navigation = () => {
         const token = await AsyncStorage.getItem("token");
         // reactotron.log({token})
         if (token) {
+
+            authContext.getProfileDetails()
+            authContext.venderCategories()
             // const user = await AsyncStorage.getItem("user");
             setInitialScreen('TabNavigator');
             // if(user){

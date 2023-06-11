@@ -1,5 +1,5 @@
 import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../Components/HeaderWithTitle'
 import moment from 'moment';
 import CommonDatePicker from '../../Components/CommonDatePicker'
@@ -16,25 +16,21 @@ import { useNavigation } from '@react-navigation/native';
 import customAxios from '../../CustomeAxios';
 import Toast from 'react-native-toast-message';
 import has from 'lodash/has'
+import { mode } from '../../config/constants';
+import AuthContext from '../../contexts/Auth';
 
 const Products = ({ navigation }) => {
-
+    const authContext = useContext(AuthContext)
+    const { vendorCategoryList = [] } = authContext
     const { width, height } = useWindowDimensions()
     const [currentTab, setCurrentTab] = useState(0)
     const [selected, setSelected] = useState({})
 
     const [filterResult, setFilterList] = useState([])
+    const [productHistory, setProductHistory] = useState([])
 
-    const [filterHistoryList, setFilterHistoryList] = useState([])
+    const [historySearch, setHistorySearch] = useState("")
     const [searchTerm, setSearchTerm] = useState("")
-    const [filter, setFilter] = useState([])
-
-
-
-
-    // const navigation = useNavigation()
-
-    // console.log({pendingList})
 
     const schema = yup.object({
         name: yup.string().required('Name is required'),
@@ -44,44 +40,17 @@ const Products = ({ navigation }) => {
         resolver: yupResolver(schema)
     });
 
-    const filterResults = (value) => {
-        // let datas = product?.filter(item => item?.name?.toLowerCase().includes(value.toLowerCase())) 
-        setSearchTerm(value)
-        // setFilterList(datas)
-    }
-
-    const filterHistory = (value) => {
-        let datas = productHistory?.filter(item => item?.name?.toLowerCase().includes(value.toLowerCase()))
-        setFilterHistoryList(datas)
+    const filterHistory = () => {
+        return productHistory?.filter(item => item?.name?.toLowerCase().includes(historySearch.toLowerCase())) || []
     }
     const productSearch = async () => {
         try {
             const response = await customAxios.post("vendor/product/search", {
-                "type": "green",
+                "type": mode,
                 "search": searchTerm
             })
-            console.log("response->", response?.data?.data);
             setFilterList(response?.data?.data)
 
-        } catch (error) {
-            console.log("error", error)
-            Toast.show({
-                type: 'error',
-                text1: error
-            });
-        }
-    }
-    const venderCategories = async () => {
-        try {
-            const response = await customAxios.post("vendor/categories", {
-                "type": "green",
-            })
-            if (response && has(response, "data.data")) {
-                console.log("response<->", response?.data);
-                setFilter(response?.data?.data)
-                setSelected(response?.data?.data[0])
-                productListing(response?.data?.data[0])
-            }
         } catch (error) {
             console.log("error", error)
             Toast.show({
@@ -93,12 +62,30 @@ const Products = ({ navigation }) => {
     const productListing = async (selected) => {
         try {
             const response = await customAxios.post("vendor/product/list", {
-                "type": "green",
+                "type": mode,
                 "category_id": selected?._id
             })
-            console.log("response->", response?.data?.data);
             if (response && has(response, "data.data")) {
                 setFilterList(response?.data?.data)
+            }
+        } catch (error) {
+            console.log("error-", error)
+            Toast.show({
+                type: 'error',
+                text1: error
+            });
+        }
+    }
+
+    const getProductHistory = async () => {
+        try {
+            const response = await customAxios.post("vendor/product/list", {
+                "type": mode,
+                "category_id": "646b13a57d0889e00305c162"
+            })
+
+            if (response && has(response, "data.data")) {
+                setProductHistory(response?.data?.data)
             }
         } catch (error) {
             console.log("error-", error)
@@ -114,39 +101,12 @@ const Products = ({ navigation }) => {
     }
 
     useEffect(() => {
-        // setFilterList(product)
-        setFilterHistoryList(productHistory)
-        venderCategories()
-    }, [/* product, */ productHistory])
+        vendorCategoryList.length > 0 && handleCategory(vendorCategoryList[0])
+    }, [vendorCategoryList])
 
     useEffect(() => {
-        if (searchTerm == "") {
-            // setFilterList(product)
-            venderCategories()
-        }
-    }, [searchTerm])
-
-
-
-
-    let productHistory = [
-        {
-            id: '1',
-            name: 'Tomato (500gm)',
-            date: '22/05/2022',
-            status: 'Pending Approval'
-        },
-        {
-            id: '2',
-            name: 'Potato (1kg)',
-            date: '28/03/2022',
-            status: 'Approved'
-
-        },
-
-
-    ]
-
+        getProductHistory()
+    }, [])
 
     const selectCurrentPdt = useCallback(() => {
         setCurrentTab(0)
@@ -159,9 +119,6 @@ const Products = ({ navigation }) => {
     const addNewProduct = useCallback(() => {
         navigation.navigate('AddNewProduct')
     }, [])
-
-
-
 
     return (
         <>
@@ -194,7 +151,7 @@ const Products = ({ navigation }) => {
                             error={errors.name}
                             fieldName="name"
                             placeholder='Search...'
-                            onChangeText={(value) => filterResults(value)}
+                            onChangeText={(value) => setSearchTerm(value)}
                             onpress={() => productSearch()}
                         />
                         <ScrollView
@@ -202,7 +159,7 @@ const Products = ({ navigation }) => {
                             style={{ marginTop: 15, backgroundColor: '#F7F7F7', paddingLeft: 10, height: 80, }}
                             showsHorizontalScrollIndicator={false}
                         >
-                            {filter?.map((item, index) => (
+                            {vendorCategoryList?.map((item, index) => (
                                 <FilterBox
                                     key={index}
                                     item={{ ...item, value: item?._id }}
@@ -219,7 +176,7 @@ const Products = ({ navigation }) => {
                                 <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
                             </View>}
                         </ScrollView>
-                        <CommonSquareButton onPress={addNewProduct} position={'absolute'} bottom={100} right={25} iconName={'add'} />
+                        {mode == "green" && <CommonSquareButton onPress={addNewProduct} position={'absolute'} bottom={100} right={25} iconName={'add'} />}
                     </>
                 }
                 {currentTab === 1 &&
@@ -230,11 +187,13 @@ const Products = ({ navigation }) => {
                             error={errors.name}
                             fieldName="name"
                             placeholder='Search...'
-                            onChangeText={(value) => filterHistory(value)}
+                            onChangeText={(value) => setHistorySearch(value)}
                         />
                         <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 11, color: '#23233C', textAlign: 'right', marginRight: 20, marginTop: 10 }}>2 of 2 items</Text>
                         <ScrollView style={{ marginBottom: 80 }}>
-                            {filterHistoryList?.map((item, index) => (<ProductCard item={item} key={index} />))}
+                            {filterHistory().length > 0 ? filterHistory()?.map((item, index) => (<ProductCard item={item} key={index} />)) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.40 }}>
+                                <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
+                            </View>}
 
                         </ScrollView>
                     </>

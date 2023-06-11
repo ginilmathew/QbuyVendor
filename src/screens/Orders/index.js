@@ -95,9 +95,12 @@ const Orders = ({ navigation, route }) => {
         try {
             const response = await customAxios.get(`vendor/orders/${url}`)
             if (response && has(response, "data.data") && !isEmpty(response.data.data)) {
-                // console.log(response.data);
+                console.log(response.data);
                 setOrders(response.data.data)
+            } else {
+                setOrders([])
             }
+            console.log("response", response?.data);
             //  loadingg.setLoading(false)
         } catch (error) {
             console.log("error", error);
@@ -171,7 +174,7 @@ const Orders = ({ navigation, route }) => {
                         </View>
                         <ScrollView style={{ paddingTop: 15, marginBottom: 80 }} showsVerticalScrollIndicator={false}>
                             {orders.length > 0 ? orders?.map((item) => (
-                                <CommonOrderCard key={item?.id} item={item} />
+                                <CommonOrderCard key={item?.id} item={item} onRefresh={() => getOrdersData(selected)} />
                             )) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.5 }}>
                                 <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
                             </View>}

@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, SafeAreaView } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, SafeAreaView, RefreshControl } from 'react-native'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { BlurView } from "@react-native-community/blur";
 import TotalCard from './TotalCard';
@@ -24,79 +24,17 @@ const Home = ({ navigation, }) => {
     const isFocused = useIsFocused()
 
     const [homeData, setHomeData] = useState({})
+    const [refreshing, setRefreshing] = useState(false)
 
-    const orders = [
-        {
-            id: '1',
-            customerName: 'Raj',
-            addr: 'Neendakara - Chinnakkada Rd, Kavanad, Kollam, Kerala 691003',
-            name: '#10765',
-            hotel: [
-                {
-                    id: '1',
-                    name: 'Brinjal',
-                    qty: 1,
-                    rate: 120
-                },
-                {
-                    id: '2',
-                    name: 'Tomato',
-                    qty: 1,
-                    rate: 110
-
-                },
-
-
-            ],
-        },
-        {
-            id: '2',
-            name: '#87452',
-            hotel: [
-                {
-                    id: '1',
-                    name: 'Cabbage',
-                    qty: 1,
-                    rate: 150
-
-                },
-            ],
-        },
-        {
-            id: '3',
-            name: '#87452',
-            hotel: [
-                {
-                    id: '1',
-                    name: 'Cabbage',
-                    qty: 1,
-                    rate: 150
-
-                },
-            ],
-        },
-        {
-            id: '4',
-            name: '#87452',
-            hotel: [
-                {
-                    id: '1',
-                    name: 'Cabbage',
-                    qty: 1,
-                    rate: 150
-
-                },
-            ],
-        },
-
-    ]
     const getHomeDetails = async () => {
         try {
             const response = await customAxios.get("vendor/home")
             if (response && has(response, "data.data")) {
                 setHomeData(response.data.data)
             }
+            setRefreshing(false)
         } catch (error) {
+            setRefreshing(false)
             console.log("error=>", error)
             Toast.show({
                 type: 'error',
@@ -108,18 +46,25 @@ const Home = ({ navigation, }) => {
     const ViewAllOrders = useCallback(() => {
         navigation.navigate('Orders')
     }, [])
+
     useEffect(() => {
         getHomeDetails()
     }, [isFocused])
+
     return (
         <>
             <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-
+                <UserImageName />
                 <ScrollView
                     style={{ backgroundColor: '#fff', paddingHorizontal: 15, }}
                     showsVerticalScrollIndicator={false}
+                    refreshControl={<RefreshControl refreshing={refreshing}
+                        onRefresh={() => {
+                            setRefreshing(true)
+                            getHomeDetails()
+                        }}
+                    />}
                 >
-                    <UserImageName />
                     <TotalCard label={'Orders Today'} count={homeData?.total_order || 0} bg='#58D36E' bgImg={light} />
                     <TotalCard label={'Revenue'} count={`₹ ${homeData?.total_revenue || 0}`} bg='#58D39D' bgImg={dark} />
                     <View style={styles.newOrders}>
