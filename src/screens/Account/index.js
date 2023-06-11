@@ -10,56 +10,6 @@ import customAxios from '../../CustomeAxios';
 import Toast from 'react-native-toast-message';
 import has from 'lodash/has'
 import isEmpty from 'lodash/isEmpty'
-const accountDataList={
-    "total_earnings": 200,
-    "settlement_list": [
-        {
-            "_id": "64537b1d4c28c40f10098142",
-            "vendor_settlement_id": 1,
-            "vendor_id": "646228ab4bf5fe2e320c3624",
-            "transaction_date": "2023-05-04",
-            "amount": "100",
-            "payment_mode": "UPI",
-            "transaction_id": "4412345",
-            "updated_at": "2023-05-04T09:30:05.447000Z",
-            "created_at": "2023-05-04T09:30:05.447000Z"
-        },
-        {
-            "_id": "64537b1d4c28c40f10098143",
-            "vendor_settlement_id": 1,
-            "vendor_id": "646228ab4bf5fe2e320c3624",
-            "transaction_date": "2023-05-04",
-            "amount": "1004",
-            "payment_mode": "UPI",
-            "transaction_id": "4412345",
-            "updated_at": "2023-05-04T09:30:05.447000Z",
-            "created_at": "2023-05-04T09:30:05.447000Z"
-        },
-        {
-            "_id": "64537b1d4c28c40f10098144",
-            "vendor_settlement_id": 1,
-            "vendor_id": "646228ab4bf5fe2e320c3624",
-            "transaction_date": "2023-05-04",
-            "amount": "1005",
-            "payment_mode": "UPI",
-            "transaction_id": "4412345",
-            "updated_at": "2023-05-04T09:30:05.447000Z",
-            "created_at": "2023-05-04T09:30:05.447000Z"
-        },
-        {
-            "_id": "64537b1d4c28c40f10098145",
-            "vendor_settlement_id": 1,
-            "vendor_id": "646228ab4bf5fe2e320c3624",
-            "transaction_date": "2023-05-04",
-            "amount": "1009",
-            "payment_mode": "UPI",
-            "transaction_id": "4412345",
-            "updated_at": "2023-05-04T09:30:05.447000Z",
-            "created_at": "2023-05-04T09:30:05.447000Z"
-        }
-    ],
-    "total_outstanding": 100
-}
 
 const Account = ({ navigation }) => {
 
@@ -98,9 +48,7 @@ const Account = ({ navigation }) => {
         try {
             const response = date ? await customAxios.post(`vendor/accounts-filter`, { date: moment(date).format("DD-MM-YYYY") }) : await customAxios.get(`vendor/accounts`)
             if (response && has(response, "data.data") && !isEmpty(response.data.data)) {
-                // console.log(response.data);
-                // setAccountData(response.data.data)
-                setAccountData(accountDataList)
+                setAccountData(response.data.data)
             }
             //  loadingg.setLoading(false)
         } catch (error) {
