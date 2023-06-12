@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, Platform, } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, Platform, Alert, } from 'react-native'
 import React, { useCallback, useContext } from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,8 +15,8 @@ import customAxios from '../../../CustomeAxios';
 import Toast from 'react-native-toast-message';
 
 
-const Otp = ({ navigation }) => {
-
+const Otp = ({ navigation ,route}) => {
+const {type}=route?.params ||{}
 	const userOtp = useContext(AuthContext)
 	const loadingg = useContext(LoaderContext)
 
@@ -48,14 +48,26 @@ const Otp = ({ navigation }) => {
 		// userOtp.setOtp(data)
 		// await AsyncStorage.setItem("token", token);
 		try {
-			const response = await customAxios.post("auth/vendorlogin", { ...data, mobile: mobileNo })
+			const response = await customAxios.post(type?"auth/vendorregisterotp":"auth/vendorlogin", { ...data, mobile: mobileNo })
 			console.log("response ", response.data);
-			if (response?.data?.access_token) {
+			if(type){
+				Alert.alert("Message",response?.data?.message,[
+					{
+						text: 'Ok',
+						onPress: () => navigation.replace('Login'),
+						// style: 'cancel',
+					},
+				])
+				
+			}else{
+				if (response?.data?.access_token) {
 				const { access_token } = response?.data
 				navigation.replace('TabNavigator')
 				await AsyncStorage.setItem("token", access_token);
 				userOtp.getProfileDetails()
 			}
+			}
+			
 		} catch (error) {
 			console.log("error", error)
 			Toast.show({

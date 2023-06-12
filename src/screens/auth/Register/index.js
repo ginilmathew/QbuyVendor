@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Alert, } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -15,12 +15,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CommonPicker from '../../../Components/CommonPicker';
 import CommonSelectDropdown from '../../../Components/CommonSelectDropdown';
 import SelectTab from '../../../Components/SelectTab';
+import customAxios from '../../../CustomeAxios';
+import AuthContext from '../../../contexts/Auth';
 
 
 const Register = ({ navigation }) => {
 
 	const [values, setValues] = useState(null);
-
+	const {vendorCategoryList,login} = useContext(AuthContext)
 	const data = [
 		{ label: 'Green', value: 'green' },
 		{ label: 'Fashion', value: 'fashion' },
@@ -30,11 +32,14 @@ const Register = ({ navigation }) => {
 	const schema = yup.object({
 		vendor_name: yup.string().required('Vendor name is required'),
 		vendor_email: yup.string().email().required('Vendor name is required'),
-		storeName: yup.string().required('Store name is required'),
+		store_name: yup.string().required('Store name is required'),
 		location: yup.string().required('Location is required'),
-		ownerName: yup.string().required('Owner name is required'),
-		lNumber: yup.string().required('License number is required'),
-		storeCategory: yup.string().required('Store category is required'),
+		license_number: yup.string().required('License number is required'),
+		category_id: yup.object({
+            _id: yup.string().required("Category is required"),
+            name: yup.string().required("Category is required")
+        }),
+		type:yup.string().required('Store category is required')
 	}).required();
 
 	const { control, handleSubmit, formState: { errors }, setValue, setError } = useForm({
@@ -46,19 +51,26 @@ const Register = ({ navigation }) => {
 		navigation.navigate('Login')
 	}, [])
 
-	const onSubmit = useCallback((data) => {
+	const onSubmit = useCallback(async (data) => {
+		console.log("data", data);
+		try {
+			 const response = await customAxios.post(`auth/vendorregister`, {
+				"vendor_name": data?.vendor_name,
+				"vendor_email": data?.vendor_email,
+				"vendor_mobile": login?.mobile,
+				"store_name": data?.store_name,
+				"location": data?.location,
+				"category_id": data?.category_id,
+				"kyc_details": {"license_number": data?.license_number},
+				"type":data?.type
+			}) 
+			if(response?.status){
+				navigation.replace('Otp',{type:data?.type})
+			}
+		} catch (error) {
+			console.log("error", error);
 
-		let datas = {
-			storeName: data?.storeName,
-			location: data?.location,
-			ownerName: data?.ownerName,
-			storeCat: data?.storeCategory,
-			lNumber: data?.lNumber
 		}
-
-		console.log({ datas })
-		navigation.navigate('Login')
-
 	}, [])
 
 
@@ -128,17 +140,27 @@ const Register = ({ navigation }) => {
 					leftIcon={<MaterialCommunityIcons name='shape' color='#58D36E' size={22} marginRight={10} marginLeft={-3} />}
 					mt={7}
 					onChange={item => {
-						setValues(item.label);
-						setValue('storeCategory', item.label)
-						setError('storeCategory', '')
+						setValue('type', item?.value)
 					}}
 				/>
-
+				<CommonSelectDropdown
+					data={vendorCategoryList}
+					placeholder='Category'
+					mt={7}
+					leftIcon={<MaterialCommunityIcons name='shape' color='#58D36E' size={22} marginRight={10} marginLeft={-3} />}
+					labelField="name"
+					valueField="_id"
+					onChange={value => {
+						console.log(value);
+						delete value?._index
+						setValue("category_id", { _id: value._id, name: value?.name })
+					}}
+				/>
 				<CommonInput
 					leftElement
 					control={control}
 					error={errors.lNumber}
-					fieldName="lNumber"
+					fieldName="license_number"
 					placeholder='License Number'
 					inputMode={'numeric'}
 					mt={20}
@@ -146,7 +168,7 @@ const Register = ({ navigation }) => {
 				/>
 
 				<CustomButton
-					onPress={handleSubmit(onSubmit)}
+					onPress={handleSubmit(onSubmit, err => console.log(err))}
 					bg='#58D36E'
 					label={'Register'}
 					mt={30}

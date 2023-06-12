@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import Toast from 'react-native-toast-message'
 import Fontisto from 'react-native-vector-icons/Fontisto'
+import DeviceInfo from 'react-native-device-info';
 
 import CommonAuthBg from '../CommonAuthBg';
 import CommonInput from '../../../Components/CommonInput';
@@ -23,7 +24,8 @@ const Login = ({ navigation }) => {
 
 	const loginUser = useContext(AuthContext)
 	const loadingg = useContext(LoaderContext)
-
+	let bundleId = DeviceInfo.getBundleId();
+	console.log("bundleId",bundleId);
 	let loader = loadingg?.loading
 
 	let user = loginUser?.login

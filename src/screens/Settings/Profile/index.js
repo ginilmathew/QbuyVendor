@@ -10,7 +10,6 @@ const Profile = ({ navigation }) => {
 
     const { width } = useWindowDimensions()
     const { userData } = useContext(AuthContext)
-
     return (
         <>
             <HeaderWithTitle title={'Profile'} backAction />

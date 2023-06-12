@@ -79,7 +79,7 @@ const AddNewProduct = ({ navigation }) => {
         setLoading(true)
         try {
             let body = new FormData()
-            body.append("type", mode)
+            body.append("type", userData?.type)
             body.append("store", JSON.stringify(userData?.store))
             body.append("franchisee", JSON.stringify(userData?.franchisee))
             body.append("name", data.name)

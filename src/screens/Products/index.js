@@ -21,7 +21,8 @@ import AuthContext from '../../contexts/Auth';
 
 const Products = ({ navigation }) => {
     const authContext = useContext(AuthContext)
-    const { vendorCategoryList = [] } = authContext
+    const { vendorCategoryList = [] ,userData} = authContext
+
     const { width, height } = useWindowDimensions()
     const [currentTab, setCurrentTab] = useState(0)
     const [selected, setSelected] = useState({})
@@ -47,7 +48,7 @@ const Products = ({ navigation }) => {
     const productSearch = async () => {
         try {
             const response = await customAxios.post("vendor/product/search", {
-                "type": mode,
+                "type": userData?.type,
                 "search": searchTerm
             })
             setFilterList(response?.data?.data)
@@ -63,7 +64,7 @@ const Products = ({ navigation }) => {
     const productListing = async (selected) => {
         try {
             const response = await customAxios.post("vendor/product/list", {
-                "type": mode,
+                "type": userData?.type,
                 "category_id": selected?._id
             })
             if (response && has(response, "data.data")) {
@@ -82,7 +83,7 @@ const Products = ({ navigation }) => {
 
     const getProductHistory = async () => {
         try {
-            const response = await customAxios.post("vendor/product/history-list", { "type": mode })
+            const response = await customAxios.post("vendor/product/history-list", { "type": userData?.type })
             if (response && has(response, "data.data")) {
                 setProductHistory(response?.data?.data)
             }
@@ -184,7 +185,7 @@ const Products = ({ navigation }) => {
                                 <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
                             </View>}
                         </ScrollView>
-                        {mode == "green" && <CommonSquareButton onPress={addNewProduct} position={'absolute'} bottom={100} right={25} iconName={'add'} />}
+                        {userData?.type == "green" && <CommonSquareButton onPress={addNewProduct} position={'absolute'} bottom={100} right={25} iconName={'add'} />}
                     </>
                 }
                 {currentTab === 1 &&

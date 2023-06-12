@@ -27,6 +27,7 @@
     "react-native": "0.71.4",
     "react-native-calendar-range-picker": "^1.5.3",
     "react-native-date-picker": "^4.2.9",
+    "react-native-device-info": "^10.6.0",
     "react-native-element-dropdown": "^2.9.0",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-image-picker": "^5.3.1",

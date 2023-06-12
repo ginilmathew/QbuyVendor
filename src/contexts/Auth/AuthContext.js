@@ -42,7 +42,7 @@ const AuthProvider = (props) => {
     const venderCategories = async () => {
         try {
             const response = await customAxios.post("vendor/categories", {
-                "type": mode,
+                "type": userData?.type,
             })
             if (response && has(response, "data.data")) {
                 setVendorCategoryList(response?.data?.data)
