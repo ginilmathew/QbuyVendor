@@ -73,7 +73,7 @@ const Home = ({ navigation, }) => {
                             <Text style={styles.viewAllText}>{"View All >>"}</Text>
                         </TouchableOpacity>
                     </View>
-                    {homeData?.orders?.length > 0 ? homeData?.orders?.map((item) => <CommonOrderCard key={item?.id} item={item} />) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.4 }}>
+                    {homeData?.orders?.length > 0 ? homeData?.orders?.map((item) => <CommonOrderCard onRefresh={() => getHomeDetails()} key={item?.id} item={item} />) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.4 }}>
                         <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
                     </View>}
                     <View style={{ height: 80 }} />

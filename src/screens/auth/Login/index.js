@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Platform, } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Platform, Alert, } from 'react-native'
 import React, { useCallback, useContext } from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -58,8 +58,22 @@ const Login = ({ navigation }) => {
 			console.log("error=>", error);
 			loadingg.setLoading(false)
 			if (!error?.user_exist) {
-				loginUser.setLogin(data)
-				navigation.navigate('Register')
+				Alert.alert("Vendor not found",
+					`Vendor for QBUY ${mode} not found, Do you want to create new one?`,
+					[
+						{
+							text: 'Cancel',
+							onPress: () => console.log('Cancel Pressed'),
+							style: 'cancel',
+						},
+						{
+							text: 'Register', onPress: () => {
+								loginUser.setLogin(data)
+								navigation.navigate('Register')
+							}
+						},
+					]
+				)
 			} else {
 				Toast.show({
 					type: 'error',

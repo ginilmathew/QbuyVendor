@@ -26,27 +26,17 @@ const CommonOrderCard = memo((props) => {
     const loadingg = useContext(LoaderContext)
 
     const openModal = (data) => {
-        console.log("data ==>", data);
         setModalVisible({ visible: true, ...data })
     }
-
-    useEffect(() => {
-        console.log("modalVisible ==>", modalVisible);
-    }, [modalVisible])
-
 
     const closeModal = useCallback(() => {
         setModalVisible({ visible: false })
     }, [])
 
-    const onSubmit = useCallback(async () => {
+    const onSubmit = async () => {
         loadingg.setLoading(true)
-        console.log({
-            "id": item?._id,
-            "status": modalVisible?.status
-        }, modalVisible);
         try {
-            /* const response = await customAxios.post(`vendor/order-accept`, {
+            const response = await customAxios.post(`vendor/order-accept`, {
                 "id": item?._id,
                 "status": modalVisible?.status
             })
@@ -54,10 +44,10 @@ const CommonOrderCard = memo((props) => {
                 Toast.show({
                     text1: response?.data?.message || "Order status changed successfully !!!"
                 });
-            } */
+            }
             onRefresh && onRefresh()
             loadingg.setLoading(false)
-            // closeModal()
+            closeModal()
         } catch (error) {
             console.log("error", error);
             loadingg.setLoading(false)
@@ -66,7 +56,7 @@ const CommonOrderCard = memo((props) => {
                 text1: error
             });
         }
-    }, [])
+    }
 
     const renderButton = (status) => {
         switch (status) {

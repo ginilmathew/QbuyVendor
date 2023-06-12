@@ -29,12 +29,12 @@ const Navigation = () => {
     }, [])
     const checkLogin = async () => {
         // await AsyncStorage.clear()
+        authContext.venderCategories()
         const token = await AsyncStorage.getItem("token");
         // reactotron.log({token})
         if (token) {
 
             authContext.getProfileDetails()
-            authContext.venderCategories()
             // const user = await AsyncStorage.getItem("user");
             setInitialScreen('TabNavigator');
             // if(user){
@@ -60,7 +60,7 @@ const Navigation = () => {
 
     return (
         <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator initialRouteName={initialScreen} screenOptions={{ headerShown: false,gestureEnabled:false }}>
+            <Stack.Navigator initialRouteName={initialScreen} screenOptions={{ headerShown: false, gestureEnabled: false }}>
                 <Stack.Screen name="SplashScreen" component={SplashScreen} />
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Otp" component={Otp} />
