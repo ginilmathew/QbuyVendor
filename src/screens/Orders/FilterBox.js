@@ -1,9 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 
 const FilterBox = ({ item, selected, onPress }) => {
     return (
-        <TouchableOpacity
+        <Pressable
             onPress={onPress}
             style={{
                 marginRight: 10,
@@ -26,7 +26,7 @@ const FilterBox = ({ item, selected, onPress }) => {
                     paddingHorizontal: 15
                 }}
             >{item?.name}</Text>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 

@@ -1,4 +1,4 @@
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native'
+import { Dimensions, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../Components/HeaderWithTitle'
 import CommonOrderCard from './CommonOrderCard'
@@ -47,6 +47,8 @@ const Orders = ({ navigation, route }) => {
     const [openCalendar, setOpenCalendar] = useState(false)
     const [orders, setOrders] = useState([])
     const [orderHistory, setOrderHistory] = useState({})
+    const [refreshing, setRefreshing] = useState(false)
+    const [refreshingHistory, setRefreshingHistory] = useState(false)
 
     const { width, height } = useWindowDimensions()
     const loadingg = useContext(LoaderContext)
@@ -100,9 +102,9 @@ const Orders = ({ navigation, route }) => {
             } else {
                 setOrders([])
             }
-            console.log("response", response?.data);
-            //  loadingg.setLoading(false)
+            setRefreshing(false)
         } catch (error) {
+            setRefreshing(false)
             console.log("error", error);
             // loadingg.setLoading(false)
             Toast.show({
@@ -126,9 +128,11 @@ const Orders = ({ navigation, route }) => {
                 setOrderHistory(response.data.data)
             }
             //  loadingg.setLoading(false)
+            setRefreshingHistory(false)
         } catch (error) {
             console.log("error", error);
             // loadingg.setLoading(false)
+            setRefreshingHistory(false)
             Toast.show({
                 type: 'error',
                 text1: error
@@ -161,7 +165,7 @@ const Orders = ({ navigation, route }) => {
                 {currentTab === 0 &&
                     <>
                         <View>
-                            <ScrollView horizontal={true} style={{ marginTop: 5 }}>
+                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ marginTop: 5 }}>
                                 {filter?.map((item, index) => (
                                     <FilterBox
                                         key={index}
@@ -172,7 +176,13 @@ const Orders = ({ navigation, route }) => {
                                 ))}
                             </ScrollView>
                         </View>
-                        <ScrollView style={{ paddingTop: 15, marginBottom: 80 }} showsVerticalScrollIndicator={false}>
+                        <ScrollView
+                            refreshControl={<RefreshControl refreshing={refreshing}
+                                onRefresh={() => {
+                                    setRefreshing(true)
+                                    getOrdersData(selected)
+                                }}
+                            />} style={{ paddingTop: 15, marginBottom: 80 }} showsVerticalScrollIndicator={false}>
                             {orders.length > 0 ? orders?.map((item) => (
                                 <CommonOrderCard key={item?.id} item={item} onRefresh={() => getOrdersData(selected)} />
                             )) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.5 }}>
@@ -195,7 +205,15 @@ const Orders = ({ navigation, route }) => {
                                 selectDate(null)
                             }}
                         />
-                        <ScrollView style={{ paddingTop: 10, marginBottom: 80 }} showsVerticalScrollIndicator={false}>
+                        <ScrollView
+                            refreshControl={<RefreshControl refreshing={refreshingHistory}
+                                onRefresh={() => {
+                                    setRefreshingHistory(true)
+                                    setOrderHistory({})
+                                    getOrdersHistoryData(date)
+                                }}
+                            />}
+                            style={{ paddingTop: 10, marginBottom: 80 }} showsVerticalScrollIndicator={false}>
                             <OrderHistoryDetailsBox data={orderHistory} />
                             {orderHistory?.orders?.length > 0 ? orderHistory?.orders?.map((item) => <OrderHistoryCard item={item} key={item?.id} />) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.4 }}>
                                 <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
@@ -203,7 +221,7 @@ const Orders = ({ navigation, route }) => {
                         </ScrollView>
                     </>
                 }
-            </View>
+            </View >
         </>
     )
 }

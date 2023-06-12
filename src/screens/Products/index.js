@@ -1,4 +1,4 @@
-import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, RefreshControl } from 'react-native'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../Components/HeaderWithTitle'
 import moment from 'moment';
@@ -28,7 +28,8 @@ const Products = ({ navigation }) => {
 
     const [filterResult, setFilterList] = useState([])
     const [productHistory, setProductHistory] = useState([])
-
+    const [refreshing, setRefreshing] = useState(false)
+    const [refreshingHistory, setRefreshingHistory] = useState(false)
     const [historySearch, setHistorySearch] = useState("")
     const [searchTerm, setSearchTerm] = useState("")
 
@@ -68,7 +69,9 @@ const Products = ({ navigation }) => {
             if (response && has(response, "data.data")) {
                 setFilterList(response?.data?.data)
             }
+            setRefreshing(false)
         } catch (error) {
+            setRefreshing(false)
             console.log("error-", error)
             Toast.show({
                 type: 'error',
@@ -83,7 +86,9 @@ const Products = ({ navigation }) => {
             if (response && has(response, "data.data")) {
                 setProductHistory(response?.data?.data)
             }
+            setRefreshingHistory(false)
         } catch (error) {
+            setRefreshingHistory(false)
             console.log("error-", error)
             Toast.show({
                 type: 'error',
@@ -167,7 +172,14 @@ const Products = ({ navigation }) => {
                         <Text
                             style={{ fontFamily: 'Poppins-LightItalic', fontSize: 11, color: '#23233C', textAlign: 'right', marginRight: 20 }}
                         >{`${filterResult.length} of ${filterResult.length} items`}</Text>
-                        <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 80, height: '100%' }}>
+                        <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 80, height: '100%' }}
+                            refreshControl={<RefreshControl refreshing={refreshing}
+                                onRefresh={() => {
+                                    setRefreshing(true)
+                                    productListing(selected)
+                                }}
+                            />}
+                        >
                             {filterResult.length > 0 ? filterResult?.map((item, index) => (<ProductCard item={item} key={index} />)) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.40 }}>
                                 <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
                             </View>}
@@ -186,7 +198,12 @@ const Products = ({ navigation }) => {
                             onChangeText={(value) => setHistorySearch(value)}
                         />
                         <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 11, color: '#23233C', textAlign: 'right', marginRight: 20, marginTop: 10 }}>{filterHistory().length} of {filterHistory().length} items</Text>
-                        <ScrollView style={{ marginBottom: 80 }} showsVerticalScrollIndicator={false}>
+                        <ScrollView style={{ marginBottom: 80 }} showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={refreshingHistory}
+                            onRefresh={() => {
+                                setRefreshingHistory(true)
+                                getProductHistory()
+                            }}
+                        />}>
                             {filterHistory().length > 0 ? filterHistory()?.map((item, index) => (<ProductCard item={item} key={index} />)) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.40 }}>
                                 <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
                             </View>}

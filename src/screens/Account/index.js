@@ -1,4 +1,4 @@
-import { StyleSheet, Text, ScrollView, View, useWindowDimensions } from 'react-native'
+import { StyleSheet, Text, ScrollView, View, useWindowDimensions, RefreshControl } from 'react-native'
 import React, { useState, useEffect, useCallback } from 'react'
 import HeaderWithTitle from '../../Components/HeaderWithTitle'
 import moment from 'moment';
@@ -17,6 +17,7 @@ const Account = ({ navigation }) => {
     const [openCalendar, setOpenCalendar] = useState(false)
     const { width, height } = useWindowDimensions()
     const [accountData, setAccountData] = useState({})
+    const [refreshing, setRefreshing] = useState(false)
 
     useEffect(() => {
         getAccountData()
@@ -50,8 +51,10 @@ const Account = ({ navigation }) => {
             if (response && has(response, "data.data") && !isEmpty(response.data.data)) {
                 setAccountData(response.data.data)
             }
+            setRefreshing(false)
             //  loadingg.setLoading(false)
         } catch (error) {
+            setRefreshing(false)
             console.log("error", error);
             // loadingg.setLoading(false)
             Toast.show({
@@ -88,7 +91,14 @@ const Account = ({ navigation }) => {
                     label='Total Outstanding'
                     alignSelf={'center'}
                 />
-                <ScrollView style={{ backgroundColor: '#F3F3F3', marginBottom: 80, marginTop: 10 }} showsVerticalScrollIndicator={false}>
+                <ScrollView style={{ backgroundColor: '#F3F3F3', marginBottom: 80, marginTop: 10 }} showsVerticalScrollIndicator={false}
+                    refreshControl={<RefreshControl refreshing={refreshing}
+                        onRefresh={() => {
+                            setRefreshing(true)
+                            getAccountData(date)
+                        }}
+                    />}
+                >
                     {accountData?.settlement_list?.length > 0 ? accountData?.settlement_list?.map((item) => (
                         <AccountCard item={item} key={item?.id} />
                     )) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.40 }}>
