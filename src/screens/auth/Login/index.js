@@ -16,6 +16,7 @@ import CommonTexts from '../../../Components/CommonTexts';
 import AuthContext from '../../../contexts/Auth';
 import LoaderContext from '../../../contexts/Loader';
 import customAxios from '../../../CustomeAxios';
+import { mode } from '../../../config/constants';
 
 
 const Login = ({ navigation }) => {
@@ -47,7 +48,7 @@ const Login = ({ navigation }) => {
 		loadingg.setLoading(true)
 		//7952124568
 		try {
-			const response = await customAxios.post("auth/vendorloginotp", data)
+			const response = await customAxios.post("auth/vendorloginotp", { ...data, type: mode })
 			if (response) {
 				loginUser.setLogin(data)
 				navigation.navigate('Otp')
