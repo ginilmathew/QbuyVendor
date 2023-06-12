@@ -94,12 +94,27 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     namespace "com.qbuystoreapp"
+    flavorDimensions "default"
     defaultConfig {
         applicationId "com.qbuystoreapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+    }
+    productFlavors {
+        create("green") {
+            applicationIdSuffix = ".green"
+            resValue "string", "app_name", "QBUY Green"
+        }
+        create("panda") {
+            applicationIdSuffix = ".panda"
+            resValue "string", "app_name", "QBUY Panda"
+        }
+        create("fashion") {
+            applicationIdSuffix = ".fashion"
+            resValue "string", "app_name", "QBUY Fashion"
+        }
     }
 
     splits {
