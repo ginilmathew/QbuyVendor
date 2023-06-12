@@ -24,8 +24,6 @@ const Login = ({ navigation }) => {
 
 	const loginUser = useContext(AuthContext)
 	const loadingg = useContext(LoaderContext)
-	let bundleId = DeviceInfo.getBundleId();
-	console.log("bundleId",bundleId);
 	let loader = loadingg?.loading
 
 	let user = loginUser?.login
@@ -49,8 +47,11 @@ const Login = ({ navigation }) => {
 	const onSubmit = useCallback(async (data) => {
 		loadingg.setLoading(true)
 		//7952124568
+
+		let bundleId = DeviceInfo.getBundleId();
+		const type = bundleId.replace("com.qbuystoreapp.","")
 		try {
-			const response = await customAxios.post("auth/vendorloginotp", { ...data, type: mode })
+			const response = await customAxios.post("auth/vendorloginotp", { ...data, type })
 			if (response) {
 				loginUser.setLogin(data)
 				navigation.navigate('Otp')
@@ -61,7 +62,7 @@ const Login = ({ navigation }) => {
 			loadingg.setLoading(false)
 			if (!error?.user_exist) {
 				Alert.alert("Vendor not found",
-					`Vendor for QBUY ${mode} not found, Do you want to create new one?`,
+					`Vendor for QBUY ${type} not found, Do you want to create new one?`,
 					[
 						{
 							text: 'Cancel',
