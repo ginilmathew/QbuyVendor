@@ -6,6 +6,7 @@ import * as yup from "yup";
 import Toast from 'react-native-toast-message'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import DeviceInfo from 'react-native-device-info';
+import has from 'lodash/has'
 
 import CommonAuthBg from '../CommonAuthBg';
 import CommonInput from '../../../Components/CommonInput';
@@ -44,7 +45,7 @@ const Login = ({ navigation }) => {
 		navigation.navigate('Register')
 	}, [])
 
-	const onSubmit = useCallback(async (data) => {
+	const onSubmit = async (data) => {
 		loadingg.setLoading(true)
 		//7952124568
 
@@ -54,13 +55,13 @@ const Login = ({ navigation }) => {
 			const response = await customAxios.post("auth/vendorloginotp", { ...data, type })
 			if (response) {
 				loginUser.setLogin(data)
-				navigation.navigate('Otp')
+				navigation.navigate('Otp',{type:"login"})
 			}
 			loadingg.setLoading(false)
 		} catch (error) {
 			console.log("error=>", error);
 			loadingg.setLoading(false)
-			if (!error?.user_exist) {
+			if (has(error,"user_exist")&&!error?.user_exist) {
 				Alert.alert("Vendor not found",
 					`Vendor for QBUY ${type} not found, Do you want to create new one?`,
 					[
@@ -84,7 +85,7 @@ const Login = ({ navigation }) => {
 				});
 			}
 		}
-	}, [])
+	}
 
 
 	return (

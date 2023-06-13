@@ -15,14 +15,14 @@ import customAxios from '../../../CustomeAxios';
 import Toast from 'react-native-toast-message';
 
 
-const Otp = ({ navigation ,route}) => {
-const {type}=route?.params ||{}
+const Otp = ({ navigation, route }) => {
+	const { type } = route?.params || {}
 	const userOtp = useContext(AuthContext)
 	const loadingg = useContext(LoaderContext)
 
 	let loader = loadingg?.loading
 	let mobileNo = userOtp.login.mobile
-
+	let endPoint;
 	let otpss = userOtp?.otp
 
 	console.log({ otpss })
@@ -43,31 +43,33 @@ const {type}=route?.params ||{}
 	mask = cardnumber?.substring(2, cardnumber.length - 1).replace(/\d/g, "*");
 	let phoneNum = first2 + mask + last1
 
-	const onSubmit = useCallback(async (data) => {
-		// navigation.navigate('TabNavigator')
-		// userOtp.setOtp(data)
-		// await AsyncStorage.setItem("token", token);
+	const onSubmit = async (data) => {
+		if (type == "register") {
+			endPoint = "auth/vendorregisterotp"
+		} else {
+			endPoint = "auth/vendorlogin"
+		}
 		try {
-			const response = await customAxios.post(type?"auth/vendorregisterotp":"auth/vendorlogin", { ...data, mobile: mobileNo })
+			const response = await customAxios.post(endPoint, { ...data, mobile: mobileNo })
 			console.log("response ", response.data);
-			if(type){
-				Alert.alert("Message",response?.data?.message,[
+			if (type == "register") {
+				Alert.alert("Message", response?.data?.message, [
 					{
 						text: 'Ok',
 						onPress: () => navigation.replace('Login'),
 						// style: 'cancel',
 					},
 				])
-				
-			}else{
+
+			} else {
 				if (response?.data?.access_token) {
-				const { access_token } = response?.data
-				navigation.replace('TabNavigator')
-				await AsyncStorage.setItem("token", access_token);
-				userOtp.getProfileDetails()
+					const { access_token } = response?.data
+					navigation.replace('TabNavigator')
+					await AsyncStorage.setItem("token", access_token);
+					userOtp.getProfileDetails()
+				}
 			}
-			}
-			
+
 		} catch (error) {
 			console.log("error", error)
 			Toast.show({
@@ -76,7 +78,7 @@ const {type}=route?.params ||{}
 			});
 		}
 
-	}, [])
+	}
 
 	const backAction = useCallback(() => {
 		navigation.goBack()
