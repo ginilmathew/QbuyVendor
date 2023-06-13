@@ -17,12 +17,13 @@ import CommonSelectDropdown from '../../../Components/CommonSelectDropdown';
 import SelectTab from '../../../Components/SelectTab';
 import customAxios from '../../../CustomeAxios';
 import AuthContext from '../../../contexts/Auth';
+import DeviceInfo from 'react-native-device-info';
 
 
 const Register = ({ navigation }) => {
 
 	const [values, setValues] = useState(null);
-	const {vendorCategoryList,login} = useContext(AuthContext)
+	const { vendorCategoryList, login } = useContext(AuthContext)
 	const data = [
 		{ label: 'Green', value: 'green' },
 		{ label: 'Fashion', value: 'fashion' },
@@ -36,13 +37,13 @@ const Register = ({ navigation }) => {
 		location: yup.string().required('Location is required'),
 		license_number: yup.string().required('License number is required'),
 		category_id: yup.object({
-            _id: yup.string().required("Category is required"),
-            name: yup.string().required("Category is required")
-        }),
-		type:yup.string().required('Store category is required')
+			_id: yup.string().required("Category is required"),
+			name: yup.string().required("Category is required")
+		}),
+		//type: yup.string().required('Store category is required')
 	}).required();
 
-	const { control, handleSubmit, formState: { errors }, setValue, setError } = useForm({
+	const { control, handleSubmit, formState: { errors }, setValue, setError, clearErrors } = useForm({
 		resolver: yupResolver(schema)
 	});
 
@@ -52,20 +53,21 @@ const Register = ({ navigation }) => {
 	}, [])
 
 	const onSubmit = useCallback(async (data) => {
-		console.log("data", data);
+		let bundleId = DeviceInfo.getBundleId();
+		const type = bundleId.replace("com.qbuystoreapp.", "")
 		try {
-			 const response = await customAxios.post(`auth/vendorregister`, {
+			const response = await customAxios.post(`auth/vendorregister`, {
 				"vendor_name": data?.vendor_name,
 				"vendor_email": data?.vendor_email,
 				"vendor_mobile": login?.mobile,
 				"store_name": data?.store_name,
 				"location": data?.location,
 				"category_id": data?.category_id,
-				"kyc_details": {"license_number": data?.license_number},
-				"type":data?.type
-			}) 
-			if(response?.status){
-				navigation.replace('Otp',{type:data?.type})
+				"kyc_details": { "license_number": data?.license_number },
+				type
+			})
+			if (response?.status) {
+				navigation.replace('Otp', { type: data?.type })
 			}
 		} catch (error) {
 			console.log("error", error);
@@ -77,7 +79,7 @@ const Register = ({ navigation }) => {
 	return (
 		<CommonAuthBg>
 
-			<ScrollView style={{ flex: 1, paddingHorizontal: 40, }}>
+			<ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, paddingHorizontal: 40, }}>
 
 				<Image
 					style={styles.logo}
@@ -99,7 +101,7 @@ const Register = ({ navigation }) => {
 					error={errors.vendor_name}
 					fieldName="vendor_name"
 					placeholder='Vendor Name'
-					inputMode={'numeric'}
+					inputMode={'none'}
 					mt={20}
 					icon={<Ionicons name='person' color='#58D36E' size={25} />}
 				/>
@@ -119,7 +121,7 @@ const Register = ({ navigation }) => {
 					error={errors.store_name}
 					fieldName="store_name"
 					placeholder='Store Name'
-					inputMode={'numeric'}
+					inputMode={'none'}
 					mt={20}
 					icon={<Image source={require('../../../Images/storeIcon.jpeg')} style={{ width: 25, height: 25 }} resizeMode='contain' />}
 				/>
@@ -132,7 +134,7 @@ const Register = ({ navigation }) => {
 					mt={20}
 					icon={<Ionicons name='location' color='#58D36E' size={25} />}
 				/>
-				<CommonSelectDropdown
+				{/* <CommonSelectDropdown
 					data={data}
 					value={values}
 					// setValue={setValues}
@@ -142,7 +144,7 @@ const Register = ({ navigation }) => {
 					onChange={item => {
 						setValue('type', item?.value)
 					}}
-				/>
+				/> */}
 				<CommonSelectDropdown
 					data={vendorCategoryList}
 					placeholder='Category'
@@ -154,15 +156,17 @@ const Register = ({ navigation }) => {
 						console.log(value);
 						delete value?._index
 						setValue("category_id", { _id: value._id, name: value?.name })
+						clearErrors()
 					}}
+					error={errors.category_id?._id}
 				/>
 				<CommonInput
 					leftElement
 					control={control}
-					error={errors.lNumber}
+					error={errors.license_number}
 					fieldName="license_number"
 					placeholder='License Number'
-					inputMode={'numeric'}
+					inputMode={'none'}
 					mt={20}
 					icon={<Entypo name='v-card' color='#58D36E' size={18} marginTop={1.5} />}
 				/>
