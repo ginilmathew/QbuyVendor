@@ -3,6 +3,8 @@ import React, { useCallback, useContext, useState } from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import DeviceInfo from 'react-native-device-info';
+
 import CommonAuthBg from '../CommonAuthBg';
 import CommonInput from '../../../Components/CommonInput';
 import CustomButton from '../../../Components/CustomButton';
@@ -17,7 +19,6 @@ import CommonSelectDropdown from '../../../Components/CommonSelectDropdown';
 import SelectTab from '../../../Components/SelectTab';
 import customAxios from '../../../CustomeAxios';
 import AuthContext from '../../../contexts/Auth';
-import DeviceInfo from 'react-native-device-info';
 
 
 const Register = ({ navigation }) => {
@@ -30,6 +31,7 @@ const Register = ({ navigation }) => {
 		{ label: 'Panda', value: 'panda' },
 	];
 
+
 	const schema = yup.object({
 		vendor_name: yup.string().required('Vendor name is required'),
 		vendor_email: yup.string().email().required('Vendor name is required'),
@@ -40,7 +42,7 @@ const Register = ({ navigation }) => {
 			_id: yup.string().required("Category is required"),
 			name: yup.string().required("Category is required")
 		}),
-		//type: yup.string().required('Store category is required')
+		// type: yup.string().required('Store category is required')
 	}).required();
 
 	const { control, handleSubmit, formState: { errors }, setValue, setError, clearErrors } = useForm({
@@ -54,6 +56,8 @@ const Register = ({ navigation }) => {
 
 	const onSubmit = async (data) => {
 		console.log("data", data);
+		let bundleId = DeviceInfo.getBundleId();
+		const type = bundleId.replace("com.qbuystoreapp.", "")
 		try {
 			const response = await customAxios.post(`auth/vendorregister`, {
 				"vendor_name": data?.vendor_name,
@@ -63,7 +67,7 @@ const Register = ({ navigation }) => {
 				"location": data?.location,
 				"category_id": data?.category_id,
 				"kyc_details": { "license_number": data?.license_number },
-				"type": data?.type
+				type
 			})
 			console.log("response", response);
 			if (response?.status) {
