@@ -62,12 +62,12 @@ const Register = ({ navigation }) => {
 				"store_name": data?.store_name,
 				"location": data?.location,
 				"category_id": data?.category_id,
-				"kyc_details": {"license_number": data?.license_number},
-				"type":data?.type
-			}) 
-			console.log("response",response);
-			if(response?.status){
-				navigation.replace('Otp',{type:"register"})
+				"kyc_details": { "license_number": data?.license_number },
+				"type": data?.type
+			})
+			console.log("response", response);
+			if (response?.status) {
+				navigation.replace('Otp', { type: "register" })
 			}
 		} catch (error) {
 			console.log("error", error);
@@ -133,7 +133,7 @@ const Register = ({ navigation }) => {
 					mt={20}
 					icon={<Ionicons name='location' color='#58D36E' size={25} />}
 				/>
-				<CommonSelectDropdown
+				{/* <CommonSelectDropdown
 					data={data}
 					value={values}
 					// setValue={setValues}
@@ -143,7 +143,7 @@ const Register = ({ navigation }) => {
 					onChange={item => {
 						setValue('type', item?.value)
 					}}
-				/>
+				/> */}
 				<CommonSelectDropdown
 					data={vendorCategoryList}
 					placeholder='Category'
