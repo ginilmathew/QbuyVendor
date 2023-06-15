@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Alert, } from 'react-native'
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -11,38 +11,23 @@ import CustomButton from '../../../Components/CustomButton';
 import CommonAuthHeading from '../CommonAuthHeading';
 import CommonTexts from '../../../Components/CommonTexts';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import CommonPicker from '../../../Components/CommonPicker';
-import CommonSelectDropdown from '../../../Components/CommonSelectDropdown';
-import SelectTab from '../../../Components/SelectTab';
 import customAxios from '../../../CustomeAxios';
 import AuthContext from '../../../contexts/Auth';
-
+import CommonMultiSelectDropdown from '../../../Components/CommonMultiSelectDropdown';
 
 const Register = ({ navigation }) => {
 
-	const [values, setValues] = useState(null);
+	const [selectedCategories, setSelectedCategory] = useState([]);
 	const { vendorCategoryList, login } = useContext(AuthContext)
-	const data = [
-		{ label: 'Green', value: 'green' },
-		{ label: 'Fashion', value: 'fashion' },
-		{ label: 'Panda', value: 'panda' },
-	];
-
-
 	const schema = yup.object({
 		vendor_name: yup.string().required('Vendor name is required'),
 		vendor_email: yup.string().email().required('Vendor name is required'),
 		store_name: yup.string().required('Store name is required'),
 		location: yup.string().required('Location is required'),
 		license_number: yup.string().required('License number is required'),
-		category_id: yup.object({
-			_id: yup.string().required("Category is required"),
-			name: yup.string().required("Category is required")
-		}),
-		// type: yup.string().required('Store category is required')
+		category_id: yup.array().of(yup.string()).min(1).required("Category is required")
 	}).required();
 
 	const { control, handleSubmit, formState: { errors }, setValue, setError, clearErrors } = useForm({
@@ -55,9 +40,14 @@ const Register = ({ navigation }) => {
 	}, [])
 
 	const onSubmit = async (data) => {
-		console.log("data", data);
 		let bundleId = DeviceInfo.getBundleId();
 		const type = bundleId.replace("com.qbuystoreapp.", "")
+		let category_id = []
+		vendorCategoryList.map(item => {
+			if (data.category_id.includes(item._id)) {
+				category_id.push({ id: item?._id, name: item?.name, image: item?.image })
+			}
+		})
 		try {
 			const response = await customAxios.post(`auth/vendorregister`, {
 				"vendor_name": data?.vendor_name,
@@ -65,7 +55,7 @@ const Register = ({ navigation }) => {
 				"vendor_mobile": login?.mobile,
 				"store_name": data?.store_name,
 				"location": data?.location,
-				"category_id": data?.category_id,
+				category_id,
 				"kyc_details": { "license_number": data?.license_number },
 				type
 			})
@@ -148,20 +138,20 @@ const Register = ({ navigation }) => {
 						setValue('type', item?.value)
 					}}
 				/> */}
-				<CommonSelectDropdown
+				<CommonMultiSelectDropdown
 					data={vendorCategoryList}
 					placeholder='Category'
 					mt={7}
 					leftIcon={<MaterialCommunityIcons name='shape' color='#58D36E' size={22} marginRight={10} marginLeft={-3} />}
 					labelField="name"
 					valueField="_id"
+					value={selectedCategories}
 					onChange={value => {
-						console.log(value);
-						delete value?._index
-						setValue("category_id", { _id: value._id, name: value?.name })
+						setSelectedCategory(value)
+						setValue("category_id", value)
 						clearErrors()
 					}}
-					error={errors.category_id?._id}
+					error={errors.category_id}
 				/>
 				<CommonInput
 					leftElement
