@@ -133,12 +133,14 @@ const styles = StyleSheet.create({
         marginRight: 5,
         fontSize: 12,
         fontFamily: 'Poppins-Regular',
+        color: '#23233C'
     },
     item: {
         padding: 17,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        color: '#23233C'
     },
     icon: {
         marginRight: 5,
