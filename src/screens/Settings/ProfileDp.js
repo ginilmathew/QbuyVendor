@@ -13,10 +13,11 @@ const ProfileDp = ({ item }) => {
                 source={{ uri: IMG_URL + userData?.original_store_logo }} alt='img'
             />
             <View style={{ marginLeft: 8, justifyContent: 'space-evenly', }}>
-                <CommonTexts label={userData?.vendor_name} fontSize={20} />
+                <CommonTexts label={userData?.store_name} fontSize={20} />
                 <View >
+                    <Text style={styles.regularText}> {userData?.vendor_name}</Text>
                     <Text style={styles.regularText}>ID : {'#' + userData?.vendor_id}</Text>
-                    <Text style={styles.regularText}>Franchisee : {userData?.store_name}</Text>
+                    <Text style={styles.regularText}>Franchisee : {userData?.franchisee?.name}</Text>
                 </View>
             </View>
         </View>

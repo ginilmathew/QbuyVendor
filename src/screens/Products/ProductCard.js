@@ -1,14 +1,15 @@
-import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Pressable } from 'react-native'
 import React, { useState, useEffect, useCallback, memo } from 'react'
 import CommonTexts from '../../Components/CommonTexts'
 import Toast from 'react-native-toast-message';
 import customAxios from '../../CustomeAxios';
 import { IMG_URL } from '../../config/constants';
+import { useNavigation } from '@react-navigation/native';
 
 const ProductCard = memo(({ item }) => {
 
     const [isEnabled, setIsEnabled] = useState(item?.status == "active");
-
+    const navigation = useNavigation()
     const toggleSwitch = (data) => {
         setIsEnabled(!isEnabled)
         handleStatus()
@@ -49,9 +50,11 @@ const ProductCard = memo(({ item }) => {
             </View>
 
             {item?.status ? <View style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                <TouchableOpacity>
+                <Pressable onPress={() => {
+                    navigation.navigate('AddNewProduct', { item })
+                }}>
                     <CommonTexts label={'EDIT'} color='#089321' fontSize={13} />
-                </TouchableOpacity>
+                </Pressable>
                 <Switch
                     trackColor={{ false: '#f0c9c9', true: '#c7f2cf' }}
                     thumbColor={isEnabled ? '#58D36E' : '#D35858'}

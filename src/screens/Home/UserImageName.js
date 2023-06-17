@@ -13,7 +13,8 @@ const UserImageName = () => {
             />
             <View style={{ marginLeft: 10 }}>
                 <Text style={styles.textRegular}>{"Welcome"}</Text>
-                <Text style={styles.textBold}>{userData?.vendor_name}</Text>
+                <Text style={styles.textBold}>{userData?.store_name}</Text>
+                <Text style={[styles.textRegular, { fontSize: 12 }]}>{userData?.vendor_name}</Text>
             </View>
         </View>
     )

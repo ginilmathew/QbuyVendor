@@ -16,12 +16,12 @@ import customAxios from '../../../CustomeAxios';
 import Toast from 'react-native-toast-message';
 import { IMG_URL, mode } from '../../../config/constants';
 import LoaderContext from '../../../contexts/Loader';
-const AddNewProduct = ({ navigation }) => {
+const AddNewProduct = ({ navigation, route }) => {
 
     const { width } = useWindowDimensions()
     const { vendorCategoryList = [], userData } = useContext(AuthContext)
     const { setLoading, loading } = useContext(LoaderContext)
-
+    const item = route?.params?.item || {}
     const [filePath, setFilePath] = useState(null);
     const [values, setValues] = useState(null);
 
@@ -42,9 +42,26 @@ const AddNewProduct = ({ navigation }) => {
         })
     }).required();
 
-    const { control, handleSubmit, formState: { errors, }, setValue, clearErrors, getValues } = useForm({
+    const { control, handleSubmit, formState: { errors, }, setValue, clearErrors, getValues, reset } = useForm({
         resolver: yupResolver(schema),
     });
+
+    useEffect(() => {
+        if (!isEmpty(route?.params?.item)) {
+            const newData = {
+                name: item.name,
+                price: item?.seller_price,
+                category: item?.category,
+                image: {
+                    fileName: item?.product_image,
+                    uri: IMG_URL + item?.product_image,
+                    type: `image/${item?.product_image.split(".")[1]}`
+                }
+            }
+            setFilePath({ uri: IMG_URL + item?.product_image })
+            reset(newData)
+        }
+    }, [])
 
     const imageGalleryLaunch = useCallback(() => {
         let options = {
@@ -85,13 +102,20 @@ const AddNewProduct = ({ navigation }) => {
             body.append("name", data.name)
             body.append("category", JSON.stringify(data.category))
             body.append("price", data.price)
-            body.append("image", {
-                uri: data?.image?.uri,
-                type: data?.image?.type,
-                name: data?.image?.fileName,
-            })
+            /*  body.append("image", {
+                 uri: data?.image?.uri,
+                 type: data?.image?.type,
+                 name: data?.image?.fileName,
+             }) */
 
-            const response = await customAxios.post("vendor/product/create", body)
+            if (item?._id) {
+                body.append("id", item?._id)
+            }
+            const response = await customAxios.post(`vendor/product/${item?._id ? 'update' : 'create'}`, body, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            })
             if (response?.data) {
                 Toast.show({
                     text1: response?.data?.message

@@ -21,12 +21,13 @@ const Profile = ({ navigation }) => {
                                 style={{ width: 100, height: 100, borderRadius: 12 }}
                                 source={{ uri: IMG_URL + userData?.original_store_logo }} alt='img'
                             />
-                            <CommonTexts label={userData?.vendor_name} fontSize={15} mt={5} />
-                            <Text style={{ fontSize: 10, color: '#909091', }}>ID : {'#' + userData?.vendor_id}</Text>
+                            <CommonTexts label={userData?.store_name} fontSize={15} mt={5} />
+                            <Text style={{ fontSize: 10, color: '#909091', }}>{userData?.vendor_name}</Text>
+                            <Text style={{ fontSize: 10, color: '#909091', }}>ID : #{userData?.vendor_id}</Text>
                         </View>
                         <CommonReadonlyBox
                             topLabel={'Franchisee'}
-                            label={'Qbuy Kollam'}
+                            label={userData?.franchisee?.name}
                         />
                         <CommonReadonlyBox
                             topLabel={'Location'}
@@ -37,12 +38,20 @@ const Profile = ({ navigation }) => {
                             label={userData?.vendor_name}
                         />
                         <CommonReadonlyBox
+                            topLabel={'Store Name'}
+                            label={userData?.store_name}
+                        />
+                        <CommonReadonlyBox
                             topLabel={'Phone Number'}
                             label={userData?.vendor_mobile}
                         />
                         <CommonReadonlyBox
+                            topLabel={'Email'}
+                            label={userData?.vendor_email}
+                        />
+                        <CommonReadonlyBox
                             topLabel={'Store Category'}
-                            label={'Restaurant'}
+                            label={userData?.category_id.map((item) => item.name).join(", ") || ""}
                         />
                     </View>
                     <View style={styles.border} />

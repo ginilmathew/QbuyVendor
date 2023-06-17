@@ -12,16 +12,17 @@ import FilterBox from '../Orders/FilterBox';
 import CommonTexts from '../../Components/CommonTexts';
 import ProductCard from './ProductCard';
 import CommonSquareButton from '../../Components/CommonSquareButton';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import customAxios from '../../CustomeAxios';
 import Toast from 'react-native-toast-message';
 import has from 'lodash/has'
+import isEmpty from 'lodash/isEmpty'
 import { mode } from '../../config/constants';
 import AuthContext from '../../contexts/Auth';
 
 const Products = ({ navigation }) => {
     const authContext = useContext(AuthContext)
-    const { vendorCategoryList = [] ,userData} = authContext
+    const { vendorCategoryList = [], userData } = authContext
 
     const { width, height } = useWindowDimensions()
     const [currentTab, setCurrentTab] = useState(0)
@@ -61,14 +62,16 @@ const Products = ({ navigation }) => {
             });
         }
     }
-    const productListing = async (selected) => {
+    const getProductList = async () => {
         try {
-            const response = await customAxios.post("vendor/product/list", {
-                "type": userData?.type,
-                "category_id": selected?._id
-            })
-            if (response && has(response, "data.data")) {
-                setFilterList(response?.data?.data)
+            if (!isEmpty(selected)) {
+                const response = await customAxios.post("vendor/product/list", {
+                    "type": userData?.type,
+                    "category_id": selected?._id
+                })
+                if (response && has(response, "data.data")) {
+                    setFilterList(response?.data?.data)
+                }
             }
             setRefreshing(false)
         } catch (error) {
@@ -97,18 +100,21 @@ const Products = ({ navigation }) => {
             });
         }
     }
-    const handleCategory = (item) => {
-        setSelected(item)
-        productListing(item)
-    }
 
     useEffect(() => {
-        vendorCategoryList.length > 0 && handleCategory(vendorCategoryList[0])
+        vendorCategoryList.length > 0 && setSelected(vendorCategoryList[0])
     }, [vendorCategoryList])
 
     useEffect(() => {
-        getProductHistory()
-    }, [])
+        !isEmpty(selected) && getProductList()
+    }, [selected])
+
+    useFocusEffect(
+        useCallback(() => {
+            getProductList()
+            getProductHistory()
+        }, [])
+    );
 
     const selectCurrentPdt = useCallback(() => {
         setCurrentTab(0)
@@ -165,7 +171,7 @@ const Products = ({ navigation }) => {
                                 <FilterBox
                                     key={index}
                                     item={{ ...item, value: item?._id }}
-                                    onPress={() => handleCategory(item)}
+                                    onPress={() => setSelected(item)}
                                     selected={selected?._id}
                                 />
                             ))}
@@ -177,7 +183,7 @@ const Products = ({ navigation }) => {
                             refreshControl={<RefreshControl refreshing={refreshing}
                                 onRefresh={() => {
                                     setRefreshing(true)
-                                    productListing(selected)
+                                    getProductList()
                                 }}
                             />}
                         >
