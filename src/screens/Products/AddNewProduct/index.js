@@ -47,12 +47,14 @@ const AddNewProduct = ({ navigation, route }) => {
     });
 
     useEffect(() => {
-        if (!isEmpty(route?.params?.item)) {
-            const newData = {
+        if (!isEmpty(item)) {
+            let newData = {
                 name: item.name,
                 price: item?.seller_price,
-                category: item?.category,
-                image: {
+                category: item?.category
+            }
+            if (item.product_image) {
+                newData.image = {
                     fileName: item?.product_image,
                     uri: IMG_URL + item?.product_image,
                     type: `image/${item?.product_image.split(".")[1]}`
@@ -102,11 +104,11 @@ const AddNewProduct = ({ navigation, route }) => {
             body.append("name", data.name)
             body.append("category", JSON.stringify(data.category))
             body.append("price", data.price)
-            /*  body.append("image", {
-                 uri: data?.image?.uri,
-                 type: data?.image?.type,
-                 name: data?.image?.fileName,
-             }) */
+            body.append("image", {
+                uri: data?.image?.uri,
+                type: data?.image?.type,
+                name: data?.image?.fileName,
+            })
 
             if (item?._id) {
                 body.append("id", item?._id)

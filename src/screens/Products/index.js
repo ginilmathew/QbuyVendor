@@ -17,8 +17,13 @@ import customAxios from '../../CustomeAxios';
 import Toast from 'react-native-toast-message';
 import has from 'lodash/has'
 import isEmpty from 'lodash/isEmpty'
-import { mode } from '../../config/constants';
 import AuthContext from '../../contexts/Auth';
+
+const initialItem = {
+    "_id": "all",
+    "image": "/storage/uploads/1684738933.png",
+    "name": "All"
+}
 
 const Products = ({ navigation }) => {
     const authContext = useContext(AuthContext)
@@ -26,7 +31,7 @@ const Products = ({ navigation }) => {
 
     const { width, height } = useWindowDimensions()
     const [currentTab, setCurrentTab] = useState(0)
-    const [selected, setSelected] = useState({})
+    const [selected, setSelected] = useState(initialItem)
 
     const [filterResult, setFilterList] = useState([])
     const [productHistory, setProductHistory] = useState([])
@@ -36,21 +41,21 @@ const Products = ({ navigation }) => {
     const [searchTerm, setSearchTerm] = useState("")
 
     const schema = yup.object({
-        name: yup.string().required('Name is required'),
+        search: yup.string().required('Name is required'),
     }).required();
 
-    const { control, handleSubmit, formState: { errors }, setValue } = useForm({
+    const { control, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm({
         resolver: yupResolver(schema)
     });
 
     const filterHistory = () => {
         return productHistory?.filter(item => item?.name?.toLowerCase().includes(historySearch.toLowerCase())) || []
     }
-    const productSearch = async () => {
+    const productSearch = async ({ search }) => {
+        console.log(search);
         try {
             const response = await customAxios.post("vendor/product/search", {
-                "type": userData?.type,
-                "search": searchTerm
+                "type": userData?.type, search
             })
             setFilterList(response?.data?.data)
 
@@ -65,7 +70,7 @@ const Products = ({ navigation }) => {
     const getProductList = async () => {
         try {
             if (!isEmpty(selected)) {
-                const response = await customAxios.post("vendor/product/list", {
+                const response = await customAxios.post(`vendor/product/${selected._id == 'all' ? 'history-' : ''}list`, {
                     "type": userData?.type,
                     "category_id": selected?._id
                 })
@@ -102,17 +107,13 @@ const Products = ({ navigation }) => {
     }
 
     useEffect(() => {
-        vendorCategoryList.length > 0 && setSelected(vendorCategoryList[0])
-    }, [vendorCategoryList])
-
-    useEffect(() => {
         !isEmpty(selected) && getProductList()
     }, [selected])
 
     useFocusEffect(
         useCallback(() => {
             getProductList()
-            getProductHistory()
+            // getProductHistory()
         }, [])
     );
 
@@ -133,7 +134,7 @@ const Products = ({ navigation }) => {
             <HeaderWithTitle title={'Products'} />
             <View style={{ backgroundColor: '#fff', flex: 1 }}>
 
-                <View style={{ marginTop: 15, flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 15 }}>
+                {/*  <View style={{ marginTop: 15, flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 15 }}>
                     <SelectTab
                         label={"Current Products"}
                         onPress={selectCurrentPdt}
@@ -148,53 +149,52 @@ const Products = ({ navigation }) => {
                         wid={width / 2.3}
                         fontSize={16}
                     />
-                </View>
+                </View> */}
                 <View style={{ backgroundColor: '#00000014', height: 2, marginTop: -1.5, marginHorizontal: 15 }} />
-
-                {currentTab === 0 &&
-                    <>
-                        <CustomSearch
-                            mb={2}
-                            control={control}
-                            error={errors.name}
-                            fieldName="name"
-                            placeholder='Search...'
-                            onChangeText={(value) => setSearchTerm(value)}
-                            onpress={() => productSearch()}
+                <CustomSearch
+                    mb={2}
+                    control={control}
+                    error={errors.search}
+                    fieldName="search"
+                    placeholder='Search...'
+                    onpress={handleSubmit(productSearch)}
+                    clearAction={() => {
+                        clearErrors()
+                        setValue("search", '')
+                        getProductList()
+                    }}
+                />
+                <ScrollView
+                    horizontal={true}
+                    style={{ marginTop: 15, backgroundColor: '#F7F7F7', paddingLeft: 10, height: 80, }}
+                    showsHorizontalScrollIndicator={false}
+                >
+                    {[initialItem, ...vendorCategoryList]?.map((item, index) => (
+                        <FilterBox
+                            key={index}
+                            item={{ ...item, value: item?._id }}
+                            onPress={() => setSelected(item)}
+                            selected={selected?._id}
                         />
-                        <ScrollView
-                            horizontal={true}
-                            style={{ marginTop: 15, backgroundColor: '#F7F7F7', paddingLeft: 10, height: 80, }}
-                            showsHorizontalScrollIndicator={false}
-                        >
-                            {vendorCategoryList?.map((item, index) => (
-                                <FilterBox
-                                    key={index}
-                                    item={{ ...item, value: item?._id }}
-                                    onPress={() => setSelected(item)}
-                                    selected={selected?._id}
-                                />
-                            ))}
-                        </ScrollView>
-                        <Text
-                            style={{ fontFamily: 'Poppins-LightItalic', fontSize: 11, color: '#23233C', textAlign: 'right', marginRight: 20 }}
-                        >{`${filterResult.length} of ${filterResult.length} items`}</Text>
-                        <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 80, height: '100%' }}
-                            refreshControl={<RefreshControl refreshing={refreshing}
-                                onRefresh={() => {
-                                    setRefreshing(true)
-                                    getProductList()
-                                }}
-                            />}
-                        >
-                            {filterResult.length > 0 ? filterResult?.map((item, index) => (<ProductCard item={item} key={index} />)) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.40 }}>
-                                <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
-                            </View>}
-                        </ScrollView>
-                        {userData?.type == "green" && <CommonSquareButton onPress={addNewProduct} position={'absolute'} bottom={100} right={25} iconName={'add'} />}
-                    </>
-                }
-                {currentTab === 1 &&
+                    ))}
+                </ScrollView>
+                <Text
+                    style={{ fontFamily: 'Poppins-LightItalic', fontSize: 11, color: '#23233C', textAlign: 'right', marginRight: 20 }}
+                >{`${filterResult.length} of ${filterResult.length} items`}</Text>
+                <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 80, height: '100%' }}
+                    refreshControl={<RefreshControl refreshing={refreshing}
+                        onRefresh={() => {
+                            setRefreshing(true)
+                            getProductList()
+                        }}
+                    />}
+                >
+                    {filterResult.length > 0 ? filterResult?.map((item, index) => (<ProductCard item={item} key={index} />)) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.40 }}>
+                        <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
+                    </View>}
+                </ScrollView>
+                {userData?.type == "green" && <CommonSquareButton onPress={addNewProduct} position={'absolute'} bottom={100} right={25} iconName={'add'} />}
+                {/* currentTab === 1 &&
                     <>
                         <CustomSearch
                             mb={2}
@@ -216,7 +216,7 @@ const Products = ({ navigation }) => {
                             </View>}
 
                         </ScrollView>
-                    </>
+                    </> */
                 }
             </View>
         </>

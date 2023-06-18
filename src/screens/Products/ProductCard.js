@@ -21,7 +21,6 @@ const ProductCard = memo(({ item }) => {
                 "product_id": item?._id,
                 "status": isEnabled ? "inactive" : "active"
             })
-            console.log("response->", response?.data?.data);
         } catch (error) {
             console.log("error", error)
             Toast.show({
@@ -30,7 +29,6 @@ const ProductCard = memo(({ item }) => {
             });
         }
     }
-    console.log(item);
 
     return (
         <View
