@@ -189,7 +189,9 @@ const Products = ({ navigation }) => {
                         }}
                     />}
                 >
-                    {filterResult.length > 0 ? filterResult?.map((item, index) => (<ProductCard item={item} key={index} />)) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.40 }}>
+                    {filterResult.length > 0 ? filterResult?.map((item, index) => (<ProductCard
+                        onRefresh={() => getProductList()}
+                        item={item} key={index} />)) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.40 }}>
                         <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
                     </View>}
                     <View style={{ height: height * 0.1 }}></View>

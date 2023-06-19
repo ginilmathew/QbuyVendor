@@ -7,14 +7,13 @@ import { IMG_URL } from '../../config/constants';
 import { useNavigation } from '@react-navigation/native';
 import CommonStatusCard from '../../Components/CommonStatusCard';
 
-const ProductCard = memo(({ item }) => {
+const ProductCard = ({ item, onRefresh = () => { } }) => {
 
-    const [isEnabled, setIsEnabled] = useState(item?.status == "active");
+    //const [isEnabled, setIsEnabled] = useState(item?.status == "active");
     const navigation = useNavigation()
-    const toggleSwitch = (data) => {
+    const toggleSwitch = (value) => {
         if (item?.approval_status == "approved") {
-            setIsEnabled(!isEnabled)
-            handleStatus()
+            handleStatus(value)
         } else {
             Toast.show({
                 type: 'error',
@@ -25,12 +24,14 @@ const ProductCard = memo(({ item }) => {
 
     };
 
-    const handleStatus = async () => {
+    const handleStatus = async (value) => {
         try {
             const response = await customAxios.post("vendor/product/status", {
                 "product_id": item?._id,
-                "status": isEnabled ? "inactive" : "active"
+                "status": value ? "active" : "inactive"
             })
+            //setIsEnabled(value)
+            onRefresh()
         } catch (error) {
             console.log("error", error)
             Toast.show({
@@ -54,7 +55,6 @@ const ProductCard = memo(({ item }) => {
                 return null; {/* <CommonStatusCard label={status} bg='#FFF082' labelColor={'#A99500'} /> */ }
         }
     }
-
     return (
         <View
             style={{ padding: 15, flexDirection: 'row', borderBottomWidth: 0.5, borderColor: '#00000014' }}
@@ -66,10 +66,10 @@ const ProductCard = memo(({ item }) => {
             />
             <View style={{ justifyContent: 'space-between', marginLeft: 10, flex: 1 }}>
                 <View>
-                    <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 13, color: isEnabled ? '#23233C' : '#A5A5A5' }}>{item?.name}</Text>
-                    <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 13, color: isEnabled ? '#23233C' : '#A5A5A5' }}>{item?.category?.name}</Text>
+                    <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 13, color: item?.status == "active" ? '#23233C' : '#A5A5A5' }}>{item?.name}</Text>
+                    <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 13, color: item?.status == "active" ? '#23233C' : '#A5A5A5' }}>{item?.category?.name}</Text>
                 </View>
-                <Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 14, color: isEnabled ? '#089321' : '#A5A5A5' }} > ₹ {item?.seller_price}</Text>
+                <Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 14, color: item?.status == "active" ? '#089321' : '#A5A5A5' }} > ₹ {item?.seller_price}</Text>
                 {renderStatusLabel(item?.approval_status)}
             </View>
 
@@ -82,10 +82,10 @@ const ProductCard = memo(({ item }) => {
                 <Switch
                     // disabled={item?.approval_status != "approved"}
                     trackColor={{ false: '#f0c9c9', true: '#c7f2cf' }}
-                    thumbColor={isEnabled ? '#58D36E' : '#D35858'}
+                    thumbColor={item?.status == "active" ? '#58D36E' : '#D35858'}
                     ios_backgroundColor="#f0c9c9"
                     onValueChange={toggleSwitch}
-                    value={isEnabled}
+                    value={item?.status == "active"}
                     style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }] }}
                 />
             </View> :
@@ -95,7 +95,7 @@ const ProductCard = memo(({ item }) => {
 
         </View>
     )
-})
+}
 
 export default ProductCard
 
