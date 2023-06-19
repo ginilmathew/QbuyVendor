@@ -112,8 +112,9 @@ const Products = ({ navigation }) => {
 
     useFocusEffect(
         useCallback(() => {
-            getProductList()
+            //getProductList()
             // getProductHistory()
+            setSelected(initialItem)
         }, [])
     );
 

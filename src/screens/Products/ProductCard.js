@@ -70,7 +70,10 @@ const ProductCard = ({ item, onRefresh = () => { } }) => {
                     <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 13, color: item?.status == "active" ? '#23233C' : '#A5A5A5' }}>{item?.category?.name}</Text>
                 </View>
                 <Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 14, color: item?.status == "active" ? '#089321' : '#A5A5A5' }} > ₹ {item?.seller_price}</Text>
-                {renderStatusLabel(item?.approval_status)}
+                {/* {renderStatusLabel(item?.approval_status)} */}
+                <View style={{ flexDirection: 'row' }}>{renderStatusLabel(item?.approval_status)}
+                    {item?.product_availability_from && item?.product_availability_to && <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 13, color: item?.status == "active" ? '#23233C' : '#A5A5A5', marginLeft: 10 }}>Availability : {item?.product_availability_from}-{item?.product_availability_to}</Text>}
+                </View>
             </View>
 
             {item?.status ? <View style={{ justifyContent: 'space-between', alignItems: 'center' }}>
