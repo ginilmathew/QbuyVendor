@@ -5,14 +5,24 @@ import Toast from 'react-native-toast-message';
 import customAxios from '../../CustomeAxios';
 import { IMG_URL } from '../../config/constants';
 import { useNavigation } from '@react-navigation/native';
+import CommonStatusCard from '../../Components/CommonStatusCard';
 
 const ProductCard = memo(({ item }) => {
 
     const [isEnabled, setIsEnabled] = useState(item?.status == "active");
     const navigation = useNavigation()
     const toggleSwitch = (data) => {
-        setIsEnabled(!isEnabled)
-        handleStatus()
+        if (item?.approval_status == "approved") {
+            setIsEnabled(!isEnabled)
+            handleStatus()
+        } else {
+            Toast.show({
+                type: 'error',
+                text1: "Unable to change the status",
+                text2: "Status change will be available once the Admin approves the product"
+            });
+        }
+
     };
 
     const handleStatus = async () => {
@@ -27,6 +37,21 @@ const ProductCard = memo(({ item }) => {
                 type: 'error',
                 text1: error
             });
+        }
+    }
+
+    const renderStatusLabel = (status) => {
+        switch (status) {
+            /*  case "created":
+                 return <CommonStatusCard label={status} bg='#BCE4FF' labelColor={'#0098FF'} /> */
+            case "pending":
+                return <CommonStatusCard label={status} bg='#FFF082' labelColor={'#A99500'} />
+            case "approved":
+                return <CommonStatusCard label={status} bg='#CCF1D3' labelColor={'#58D36E'} />
+            case "rejected":
+                return <CommonStatusCard label={status} bg='#FFC9C9' labelColor={'#FF7B7B'} />
+            default:
+                return null; {/* <CommonStatusCard label={status} bg='#FFF082' labelColor={'#A99500'} /> */ }
         }
     }
 
@@ -45,6 +70,7 @@ const ProductCard = memo(({ item }) => {
                     <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 13, color: isEnabled ? '#23233C' : '#A5A5A5' }}>{item?.category?.name}</Text>
                 </View>
                 <Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 14, color: isEnabled ? '#089321' : '#A5A5A5' }} > ₹ {item?.seller_price}</Text>
+                {renderStatusLabel(item?.approval_status)}
             </View>
 
             {item?.status ? <View style={{ justifyContent: 'space-between', alignItems: 'center' }}>
@@ -54,6 +80,7 @@ const ProductCard = memo(({ item }) => {
                     <CommonTexts label={'EDIT'} color='#089321' fontSize={13} />
                 </Pressable>
                 <Switch
+                    // disabled={item?.approval_status != "approved"}
                     trackColor={{ false: '#f0c9c9', true: '#c7f2cf' }}
                     thumbColor={isEnabled ? '#58D36E' : '#D35858'}
                     ios_backgroundColor="#f0c9c9"

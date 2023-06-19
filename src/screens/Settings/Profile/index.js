@@ -78,20 +78,20 @@ const Profile = ({ navigation }) => {
                     <View style={{ paddingHorizontal: 15, }}>
                         <CommonTexts label={'Bank Details '} fontSize={12} mb={8} />
                         <CommonReadonlyBox
-                            topLabel={'Bank Name'}
-                            label={'State Bank of India'}
+                            topLabel={'Bank and Branch Name'}
+                            label={userData?.kyc_details?.branch}
                         />
                         <CommonReadonlyBox
                             topLabel={'IFSC Code'}
-                            label={'SBI000884'}
+                            label={userData?.kyc_details?.ifsc}
                         />
                         <CommonReadonlyBox
                             topLabel={'Account Number'}
-                            label={'8877456544156'}
+                            label={userData?.kyc_details?.account_number}
                         />
                         <CommonReadonlyBox
                             topLabel={'Account Name'}
-                            label={'Ben Johnson'}
+                            label={userData?.kyc_details?.recipient_name}
                         />
                     </View>
                 </ScrollView>
