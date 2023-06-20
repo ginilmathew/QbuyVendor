@@ -13,13 +13,14 @@ import Toast from 'react-native-toast-message';
 import { useIsFocused } from '@react-navigation/native';
 import customAxios from '../../CustomeAxios';
 import has from 'lodash/has';
+import AuthContext from '../../contexts/Auth';
 
 
 const Home = ({ navigation, }) => {
 
     const { height } = useWindowDimensions()
 
-    const loadingg = useContext(LoaderContext)
+    const { getProfileDetails } = useContext(AuthContext)
 
     const isFocused = useIsFocused()
 
@@ -62,6 +63,7 @@ const Home = ({ navigation, }) => {
                         onRefresh={() => {
                             setRefreshing(true)
                             getHomeDetails()
+                            getProfileDetails()
                         }}
                     />}
                 >

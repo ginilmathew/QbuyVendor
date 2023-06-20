@@ -197,7 +197,7 @@ const Products = ({ navigation }) => {
                     </View>}
                     <View style={{ height: height * 0.1 }}></View>
                 </ScrollView>
-                {userData?.type == "green" && <CommonSquareButton onPress={addNewProduct} position={'absolute'} bottom={100} right={25} iconName={'add'} />}
+                {["green", "fashion"].includes(userData?.type) && <CommonSquareButton onPress={addNewProduct} position={'absolute'} bottom={100} right={25} iconName={'add'} />}
                 {/* currentTab === 1 &&
                     <>
                         <CustomSearch

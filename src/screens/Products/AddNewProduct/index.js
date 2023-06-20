@@ -174,7 +174,7 @@ const AddNewProduct = ({ navigation, route }) => {
                 <CommonSelectDropdown
                     error={errors.category?._id}
                     topLabel={'Category'}
-                    data={vendorCategoryList}
+                    data={userData?.category_id}
                     value={getValues("category")}
                     backgroundColor='#F2F2F2'
                     mt={15}
