@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import Toast from 'react-native-toast-message';
 import store from './Redux/store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Notification from './Components/Notification'
 
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
                         position='bottom'
                         bottomOffset={20}
                     />
+                    <Notification />
                 </AuthProvider>
             </LoadProvider>
         </Provider>
