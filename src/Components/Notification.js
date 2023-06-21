@@ -24,7 +24,6 @@ const Notification = () => {
         )
         getToken()
         messaging().onTokenRefresh(fcmToken => {
-            Alert.alert("A new FCM message arrived!")
             console.log("fcmToken", fcmToken);
         });
         messaging().onMessage(msg => {
