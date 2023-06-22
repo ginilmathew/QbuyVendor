@@ -1,4 +1,4 @@
-import { View, Text, Platform, Pressable, Alert, Dimensions, PermissionsAndroid } from 'react-native'
+import { View, Text, Platform, Pressable, Dimensions, PermissionsAndroid } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler'

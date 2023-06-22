@@ -81,7 +81,7 @@ const Otp = ({ navigation, route }) => {
 	}
 
 	const backAction = useCallback(() => {
-		navigation.goBack()
+		navigation.replace("Login")
 	}, [])
 
 

@@ -179,11 +179,11 @@ const AddNewProduct = ({ navigation, route }) => {
                     backgroundColor='#F2F2F2'
                     mt={15}
                     labelField="name"
-                    valueField="_id"
+                    valueField="name"
                     onChange={value => {
-                        console.log(value);
+                        console.log("value", value);
                         delete value?._index
-                        setValue("category", { _id: value._id, name: value?.name })
+                        setValue("category", { _id: value.id, name: value?.name })
                         clearErrors()
                     }}
                 />

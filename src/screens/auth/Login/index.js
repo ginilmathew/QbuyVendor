@@ -55,7 +55,7 @@ const Login = ({ navigation }) => {
 			const response = await customAxios.post("auth/vendorloginotp", { ...data, type })
 			if (response) {
 				loginUser.setLogin(data)
-				navigation.navigate('Otp', { type: "login" })
+				navigation.replace('Otp', { type: "login" })
 			}
 			loadingg.setLoading(false)
 		} catch (error) {
