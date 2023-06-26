@@ -38,6 +38,22 @@ const Settings = ({ navigation }) => {
 
     }, [])
 
+    const onLogout = async () => {
+        try {
+            const response = await customAxios.post("auth/vendorlogout")
+            if (response?.data) {
+                handleLogout()
+            }
+        } catch (error) {
+            console.log("error", error)
+            Toast.show({
+                type: 'error',
+                text1: error
+            });
+        }
+
+    }
+
     const handleLogout = async () => {
         await AsyncStorage.removeItem("token");
         authContext.setUserData({})
@@ -89,7 +105,7 @@ const Settings = ({ navigation }) => {
                                     onPress: () => console.log('Cancel Pressed'),
                                     style: 'cancel',
                                 },
-                                { text: 'Logout', onPress: () => handleLogout() },
+                                { text: 'Logout', onPress: () => onLogout() },
                             ]
                         )
                     }}

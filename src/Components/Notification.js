@@ -1,9 +1,12 @@
 import { View, Text, Platform, Pressable, Dimensions, PermissionsAndroid } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler'
 import messaging from '@react-native-firebase/messaging'
 import isEmpty from 'lodash/isEmpty'
+import Sound from 'react-native-sound'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import AuthContext from '../contexts/Auth'
 
 
 const HEIGHT = Dimensions.get("window").height
@@ -15,6 +18,7 @@ const outputValue = Platform.OS == "android" ? WIDTH * 0.025 : WIDTH * 0.025 + H
 const Notification = () => {
     const animationValue1 = useSharedValue(inputValue)
     const [notificationData, setNotificationData] = useState({})
+    const Auth = useContext(AuthContext)
 
     useEffect(() => {
         //PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS)
@@ -23,14 +27,35 @@ const Notification = () => {
         }
         )
         getToken()
-        messaging().onTokenRefresh(fcmToken => {
-            console.log("fcmToken", fcmToken);
+        messaging().onTokenRefresh(async token => {
+            console.log("fcmToken", token);
+            let accessToken = await AsyncStorage.getItem("token");
+            if (accessToken) {
+                Auth.setPushDetails({ token })
+            }
         });
         messaging().onMessage(msg => {
             setNotificationData(msg.notification)
+            console.log(msg.notification);
             clearTimeout(timeOut)
             startAnimation()
             timeOut
+            if (msg?.notification?.android?.channelId) {
+                let whoosh = new Sound(`${msg.notification?.android?.channelId}.mp3`, Sound.MAIN_BUNDLE, (error) => {
+                    if (error) {
+                        console.log('failed to load the sound', error);
+                        return;
+                    }
+                    // Play the sound with an onEnd callback
+                    whoosh.play((success) => {
+                        if (success) {
+                            console.log('successfully finished playing');
+                        } else {
+                            console.log('playback failed due to audio decoding errors');
+                        }
+                    });
+                });
+            }
         })
         messaging().onNotificationOpenedApp(() => {
             // navigate("NotificationScreen")

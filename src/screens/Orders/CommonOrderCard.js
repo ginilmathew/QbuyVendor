@@ -76,8 +76,19 @@ const CommonOrderCard = memo((props) => {
 
             case "pending":
                 return (<CustomButton
+                    onPress={() => openModal({ title: "Are you sure you want to start preparing this order?", bgColor: "#C7B63E", status: "preparing" })}
+                    label={'Prepare Order'} bg='#C7B63E' mx={8}
+                />)
+
+            case "preparing":
+                return (<CustomButton
+                    onPress={() => openModal({ title: "Are you sure you want to complete preparing this order?", bgColor: "#C7B63E", status: "ready" })}
+                    label={'Order Ready'} bg='#C7B63E' mx={8}
+                />)
+            case "ready":
+                return (<CustomButton
                     onPress={() => openModal({ title: "Are you sure you want to complete this order?", bgColor: "#58D36E", status: "completed" })}
-                    label={'Complete Order'} bg='#C7B63E' mx={8}
+                    label={'Complete Order'} bg='#58D36E' mx={8}
                 />)
 
             case "completed":
@@ -137,7 +148,7 @@ const CommonOrderCard = memo((props) => {
 
                     {/*  <TotalBill value={item?.total_amount} label="Item Total" containerStyle={{ marginTop: 0, paddingVertical: 0 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} />
                     <TotalBill value={item?.delivery_charge} label="Delivery Fee" containerStyle={{ margin: 0, paddingVertical: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} /> */}
-                    <TotalBill value={item?.grand_total} />
+                    {item?.grand_total && <TotalBill value={item?.grand_total} />}
 
                     {renderButton(item?.status)}
 
