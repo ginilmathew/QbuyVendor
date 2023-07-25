@@ -8,7 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import AuthContext from '../../contexts/Auth';
 import customAxios from '../../CustomeAxios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Toast from 'react-native-toast-message';
 
 const Settings = ({ navigation }) => {
     const authContext = useContext(AuthContext)

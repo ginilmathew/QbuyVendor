@@ -54,7 +54,7 @@ const Products = ({ navigation }) => {
     const productSearch = async ({ search }) => {
         console.log(search);
         try {
-            const response = await customAxios.post("vendor/product/search", {
+            const response = await customAxios.post("vendor/newproduct/search", {
                 "type": userData?.type, search
             })
             setFilterList(response?.data?.data)
@@ -70,7 +70,7 @@ const Products = ({ navigation }) => {
     const getProductList = async () => {
         try {
             if (!isEmpty(selected)) {
-                const response = await customAxios.post(`vendor/product/${selected._id == 'all' ? 'history-' : ''}list`, {
+                const response = await customAxios.post(`vendor/newproduct/${selected._id == 'all' ? 'history-' : ''}list`, {
                     "type": userData?.type,
                     "category_id": selected?._id
                 })
@@ -91,7 +91,7 @@ const Products = ({ navigation }) => {
 
     const getProductHistory = async () => {
         try {
-            const response = await customAxios.post("vendor/product/history-list", { "type": userData?.type })
+            const response = await customAxios.post("vendor/newproduct/history-list", { "type": userData?.type })
             if (response && has(response, "data.data")) {
                 setProductHistory(response?.data?.data)
             }

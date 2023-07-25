@@ -1,4 +1,4 @@
-import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Platform } from 'react-native'
+import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Platform, TextInput, Pressable } from 'react-native'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../../Components/HeaderWithTitle'
 import { useForm } from "react-hook-form";
@@ -11,23 +11,115 @@ import CommonSelectDropdown from '../../../Components/CommonSelectDropdown';
 import CustomButton from '../../../Components/CustomButton';
 import AuthContext from '../../../contexts/Auth';
 import isEmpty from 'lodash/isEmpty';
-import has from 'lodash/has';
+import isNull from 'lodash/isNull';
 import customAxios from '../../../CustomeAxios';
 import Toast from 'react-native-toast-message';
 import { IMG_URL, mode } from '../../../config/constants';
 import LoaderContext from '../../../contexts/Loader';
+import CommonSquareButton from '../../../Components/CommonSquareButton';
+
+
+const CustomTextInput = ({ label = "", error, onChangeText, value, keyboardType = "default" }) => {
+    return <View style={{ flex: 1 }}>
+        <Text style={{
+            fontFamily: 'Poppins-Regular',
+            color: '#23233C',
+            fontSize: 11,
+            marginLeft: 5,
+        }}>{label}</Text>
+        <View style={{
+            backgroundColor: '#F2F2F2',
+            borderRadius: 7,
+            shadowOpacity: 0.1,
+            shadowRadius: 5,
+            elevation: 2,
+            marginLeft: 1,
+            shadowOffset: { width: 1, height: 5 },
+        }}>
+            <TextInput style={{ flex: 1, height: 45 }}
+                onChangeText={onChangeText} value={value}
+                keyboardType={keyboardType}
+            />
+        </View>
+        <Text style={{
+            fontFamily: 'Poppins-Regular',
+            color: 'red',
+            fontSize: 9,
+            marginLeft: 5,
+            position: "absolute",
+            bottom: -15
+        }}>{error}</Text>
+    </View>
+}
+
+const CustomOptionInput = ({ onChangeText, value, err }) => {
+
+    const [data, setData] = useState(value || "")
+    const [error, setErrorFn] = useState(err || "")
+
+    useEffect(() => {
+        setErrorFn(err)
+    }, [err])
+
+
+    return <View style={{ flex: 1, flexDirection: "row" }}>
+        <View style={{
+            backgroundColor: '#F2F2F2',
+            borderRadius: 7,
+            shadowOpacity: 0.1,
+            shadowRadius: 5,
+            elevation: 2,
+            marginLeft: 1,
+            shadowOffset: { width: 1, height: 5 },
+            flex: 1,
+        }}>
+            <TextInput style={{ flex: 1, height: 45 }}
+                onChangeText={(v) => {
+                    setData(v)
+                    setErrorFn("")
+                }} value={data}
+            />
+            <Text style={{
+                fontFamily: 'Poppins-Regular',
+                color: 'red',
+                fontSize: 9,
+                marginLeft: 5,
+                position: "absolute",
+                bottom: -15
+            }}>{error}</Text>
+        </View>
+        <CommonSquareButton ml={10} iconName={"add-circle-outline"} onPress={() => {
+            if (!isEmpty(data)) {
+                onChangeText(data)
+                setData("")
+            } else {
+                setErrorFn("Please enter an option value")
+            }
+        }} />
+    </View>
+}
+
+
 const AddNewProduct = ({ navigation, route }) => {
 
-    const { width } = useWindowDimensions()
     const { vendorCategoryList = [], userData } = useContext(AuthContext)
     const { setLoading, loading } = useContext(LoaderContext)
     const item = route?.params?.item || {}
     const [filePath, setFilePath] = useState(null);
-    const [values, setValues] = useState(null);
+    const [variant, setVariant] = useState(false);
+    const [attributess, setAttributess] = useState([{ name: "", options: [], variant: true }]);
+    const [error, setErrorFn] = useState({});
+    const [options, setOptions] = useState([]);
+
+    const setFormData = (field, value) => {
+        setAttributess([...value]);
+        setErrorFn({})
+    }
 
     const schema = yup.object({
+        variant: yup.boolean(),
         name: yup.string().required('Name is required'),
-        price: yup.number().required('Price is required'),
+        price: yup.number(),
         category: yup.object({
             _id: yup.string().required("Category is required"),
             name: yup.string().required("Category is required")
@@ -42,7 +134,7 @@ const AddNewProduct = ({ navigation, route }) => {
         })
     }).required();
 
-    const { control, handleSubmit, formState: { errors, }, setValue, clearErrors, getValues, reset } = useForm({
+    const { control, handleSubmit, formState: { errors }, setValue, clearErrors, getValues, reset, setError } = useForm({
         resolver: yupResolver(schema),
     });
 
@@ -95,6 +187,8 @@ const AddNewProduct = ({ navigation, route }) => {
     }, [])
 
     const onSubmit = useCallback(async (data) => {
+        console.log("111", options);
+        //console.log("data ==>", data);
         setLoading(true)
         try {
             let body = new FormData()
@@ -103,7 +197,6 @@ const AddNewProduct = ({ navigation, route }) => {
             body.append("franchisee", JSON.stringify(userData?.franchisee))
             body.append("name", data.name)
             body.append("category", JSON.stringify(data.category))
-            body.append("price", data.price)
             body.append("image", {
                 uri: data?.image?.uri,
                 type: data?.image?.type,
@@ -113,12 +206,38 @@ const AddNewProduct = ({ navigation, route }) => {
             if (item?._id) {
                 body.append("id", item?._id)
             }
-            const response = await customAxios.post(`vendor/product/${item?._id ? 'update' : 'create'}`, body, {
+
+            body.append("variant", data?.variant)
+            if (data?.variant) {
+                const valid = validateData()
+                if (valid) {
+                    setLoading(false)
+                    return false
+                    body.append("attributess", attributess)
+                    body.append("variants", options)
+
+                } else {
+                    setLoading(false)
+                    return false
+                }
+            } else {
+                if (!data?.price || isNull(data?.price)) {
+                    setError("price", { message: "Price is required" })
+                    setLoading(false)
+                    return false
+                } else {
+                    body.append("price", data.price)
+                }
+            }
+            console.log("body ==>", JSON.stringify(body));
+            return false
+            const response = await customAxios.post(`vendor/newproduct/${item?._id ? 'update' : 'create'}`, body, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
             })
             if (response?.data) {
+                console.log("response?.data ==>", response?.data);
                 Toast.show({
                     text1: response?.data?.message
                 });
@@ -136,6 +255,95 @@ const AddNewProduct = ({ navigation, route }) => {
             });
         }
     }, [])
+
+
+    const validateData = () => {
+        let error = {}
+        attributess.map((attribute, index) => {
+            if (isEmpty(attribute?.name)) {
+                error.attribute = error.attribute || { [index]: { name: "" } }
+                error.attribute[index] = { name: "Please enter attribute name" }
+            }
+            if (isEmpty(attribute?.options)) {
+                error.attribute = error.attribute || { [index]: { options: "" } }
+                error.attribute[index]["options"] = /* { options: */ "Please enter attribute options" //}
+            }
+        })
+        console.log(options);
+        options.map(({ seller_price }, index) => {
+            if (!seller_price || isNull(seller_price)) {
+                error.options = error.options || {}
+                error.options[index] = "Please enter attribute price"
+            }
+        })
+
+        setErrorFn(error)
+        console.log(error, isEmpty(error));
+        return isEmpty(error)
+    }
+
+    const addAttribute = () => {
+        let error = {}
+        attributess.map((attribute, index) => {
+            if (isEmpty(attribute?.name)) {
+                error.attribute = {}
+                error.attribute[index] = "Please enter attribute name"
+            }
+        })
+        if (isEmpty(error)) {
+            setFormData("attributess", [...attributess, { name: "", options: [], variant: true }])
+        } else {
+            setErrorFn(error)
+        }
+    }
+
+    const removeAttribute = (index) => {
+        console.log(index);
+        let error = {}
+        if (attributess?.length == 1) {
+            error.attribute = {}
+            error.attribute[0] = "Unable to remove attribute"
+        }
+        if (isEmpty(error)) {
+            let tmp = attributess.filter((attribute, i) => i !== index)
+            setFormData("attributess", tmp)
+        } else {
+            setErrorFn(error)
+        }
+    }
+
+    useEffect(() => {
+        setOptions(renderOptions(attributess?.map(({ options }) => options)))
+        console.log("UPDATEDDDDD");
+    }, [attributess])
+
+    useEffect(() => {
+        //setOptions(attributess?.map(({ options }) => options))
+        console.log("options ==>", options);
+    }, [options])
+
+    const renderOptions = (arr) => {
+        let n = arr.length;
+        let indices = new Array(n);
+        let attributs = []
+        let combinationList = []
+        for (let i = 0; i < n; i++)
+            indices[i] = 0;
+        while (true) {
+            for (let i = 0; i < n; i++)
+                attributs.push(arr[i][indices[i]])
+            combinationList.push({ attributs: attributs || [], title: attributs?.join("-") })
+            let next = n - 1;
+            while (next >= 0 && (indices[next] + 1 >= arr[next].length))
+                next--;
+            if (next < 0) return combinationList;
+            indices[next]++;
+            for (let i = next + 1; i < n; i++)
+                indices[i] = 0;
+            attributs = []
+        }
+    }
+
 
     return (
         <>
@@ -187,21 +395,141 @@ const AddNewProduct = ({ navigation, route }) => {
                         clearErrors()
                     }}
                 />
-                <CommonInput
-                    control={control}
-                    error={errors.price}
-                    fieldName="price"
-                    backgroundColor='#F2F2F2'
-                    topLabel={'Price'}
-                    top={15}
-                    rightIcon={<Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 30, color: '#58D36E' }}>₹</Text>}
-                />
+                <View style={{ justifyContent: "space-between", flexDirection: "row", marginVertical: 20 }}>
+                    <Text style={{
+                        fontFamily: 'Poppins-Regular',
+                        color: '#23233C',
+                        fontSize: 12,
+                        marginLeft: 5,
+                    }}>Product Attributes</Text>
+                    <Switch
+                        // disabled={item?.approval_status != "approved"}
+                        trackColor={{ false: '#f0c9c9', true: '#c7f2cf' }}
+                        thumbColor={variant ? '#58D36E' : '#D35858'}
+                        ios_backgroundColor="#f0c9c9"
+                        onValueChange={(value) => {
+                            setVariant(value)
+                            setValue("variant", value)
+                        }}
+                        value={variant}
+                        style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }] }}
+                    />
+                </View>
+                {variant ? <View style={{}}>
+                    {
+                        attributess?.map((item, index) => {
+                            return <View style={{ borderWidth: 1, borderColor: "#58D36E", borderStyle: "dashed", borderRadius: 5, padding: 5, marginBottom: 10 }}>
+                                <View style={{ flexDirection: "row", alignItems: "flex-end", marginBottom: 10 }}>
+                                    <CustomTextInput label="Attribute Name"
+                                        error={error?.attribute?.[index]?.name}
+                                        value={item?.name || ""}
+                                        onChangeText={(name) => {
+                                            let tmp = attributess
+                                            tmp[index] = { ...item, name }
+                                            setFormData("attributess", tmp)
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ borderWidth: 0, marginLeft: 15 }}>
+                                    <Text style={{
+                                        fontFamily: 'Poppins-Regular',
+                                        color: '#23233C',
+                                        fontSize: 12,
+                                        marginLeft: 5,
+                                    }}>Product Attributes options</Text>
+                                    <CustomOptionInput label="Options Name"
+                                        //value={item?.name || ""}
+                                        err={error?.attribute?.[index]?.options}
+                                        onChangeText={(name) => {
+                                            let tmp = attributess
+                                            tmp[index].options.push(name)
+                                            setFormData("attributess", tmp)
+                                        }}
+                                    />
+                                    <View style={{ flexWrap: "wrap", flexDirection: "row", marginBottom: 5 }}>
+                                        {
+                                            item?.options?.map((option, i) => <View style={{ flexDirection: "row", backgroundColor: "#F2F2F2", marginTop: 15, marginRight: 5, borderRadius: 20 }}>
+                                                <Text style={{
+                                                    fontFamily: 'Poppins-Regular',
+                                                    color: '#23233C',
+                                                    fontSize: 12,
+                                                    margin: 5,
+                                                    marginHorizontal: 10
+                                                }}>{option}</Text>
+                                                <Pressable onPress={() => {
+                                                    let tmp = attributess
+                                                    //tmp[index].options = []
+                                                    tmp[index].options = item?.options?.filter(op => op != option)
+                                                    setFormData("attributess", tmp)
+                                                }} style={{ paddingRight: 5, justifyContent: "center" }}>
+                                                    <Ionicons name={"close-circle-outline"} color='red' size={15} marginLeft={2} />
+                                                </Pressable>
+                                            </View>)
+                                        }
+                                    </View>
+                                </View>
+                                <View style={{ flexDirection: "row", margin: 10 }}>
+                                    {attributess?.length > 1 && <CustomButton
+                                        style={{ flex: 1, marginRight: 10 }}
+                                        label={"Remove"}
+                                        bg="#FF4B4B"
+                                        onPress={() => {
+                                            removeAttribute(index)
+                                        }}
+                                    />}
+                                    {attributess?.length == (index + 1) && <CustomButton
+                                        bg="#58D36E"
+                                        style={{ flex: 1 }}
+                                        label={"Add New Attribute"}
+                                        onPress={() => {
+                                            addAttribute()
+                                        }}
+                                    />}
+                                </View>
+                            </View>
+                        })
+                    }
+                    <Text style={{
+                        fontFamily: 'Poppins-Regular',
+                        color: '#23233C',
+                        fontSize: 12,
+                        marginLeft: 5,
+                        marginTop: 5
+                    }}>Product Attributes Options Prices</Text>
+                    {
+                        options?.map((item, index) => {
+                            return <View style={{ paddingLeft: 10, paddingVertical: 5 }}>
+                                <CustomTextInput
+                                    label={`Selling price for ${item?.attributs?.join("-")}`}
+                                    value={item?.seller_price || ""}
+                                    keyboardType='number-pad'
+                                    onChangeText={(seller_price) => {
+                                        let tmp = options
+                                        tmp[index] = { ...tmp[index], seller_price }
+                                        setOptions([...tmp])
+                                    }}
+                                    error={error?.options?.[index]}
+                                />
+                            </View>
+                        })
+                    }
+                </View> :
+                    <CommonInput
+                        control={control}
+                        error={errors.price}
+                        fieldName="price"
+                        backgroundColor='#F2F2F2'
+                        topLabel={'Price'}
+                        top={15}
+                        rightIcon={<Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 30, color: '#58D36E' }}>₹</Text>}
+                    />}
 
-                <CustomButton label={'Submit'} bg='#58D36E' mt={25} onPress={handleSubmit(onSubmit, (err) => {
+                <CustomButton label={'Submit'} bg='#58D36E' mt={25} onPress={onSubmit/* handleSubmit(onSubmit, (err) => {
                     //console.log(err);
-                })}
+                }) */}
                     loading={loading}
                 />
+                <View style={{ marginBottom: 150 }} />
             </ScrollView>
         </>
     )

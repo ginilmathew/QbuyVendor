@@ -2,25 +2,25 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useContext } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
-const CommonSquareButton = ({position, bottom, mt, right, onPress, iconName}) => {
+const CommonSquareButton = ({ position, bottom, mt, right, onPress, iconName, ml, backgroundColor = "#58D36E" }) => {
 
     return (
         <TouchableOpacity
-            style={{
+            style={[{
                 width: 45,
                 height: 45,
-                backgroundColor: '#58D36E',
+                backgroundColor,
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 10,
                 marginTop: mt,
                 position: position,
-                bottom: bottom, 
+                bottom: bottom,
                 right: right
-            }}
-            onPress= {onPress}
+            }, ml ? { marginLeft: ml } : {}]}
+            onPress={onPress}
         >
-            <Ionicons name={iconName} color='#fff' size={30}  marginLeft={2}/>
+            <Ionicons name={iconName} color='#fff' size={30} marginLeft={2} />
 
         </TouchableOpacity>
     )
