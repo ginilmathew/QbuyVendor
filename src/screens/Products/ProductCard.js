@@ -75,12 +75,11 @@ const ProductCard = ({ item, onRefresh = () => { } }) => {
                     {item?.product_availability_from && item?.product_availability_to && <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 13, color: item?.status == "active" ? '#23233C' : '#A5A5A5', marginLeft: 10 }}>{item?.product_availability_from}-{item?.product_availability_to}</Text>}
                 </View>
             </View>
-
             {item?.status ? <View style={{ justifyContent: 'space-between', alignItems: 'center' }}>
                 <Pressable onPress={() => {
                     navigation.navigate('AddNewProduct', { item })
                 }}>
-                    <CommonTexts label={'EDIT'} color='#089321' fontSize={13} />
+                    <CommonTexts label={item?.approval_status == "pending" ? 'EDIT' : "VIEW"} color='#089321' fontSize={13} />
                 </Pressable>
                 <Switch
                     // disabled={item?.approval_status != "approved"}

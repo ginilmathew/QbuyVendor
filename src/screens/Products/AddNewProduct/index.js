@@ -107,7 +107,7 @@ const AddNewProduct = ({ navigation, route }) => {
     const item = route?.params?.item || {}
     const [filePath, setFilePath] = useState(null);
     const [variant, setVariant] = useState(false);
-    const [attributess, setAttributess] = useState([{ name: "", options: [], variant: true }]);
+    const [attributess, setAttributess] = useState([]);
     const [error, setErrorFn] = useState({});
     const [options, setOptions] = useState([]);
 
@@ -186,8 +186,8 @@ const AddNewProduct = ({ navigation, route }) => {
         });
     }, [])
 
-    const onSubmit = useCallback(async (data) => {
-        console.log("111", options);
+    const onSubmit = async (data) => {
+        console.log("111", options, data);
         //console.log("data ==>", data);
         setLoading(true)
         try {
@@ -212,9 +212,10 @@ const AddNewProduct = ({ navigation, route }) => {
                 const valid = validateData()
                 if (valid) {
                     setLoading(false)
-                    return false
-                    body.append("attributess", attributess)
-                    body.append("variants", options)
+                    // return false
+                    console.log("attributess", JSON.stringify(attributess), "variants", JSON.stringify(options));
+                    body.append("attributess", JSON.stringify(attributess))
+                    body.append("variants", JSON.stringify(options))
 
                 } else {
                     setLoading(false)
@@ -230,7 +231,7 @@ const AddNewProduct = ({ navigation, route }) => {
                 }
             }
             console.log("body ==>", JSON.stringify(body));
-            return false
+            // return false
             const response = await customAxios.post(`vendor/newproduct/${item?._id ? 'update' : 'create'}`, body, {
                 headers: {
                     "Content-Type": "multipart/form-data"
@@ -254,7 +255,7 @@ const AddNewProduct = ({ navigation, route }) => {
                 text1: error
             });
         }
-    }, [])
+    }
 
 
     const validateData = () => {
@@ -313,14 +314,8 @@ const AddNewProduct = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        setOptions(renderOptions(attributess?.map(({ options }) => options)))
-        console.log("UPDATEDDDDD");
+        attributess.length > 0 && setOptions(renderOptions(attributess?.map(({ options }) => options)))
     }, [attributess])
-
-    useEffect(() => {
-        //setOptions(attributess?.map(({ options }) => options))
-        console.log("options ==>", options);
-    }, [options])
 
     const renderOptions = (arr) => {
         let n = arr.length;
@@ -347,7 +342,7 @@ const AddNewProduct = ({ navigation, route }) => {
 
     return (
         <>
-            <HeaderWithTitle title={'Add New Product'} backAction />
+            <HeaderWithTitle title={isEmpty(item) ? 'Add New Product' : "Edit Product"} backAction />
             <ScrollView style={{ backgroundColor: '#fff', flex: 1, paddingHorizontal: 15 }}>
 
                 <TouchableOpacity
@@ -417,7 +412,7 @@ const AddNewProduct = ({ navigation, route }) => {
                 </View>
                 {variant ? <View style={{}}>
                     {
-                        attributess?.map((item, index) => {
+                        (attributess.length > 0 ? attributess : [{ name: "", options: [], variant: true }])?.map((item, index) => {
                             return <View style={{ borderWidth: 1, borderColor: "#58D36E", borderStyle: "dashed", borderRadius: 5, padding: 5, marginBottom: 10 }}>
                                 <View style={{ flexDirection: "row", alignItems: "flex-end", marginBottom: 10 }}>
                                     <CustomTextInput label="Attribute Name"
@@ -523,12 +518,11 @@ const AddNewProduct = ({ navigation, route }) => {
                         top={15}
                         rightIcon={<Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 30, color: '#58D36E' }}>₹</Text>}
                     />}
-
-                <CustomButton label={'Submit'} bg='#58D36E' mt={25} onPress={onSubmit/* handleSubmit(onSubmit, (err) => {
+                {(!item?.approval_status || item?.approval_status == "pending") && <CustomButton label={'Submit'} bg='#58D36E' mt={25} onPress={handleSubmit(onSubmit, (err) => {
                     //console.log(err);
-                }) */}
+                })}
                     loading={loading}
-                />
+                />}
                 <View style={{ marginBottom: 150 }} />
             </ScrollView>
         </>
