@@ -12,6 +12,7 @@ const AuthProvider = (props) => {
     const [login, setLogin] = useState([]);
     const [otp, setOtp] = useState('');
     const [userData, setUserData] = useState({});
+    const [fcmToken, setFcmToken] = useState(null);
     const [orderStatus, setOrderStatus] = useState([]);
     const [vendorCategoryList, setVendorCategoryList] = useState([]);
     const loading = useContext(LoaderContext)
@@ -91,13 +92,15 @@ const AuthProvider = (props) => {
                 userData,
                 orderStatus,
                 vendorCategoryList,
+                fcmToken,
                 setOtp,
                 setLogin,
                 setUserData,
                 getProfileDetails,
                 getOrderStatus,
                 venderCategories,
-                setPushDetails
+                setPushDetails,
+                setFcmToken
             }}
         >
             {props.children}

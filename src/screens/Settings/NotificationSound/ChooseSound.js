@@ -1,29 +1,8 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import Sound from 'react-native-sound'
 
-const ChooseSound = ({ onPress, selected, item }) => {
-
-    const [play, setPlay] = useState(false)
-
-    const action = () => {
-        setPlay(true)
-        let whoosh = new Sound(item?.uri, Sound.MAIN_BUNDLE, (error) => {
-            if (error) {
-                console.log('failed to load the sound', error);
-                return;
-            }
-            whoosh.play((success) => {
-                if (success) {
-                    console.log('successfully finished playing');
-                    setPlay(false)
-                } else {
-                    console.log('playback failed due to audio decoding errors');
-                }
-            });
-        });
-    }
+const ChooseSound = ({ onPress, selected, item, playing = null, setPlaying }) => {
 
     return (
         <TouchableOpacity
@@ -42,9 +21,9 @@ const ChooseSound = ({ onPress, selected, item }) => {
                 >{item?.name}</Text>
             </View>
             <TouchableOpacity
-                onPress={() => action(item)}
+                onPress={() => setPlaying()}
             >
-                <Ionicons name={play ? 'md-stop-circle' : 'md-play-circle'} color={'#D122CB'} size={30} />
+                <Ionicons name={playing?._id === item?._id ? 'md-stop-circle' : 'md-play-circle'} color={'#D122CB'} size={30} />
             </TouchableOpacity>
         </TouchableOpacity>
     )

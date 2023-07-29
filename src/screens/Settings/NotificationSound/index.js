@@ -6,6 +6,7 @@ import CustomButton from '../../../Components/CustomButton'
 import AuthContext from '../../../contexts/Auth'
 import LoaderContext from '../../../contexts/Loader'
 import Toast from 'react-native-toast-message'
+import Sound from 'react-native-sound'
 
 const NotificationSound = ({ navigation }) => {
 
@@ -13,6 +14,7 @@ const NotificationSound = ({ navigation }) => {
     const Auth = useContext(AuthContext)
     const loading = useContext(LoaderContext)
     const [selected, setSelected] = useState(Auth?.userData?.sound || 'sound1')
+    const [playing, setPlaying] = useState(null)
     const data = [
         {
             _id: 'sound1',
@@ -31,6 +33,21 @@ const NotificationSound = ({ navigation }) => {
         },
     ]
 
+    const playSound = async (item) => {
+        setPlaying(item)
+        let whoosh = new Sound(item?.uri, Sound.MAIN_BUNDLE, (err) => {
+            if (err) {
+                console.log("err ==>", err);
+            } else {
+                whoosh.play((success) => {
+                    if (success) {
+                        setPlaying(null)
+                    }
+                })
+            }
+        })
+    }
+
     return (
         <>
             <HeaderWithTitle title={'Notification Sound'} backAction />
@@ -40,6 +57,10 @@ const NotificationSound = ({ navigation }) => {
                         item={item}
                         key={item?._id}
                         selected={selected}
+                        playing={playing}
+                        setPlaying={() => {
+                            playSound(item)
+                        }}
                         onPress={() => setSelected(item?._id)}
                     />
                 )}

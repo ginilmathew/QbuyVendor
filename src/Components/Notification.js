@@ -29,10 +29,7 @@ const Notification = () => {
         getToken()
         messaging().onTokenRefresh(async token => {
             console.log("fcmToken", token);
-            let accessToken = await AsyncStorage.getItem("token");
-            if (accessToken) {
-                Auth.setPushDetails({ token })
-            }
+            Auth.setFcmToken(token)
         });
         messaging().onMessage(msg => {
             setNotificationData(msg.notification)
@@ -83,16 +80,16 @@ const Notification = () => {
     });
 
     const getToken = async () => {
-        if (Platform.OS == "ios") {
-            const hasPermission = await messaging().hasPermission()
-            if (hasPermission == messaging.AuthorizationStatus.NOT_DETERMINED) {
-                await messaging().requestPermission()
-            }
-        } else {
-            PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS)
+        if (Platform.OS == "android") {
+            const t = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS)
         }
-        const firebasebToken = await messaging().getToken()
-        console.log("firebasebToken", firebasebToken);
+        const hasPermission = await messaging().hasPermission()
+        if (hasPermission == messaging.AuthorizationStatus.NOT_DETERMINED) {
+            await messaging().requestPermission()
+        }
+        const token = await messaging().getToken()
+        Auth.setFcmToken(token)
+        console.log("firebasebToken", token);
     }
 
     return (<Animated.View style={[{ backgroundColor: "#FFF", margin: WIDTH * 0.025, borderRadius: WIDTH * 0.025, position: "absolute", top: 0, right: 0, left: 0 }, animatedStyle]}>

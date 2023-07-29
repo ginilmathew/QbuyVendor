@@ -20,7 +20,7 @@ const Home = ({ navigation, }) => {
 
     const { height } = useWindowDimensions()
 
-    const { getProfileDetails } = useContext(AuthContext)
+    const { getProfileDetails, fcmToken, setPushDetails } = useContext(AuthContext)
 
     const isFocused = useIsFocused()
 
@@ -51,6 +51,12 @@ const Home = ({ navigation, }) => {
     useEffect(() => {
         getHomeDetails()
     }, [isFocused])
+
+    useEffect(() => {
+        if (fcmToken) {
+            setPushDetails({ token: fcmToken })
+        }
+    }, [])
 
     return (
         <>
