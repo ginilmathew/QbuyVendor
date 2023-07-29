@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, Platform, Alert, } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, Platform, Alert, Pressable, } from 'react-native'
 import React, { useCallback, useContext } from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,7 +13,7 @@ import AuthContext from '../../../contexts/Auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import customAxios from '../../../CustomeAxios';
 import Toast from 'react-native-toast-message';
-
+import DeviceInfo from 'react-native-device-info';
 
 const Otp = ({ navigation, route }) => {
 	const { type } = route?.params || {}
@@ -85,6 +85,26 @@ const Otp = ({ navigation, route }) => {
 	}, [])
 
 
+	const handleResendOtp = async () => {
+		let bundleId = DeviceInfo.getBundleId();
+		const type = bundleId.replace("com.qbuystoreapp.", "")
+		try {
+			const response = await customAxios.post("auth/vendorloginotp", { mobile: mobileNo, type })
+			if (response) {
+				Toast.show({
+					type: 'success',
+					text1: response.data.message
+				});
+			}
+		} catch (error) {
+			console.log("error=>", error);
+			Toast.show({
+				type: 'error',
+				text1: error
+			});
+		}
+	}
+
 	return (
 		<CommonAuthBg>
 			<ScrollView style={{ flex: 1, paddingHorizontal: 40, }}>
@@ -103,12 +123,17 @@ const Otp = ({ navigation, route }) => {
 						setValue("otp", text)
 					}}
 				/>
-				<CommonTexts
-					label={'Resend OTP'}
-					mt={10}
-					textAlign='right'
-					color={'#5871D3'}
-				/>
+				<Pressable onPress={() => {
+					handleResendOtp()
+				}}>
+					<CommonTexts
+						label={'Resend OTP'}
+						mt={10}
+						textAlign='right'
+						color={'#5871D3'}
+
+					/>
+				</Pressable>
 				<CustomButton
 					onPress={handleSubmit(onSubmit)}
 					bg='#58D36E'

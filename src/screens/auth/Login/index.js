@@ -18,7 +18,6 @@ import CommonTexts from '../../../Components/CommonTexts';
 import AuthContext from '../../../contexts/Auth';
 import LoaderContext from '../../../contexts/Loader';
 import customAxios from '../../../CustomeAxios';
-import { mode } from '../../../config/constants';
 
 
 const Login = ({ navigation }) => {
