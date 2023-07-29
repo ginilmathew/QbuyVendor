@@ -12,6 +12,7 @@ import CustomButton from '../../../Components/CustomButton';
 import AuthContext from '../../../contexts/Auth';
 import isEmpty from 'lodash/isEmpty';
 import isNull from 'lodash/isNull';
+import has from 'lodash/has';
 import customAxios from '../../../CustomeAxios';
 import Toast from 'react-native-toast-message';
 import { IMG_URL, mode } from '../../../config/constants';
@@ -19,7 +20,7 @@ import LoaderContext from '../../../contexts/Loader';
 import CommonSquareButton from '../../../Components/CommonSquareButton';
 
 
-const CustomTextInput = ({ label = "", error, onChangeText, value, keyboardType = "default" }) => {
+const CustomTextInput = ({ label = "", error, onChangeText, value, keyboardType = "default", editable = true }) => {
     return <View style={{ flex: 1 }}>
         <Text style={{
             fontFamily: 'Poppins-Regular',
@@ -39,6 +40,7 @@ const CustomTextInput = ({ label = "", error, onChangeText, value, keyboardType 
             <TextInput style={{ flex: 1, height: 45 }}
                 onChangeText={onChangeText} value={value}
                 keyboardType={keyboardType}
+                editable={editable}
             />
         </View>
         <Text style={{
@@ -52,7 +54,7 @@ const CustomTextInput = ({ label = "", error, onChangeText, value, keyboardType 
     </View>
 }
 
-const CustomOptionInput = ({ onChangeText, value, err }) => {
+const CustomOptionInput = ({ onChangeText, value, err, editable }) => {
 
     const [data, setData] = useState(value || "")
     const [error, setErrorFn] = useState(err || "")
@@ -78,6 +80,7 @@ const CustomOptionInput = ({ onChangeText, value, err }) => {
                     setData(v)
                     setErrorFn("")
                 }} value={data}
+                editable={editable}
             />
             <Text style={{
                 fontFamily: 'Poppins-Regular',
@@ -88,14 +91,17 @@ const CustomOptionInput = ({ onChangeText, value, err }) => {
                 bottom: -15
             }}>{error}</Text>
         </View>
-        <CommonSquareButton ml={10} iconName={"add-circle-outline"} onPress={() => {
-            if (!isEmpty(data)) {
-                onChangeText(data)
-                setData("")
-            } else {
-                setErrorFn("Please enter an option value")
-            }
-        }} />
+        <CommonSquareButton ml={10} iconName={"add-circle-outline"}
+            disabled={!editable}
+            onPress={() => {
+                if (!isEmpty(data)) {
+                    onChangeText(data)
+                    setData("")
+                } else {
+                    setErrorFn("Please enter an option value")
+                }
+            }}
+        />
     </View>
 }
 
@@ -105,11 +111,13 @@ const AddNewProduct = ({ navigation, route }) => {
     const { vendorCategoryList = [], userData } = useContext(AuthContext)
     const { setLoading, loading } = useContext(LoaderContext)
     const item = route?.params?.item || {}
+    const disabled = /* true// */item?.approval_status ? !(item?.approval_status == "pending") : false
+    console.log("disabled", disabled, item?.approval_status);
     const [filePath, setFilePath] = useState(null);
-    const [variant, setVariant] = useState(false);
-    const [attributess, setAttributess] = useState([]);
+    const [variant, setVariant] = useState(!isEmpty(item?.variants) || false);
+    const [attributess, setAttributess] = useState(item?.attributes || []);
     const [error, setErrorFn] = useState({});
-    const [options, setOptions] = useState([]);
+    const [options, setOptions] = useState(item?.variants || []);
 
     const setFormData = (field, value) => {
         setAttributess([...value]);
@@ -142,8 +150,13 @@ const AddNewProduct = ({ navigation, route }) => {
         if (!isEmpty(item)) {
             let newData = {
                 name: item.name,
-                price: item?.seller_price,
                 category: item?.category
+            }
+            if (item?.seller_price) {
+                newData.price = item?.seller_price
+            }
+            if (item?.variants) {
+                newData.variant = !isEmpty(item?.variants)
             }
             if (item.product_image) {
                 newData.image = {
@@ -238,7 +251,6 @@ const AddNewProduct = ({ navigation, route }) => {
                 }
             })
             if (response?.data) {
-                console.log("response?.data ==>", response?.data);
                 Toast.show({
                     text1: response?.data?.message
                 });
@@ -270,7 +282,6 @@ const AddNewProduct = ({ navigation, route }) => {
                 error.attribute[index]["options"] = /* { options: */ "Please enter attribute options" //}
             }
         })
-        console.log(options);
         options.map(({ seller_price }, index) => {
             if (!seller_price || isNull(seller_price)) {
                 error.options = error.options || {}
@@ -279,7 +290,6 @@ const AddNewProduct = ({ navigation, route }) => {
         })
 
         setErrorFn(error)
-        console.log(error, isEmpty(error));
         return isEmpty(error)
     }
 
@@ -314,7 +324,17 @@ const AddNewProduct = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        attributess.length > 0 && setOptions(renderOptions(attributess?.map(({ options }) => options)))
+        if (attributess.length > 0) {
+            let tmp = renderOptions(attributess?.map(({ options }) => options))
+
+            if (!isEmpty(item?.variants)) {
+                tmp.map((variant, i) => {
+                    tmp[i] = { ...item?.variants[i], ...variant }
+                })
+            }
+
+            setOptions(tmp)
+        }
     }, [attributess])
 
     const renderOptions = (arr) => {
@@ -339,13 +359,13 @@ const AddNewProduct = ({ navigation, route }) => {
         }
     }
 
-
     return (
         <>
             <HeaderWithTitle title={isEmpty(item) ? 'Add New Product' : "Edit Product"} backAction />
-            <ScrollView style={{ backgroundColor: '#fff', flex: 1, paddingHorizontal: 15 }}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: '#fff', flex: 1, paddingHorizontal: 15 }}>
 
                 <TouchableOpacity
+                    disabled={disabled}
                     onPress={imageGalleryLaunch}
                     style={styles.imageContainer}
                 >
@@ -373,6 +393,7 @@ const AddNewProduct = ({ navigation, route }) => {
                     backgroundColor='#F2F2F2'
                     topLabel={'Product Name'}
                     top={15}
+                    editable={!disabled}
                 />
                 <CommonSelectDropdown
                     error={errors.category?._id}
@@ -389,6 +410,7 @@ const AddNewProduct = ({ navigation, route }) => {
                         setValue("category", { _id: value.id, name: value?.name })
                         clearErrors()
                     }}
+                    disable={disabled}
                 />
                 <View style={{ justifyContent: "space-between", flexDirection: "row", marginVertical: 20 }}>
                     <Text style={{
@@ -398,7 +420,7 @@ const AddNewProduct = ({ navigation, route }) => {
                         marginLeft: 5,
                     }}>Product Attributes</Text>
                     <Switch
-                        // disabled={item?.approval_status != "approved"}
+                        disabled={disabled}
                         trackColor={{ false: '#f0c9c9', true: '#c7f2cf' }}
                         thumbColor={variant ? '#58D36E' : '#D35858'}
                         ios_backgroundColor="#f0c9c9"
@@ -412,7 +434,7 @@ const AddNewProduct = ({ navigation, route }) => {
                 </View>
                 {variant ? <View style={{}}>
                     {
-                        (attributess.length > 0 ? attributess : [{ name: "", options: [], variant: true }])?.map((item, index) => {
+                        (attributess?.length > 0 ? attributess : [{ name: "", options: [], variant: true }])?.map((item, index) => {
                             return <View style={{ borderWidth: 1, borderColor: "#58D36E", borderStyle: "dashed", borderRadius: 5, padding: 5, marginBottom: 10 }}>
                                 <View style={{ flexDirection: "row", alignItems: "flex-end", marginBottom: 10 }}>
                                     <CustomTextInput label="Attribute Name"
@@ -423,6 +445,7 @@ const AddNewProduct = ({ navigation, route }) => {
                                             tmp[index] = { ...item, name }
                                             setFormData("attributess", tmp)
                                         }}
+                                        editable={!disabled}
                                     />
                                 </View>
                                 <View style={{ borderWidth: 0, marginLeft: 15 }}>
@@ -432,7 +455,7 @@ const AddNewProduct = ({ navigation, route }) => {
                                         fontSize: 12,
                                         marginLeft: 5,
                                     }}>Product Attributes options</Text>
-                                    <CustomOptionInput label="Options Name"
+                                    {!disabled && <CustomOptionInput label="Options Name"
                                         //value={item?.name || ""}
                                         err={error?.attribute?.[index]?.options}
                                         onChangeText={(name) => {
@@ -440,10 +463,11 @@ const AddNewProduct = ({ navigation, route }) => {
                                             tmp[index].options.push(name)
                                             setFormData("attributess", tmp)
                                         }}
-                                    />
+                                        editable={!disabled}
+                                    />}
                                     <View style={{ flexWrap: "wrap", flexDirection: "row", marginBottom: 5 }}>
                                         {
-                                            item?.options?.map((option, i) => <View style={{ flexDirection: "row", backgroundColor: "#F2F2F2", marginTop: 15, marginRight: 5, borderRadius: 20 }}>
+                                            item?.options?.length > 0 && item?.options?.map((option, i) => <View style={{ flexDirection: "row", backgroundColor: "#F2F2F2", marginTop: disabled ? 10 : 15, marginRight: 5, borderRadius: 20 }}>
                                                 <Text style={{
                                                     fontFamily: 'Poppins-Regular',
                                                     color: '#23233C',
@@ -451,19 +475,21 @@ const AddNewProduct = ({ navigation, route }) => {
                                                     margin: 5,
                                                     marginHorizontal: 10
                                                 }}>{option}</Text>
-                                                <Pressable onPress={() => {
-                                                    let tmp = attributess
-                                                    //tmp[index].options = []
-                                                    tmp[index].options = item?.options?.filter(op => op != option)
-                                                    setFormData("attributess", tmp)
-                                                }} style={{ paddingRight: 5, justifyContent: "center" }}>
+                                                {!disabled && <Pressable
+                                                    disabled={disabled}
+                                                    onPress={() => {
+                                                        let tmp = attributess
+                                                        //tmp[index].options = []
+                                                        tmp[index].options = item?.options?.filter(op => op != option)
+                                                        setFormData("attributess", tmp)
+                                                    }} style={{ paddingRight: 5, justifyContent: "center" }}>
                                                     <Ionicons name={"close-circle-outline"} color='red' size={15} marginLeft={2} />
-                                                </Pressable>
+                                                </Pressable>}
                                             </View>)
                                         }
                                     </View>
                                 </View>
-                                <View style={{ flexDirection: "row", margin: 10 }}>
+                                {!disabled && <View style={{ flexDirection: "row", margin: 10 }}>
                                     {attributess?.length > 1 && <CustomButton
                                         style={{ flex: 1, marginRight: 10 }}
                                         label={"Remove"}
@@ -471,6 +497,7 @@ const AddNewProduct = ({ navigation, route }) => {
                                         onPress={() => {
                                             removeAttribute(index)
                                         }}
+                                        disabled={disabled}
                                     />}
                                     {attributess?.length == (index + 1) && <CustomButton
                                         bg="#58D36E"
@@ -479,8 +506,9 @@ const AddNewProduct = ({ navigation, route }) => {
                                         onPress={() => {
                                             addAttribute()
                                         }}
+                                        disabled={disabled}
                                     />}
-                                </View>
+                                </View>}
                             </View>
                         })
                     }
@@ -504,12 +532,14 @@ const AddNewProduct = ({ navigation, route }) => {
                                         setOptions([...tmp])
                                     }}
                                     error={error?.options?.[index]}
+                                    editable={!disabled}
                                 />
                             </View>
                         })
                     }
                 </View> :
                     <CommonInput
+                        editable={!disabled}
                         control={control}
                         error={errors.price}
                         fieldName="price"
@@ -518,8 +548,8 @@ const AddNewProduct = ({ navigation, route }) => {
                         top={15}
                         rightIcon={<Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 30, color: '#58D36E' }}>₹</Text>}
                     />}
-                {(!item?.approval_status || item?.approval_status == "pending") && <CustomButton label={'Submit'} bg='#58D36E' mt={25} onPress={handleSubmit(onSubmit, (err) => {
-                    //console.log(err);
+                {!disabled && <CustomButton label={'Submit'} bg='#58D36E' mt={25} onPress={handleSubmit(onSubmit, (err) => {
+                    console.log(err);
                 })}
                     loading={loading}
                 />}

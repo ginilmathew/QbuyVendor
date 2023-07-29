@@ -139,7 +139,7 @@ const CommonOrderCard = memo((props) => {
                             <Text style={styles.orderIdLabel}>{"Order ID :"}</Text>
                             <Text style={styles.orderId}>{item?.order_id}</Text>
                         </View>
-                        {renderStatusLabel(item?.status)}
+                        {renderStatusLabel(item?.order_status)}
                     </View>
 
                     <TableHeading />
@@ -150,7 +150,7 @@ const CommonOrderCard = memo((props) => {
                     <TotalBill value={item?.delivery_charge} label="Delivery Fee" containerStyle={{ margin: 0, paddingVertical: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} /> */}
                     {item?.grand_total && <TotalBill value={item?.grand_total} />}
 
-                    {renderButton(item?.status)}
+                    {renderButton(item?.order_status)}
 
                 </View>
             </View>

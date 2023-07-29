@@ -97,7 +97,6 @@ const Orders = ({ navigation, route }) => {
         try {
             const response = await customAxios.get(`vendor/orders/${url}`)
             if (response && has(response, "data.data") && !isEmpty(response.data.data)) {
-                console.log(response.data);
                 setOrders(response.data.data)
             } else {
                 setOrders([])

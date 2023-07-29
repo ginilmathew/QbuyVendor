@@ -6,10 +6,12 @@ import customAxios from '../../CustomeAxios';
 import { IMG_URL } from '../../config/constants';
 import { useNavigation } from '@react-navigation/native';
 import CommonStatusCard from '../../Components/CommonStatusCard';
+import isEmpty from 'lodash/isEmpty';
 
 const ProductCard = ({ item, onRefresh = () => { } }) => {
 
     //const [isEnabled, setIsEnabled] = useState(item?.status == "active");
+    let values = item.variants?.map((it) => Number(it?.seller_price)) || []
     const navigation = useNavigation()
     const toggleSwitch = (value) => {
         if (item?.approval_status == "approved") {
@@ -69,7 +71,7 @@ const ProductCard = ({ item, onRefresh = () => { } }) => {
                     <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 13, color: item?.status == "active" ? '#23233C' : '#A5A5A5' }}>{item?.name}</Text>
                     <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 13, color: item?.status == "active" ? '#23233C' : '#A5A5A5' }}>{item?.category?.name}</Text>
                 </View>
-                <Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 14, color: item?.status == "active" ? '#089321' : '#A5A5A5' }} > ₹ {item?.seller_price}</Text>
+                <Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 14, color: item?.status == "active" ? '#089321' : '#A5A5A5' }} > ₹ {isEmpty(item.variants) ? item?.seller_price : `${Math.min(...values)} - ${Math.max(...values)}`}</Text>
                 {/* {renderStatusLabel(item?.approval_status)} */}
                 <View style={{ flexDirection: 'row' }}>{renderStatusLabel(item?.approval_status)}
                     {item?.product_availability_from && item?.product_availability_to && <Text style={{ fontFamily: 'Poppins-LightItalic', fontSize: 13, color: item?.status == "active" ? '#23233C' : '#A5A5A5', marginLeft: 10 }}>{item?.product_availability_from}-{item?.product_availability_to}</Text>}

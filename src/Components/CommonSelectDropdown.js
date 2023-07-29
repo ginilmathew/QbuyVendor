@@ -4,7 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Dropdown } from 'react-native-element-dropdown';
 import { Controller } from 'react-hook-form';
 
-const CommonSelectDropdown = ({ topLabel, mb, placeholder, data, value, onChange, search, height, mt, width, leftIcon, backgroundColor, error, labelField = "label", valueField = "label" }) => {
+const CommonSelectDropdown = ({ topLabel, mb, placeholder, data, value, onChange, search, height, mt, width, leftIcon, backgroundColor, error, labelField = "label", valueField = "label", disable = false }) => {
 
     const [isFocus, setIsFocus] = useState(false);
     return (
@@ -19,6 +19,7 @@ const CommonSelectDropdown = ({ topLabel, mb, placeholder, data, value, onChange
                 }}
             >{topLabel}</Text>
             <Dropdown
+                disable={disable}
                 renderLeftIcon={() => (leftIcon)}
                 style={{
                     height: height ? height : 45,

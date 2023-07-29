@@ -45,11 +45,12 @@ const errorHandler = async error => {
     //reactotron.log(error.response)
     let err = "";
     if (error?.response) {
-        if (error?.response.status === 405) {
+        if (error?.response.status === 403) {
             await AsyncStorage.clear()
             // store.dispatch({
             //     type: RESET_AUTH
             // })
+            err = "Authentication Error"
             RootNavigation.navigate("Login")
         }
         else if (error?.response?.data === "undefined") {
@@ -57,7 +58,7 @@ const errorHandler = async error => {
             err = "Network Error"
         }
         else {
-            err =!has(error?.response?.data,"user_exist")? JSON.stringify(error?.response?.data?.message):error?.response?.data
+            err = !has(error?.response?.data, "user_exist") ? JSON.stringify(error?.response?.data?.message) : error?.response?.data
         }
 
         /*if(error.response.status === 403){
