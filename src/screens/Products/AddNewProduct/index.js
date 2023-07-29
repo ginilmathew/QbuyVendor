@@ -112,7 +112,6 @@ const AddNewProduct = ({ navigation, route }) => {
     const { setLoading, loading } = useContext(LoaderContext)
     const item = route?.params?.item || {}
     const disabled = /* true// */item?.approval_status ? !(item?.approval_status == "pending") : false
-    console.log("disabled", disabled, item?.approval_status);
     const [filePath, setFilePath] = useState(null);
     const [variant, setVariant] = useState(!isEmpty(item?.variants) || false);
     const [attributess, setAttributess] = useState(item?.attributes || []);
