@@ -41,6 +41,7 @@ const CustomTextInput = ({ label = "", error, onChangeText, value, keyboardType 
                 onChangeText={onChangeText} value={value}
                 keyboardType={keyboardType}
                 editable={editable}
+                color='#23233C'
             />
         </View>
         <Text style={{
@@ -81,6 +82,7 @@ const CustomOptionInput = ({ onChangeText, value, err, editable }) => {
                     setErrorFn("")
                 }} value={data}
                 editable={editable}
+                color='#23233C'
             />
             <Text style={{
                 fontFamily: 'Poppins-Regular',
@@ -223,7 +225,7 @@ const AddNewProduct = ({ navigation, route }) => {
             if (data?.variant) {
                 const valid = validateData()
                 if (valid) {
-                    setLoading(false)
+                    //setLoading(false)
                     // return false
                     console.log("attributess", JSON.stringify(attributess), "variants", JSON.stringify(options));
                     body.append("attributess", JSON.stringify(attributess))
@@ -551,9 +553,11 @@ const AddNewProduct = ({ navigation, route }) => {
                     console.log(err);
                 })}
                     loading={loading}
+                    disabled={loading}
                 />}
                 <View style={{ marginBottom: 150 }} />
             </ScrollView>
+            {submitted && <View style={[StyleSheet.absoluteFillObject, { backgroundColor: "red" }]}></View>}
         </>
     )
 }

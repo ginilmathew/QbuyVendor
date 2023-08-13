@@ -92,10 +92,8 @@ const CommonOrderCard = memo((props) => {
                 />)
 
             case "completed":
-                return (<CustomButton
-                    onPress={() => navigation.navigate('Orders', { mode: 'complete' })}
-                    label={'Order Completed'} bg='#58D36E' mx={8}
-                />)
+                return null
+            //return (<CustomButton onPress={() => navigation.navigate('Orders', { mode: 'complete' })} label={'Order Completed'} bg='#58D36E' mx={8}/>)
 
             case "cancelled":
                 return (<CustomButton
@@ -146,8 +144,8 @@ const CommonOrderCard = memo((props) => {
 
                     {item?.product_details?.map((item, index) => (<CommonItems item={item} key={index} />))}
 
-                    {/*  <TotalBill value={item?.total_amount} label="Item Total" containerStyle={{ marginTop: 0, paddingVertical: 0 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} />
-                    <TotalBill value={item?.delivery_charge} label="Delivery Fee" containerStyle={{ margin: 0, paddingVertical: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} /> */}
+                    <TotalBill value={item?.total_amount} label="Item Total" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} />
+                    <TotalBill value={item?.delivery_charge} label="Delivery Fee" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} />
                     {item?.grand_total && <TotalBill value={item?.grand_total} />}
 
                     {renderButton(item?.order_status)}
