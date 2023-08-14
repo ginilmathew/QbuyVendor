@@ -1,34 +1,149 @@
 {
   "project_info": {
-    "project_number": "335652484827",
-    "project_id": "qbuy-vendor",
-    "storage_bucket": "qbuy-vendor.appspot.com"
+    "project_number": "678656967091",
+    "project_id": "qbuygreen-2185c",
+    "storage_bucket": "qbuygreen-2185c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:335652484827:android:62db3ff750c7f33bf2befe",
+        "mobilesdk_app_id": "1:678656967091:android:b8764a4896668bc779cbc6",
+        "android_client_info": {
+          "package_name": "com.diginest.pandaalert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "678656967091-j6eauj9iupvg70r5gtila7ho2spgq3tn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr7ldz6R7nUhdB4nIlGklKiRBh3mZUv9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "678656967091-j6eauj9iupvg70r5gtila7ho2spgq3tn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "678656967091-aoesi3neja6jbm52l55sngcsdbm54rja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.qbuystoreapp.green"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678656967091:android:64e0caf19332f8ce79cbc6",
+        "android_client_info": {
+          "package_name": "com.diginest.qbuygreen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "678656967091-j6eauj9iupvg70r5gtila7ho2spgq3tn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr7ldz6R7nUhdB4nIlGklKiRBh3mZUv9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "678656967091-j6eauj9iupvg70r5gtila7ho2spgq3tn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "678656967091-aoesi3neja6jbm52l55sngcsdbm54rja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.qbuystoreapp.green"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678656967091:android:dd311bf0298d0b8d79cbc6",
+        "android_client_info": {
+          "package_name": "com.diginest.qbuypanda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "678656967091-j6eauj9iupvg70r5gtila7ho2spgq3tn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr7ldz6R7nUhdB4nIlGklKiRBh3mZUv9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "678656967091-j6eauj9iupvg70r5gtila7ho2spgq3tn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "678656967091-aoesi3neja6jbm52l55sngcsdbm54rja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.qbuystoreapp.green"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678656967091:android:c02e9801611eb62479cbc6",
         "android_client_info": {
           "package_name": "com.qbuystoreapp.fashion"
         }
       },
       "oauth_client": [
         {
-          "client_id": "335652484827-25i5mfma27j919a593d2mj6j28s2900a.apps.googleusercontent.com",
+          "client_id": "678656967091-j6eauj9iupvg70r5gtila7ho2spgq3tn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDMtXCITSZTt_n6lqOvxTLcXEZZWtRuijI"
+          "current_key": "AIzaSyBr7ldz6R7nUhdB4nIlGklKiRBh3mZUv9k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "335652484827-25i5mfma27j919a593d2mj6j28s2900a.apps.googleusercontent.com",
+              "client_id": "678656967091-j6eauj9iupvg70r5gtila7ho2spgq3tn.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "678656967091-aoesi3neja6jbm52l55sngcsdbm54rja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.qbuystoreapp.green"
+              }
             }
           ]
         }
@@ -36,28 +151,35 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:335652484827:android:2d12e30d1d256f41f2befe",
+        "mobilesdk_app_id": "1:678656967091:android:1ea3ae43d775b4bf79cbc6",
         "android_client_info": {
           "package_name": "com.qbuystoreapp.green"
         }
       },
       "oauth_client": [
         {
-          "client_id": "335652484827-25i5mfma27j919a593d2mj6j28s2900a.apps.googleusercontent.com",
+          "client_id": "678656967091-j6eauj9iupvg70r5gtila7ho2spgq3tn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDMtXCITSZTt_n6lqOvxTLcXEZZWtRuijI"
+          "current_key": "AIzaSyBr7ldz6R7nUhdB4nIlGklKiRBh3mZUv9k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "335652484827-25i5mfma27j919a593d2mj6j28s2900a.apps.googleusercontent.com",
+              "client_id": "678656967091-j6eauj9iupvg70r5gtila7ho2spgq3tn.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "678656967091-aoesi3neja6jbm52l55sngcsdbm54rja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.qbuystoreapp.green"
+              }
             }
           ]
         }
@@ -65,28 +187,35 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:335652484827:android:6b9f3f1038e06f68f2befe",
+        "mobilesdk_app_id": "1:678656967091:android:e91f09467de1d8b179cbc6",
         "android_client_info": {
           "package_name": "com.qbuystoreapp.panda"
         }
       },
       "oauth_client": [
         {
-          "client_id": "335652484827-25i5mfma27j919a593d2mj6j28s2900a.apps.googleusercontent.com",
+          "client_id": "678656967091-j6eauj9iupvg70r5gtila7ho2spgq3tn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDMtXCITSZTt_n6lqOvxTLcXEZZWtRuijI"
+          "current_key": "AIzaSyBr7ldz6R7nUhdB4nIlGklKiRBh3mZUv9k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "335652484827-25i5mfma27j919a593d2mj6j28s2900a.apps.googleusercontent.com",
+              "client_id": "678656967091-j6eauj9iupvg70r5gtila7ho2spgq3tn.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "678656967091-aoesi3neja6jbm52l55sngcsdbm54rja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.qbuystoreapp.green"
+              }
             }
           ]
         }
