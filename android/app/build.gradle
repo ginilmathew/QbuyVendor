@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services'
 apply plugin: "com.facebook.react"
 
 import com.android.build.OutputFile
@@ -58,7 +59,7 @@ react {
  * use App Bundles (https://developer.android.com/guide/app-bundle/)
  * and want to have separate APKs to upload to the Play Store.
  */
-def enableSeparateBuildPerCPUArchitecture = true
+def enableSeparateBuildPerCPUArchitecture = false
 
 /**
  * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
@@ -94,6 +95,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     namespace "com.qbuystoreapp"
+    flavorDimensions "default"
     defaultConfig {
         applicationId "com.qbuystoreapp"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -101,12 +103,26 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    productFlavors {
+        create("green") {
+            applicationIdSuffix = ".green"
+            resValue "string", "app_name", "QBUY Green"
+        }
+        create("panda") {
+            applicationIdSuffix = ".panda"
+            resValue "string", "app_name", "QBUY Panda"
+        }
+        create("fashion") {
+            applicationIdSuffix = ".fashion"
+            resValue "string", "app_name", "QBUY Fashion"
+        }
+    }
 
     splits {
         abi {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
-            universalApk false  // If true, also generate a universal APK
+            universalApk true  // If true, also generate a universal APK
             include (*reactNativeArchitectures())
         }
     }
@@ -153,7 +169,6 @@ dependencies {
     implementation("com.facebook.react:react-android")
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
-
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.squareup.okhttp3', module:'okhttp'

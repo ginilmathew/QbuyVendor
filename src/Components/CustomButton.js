@@ -1,13 +1,13 @@
-import { ActivityIndicator, Platform, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { ActivityIndicator, Platform, Pressable, StyleSheet, Text, } from 'react-native'
 import React, { useContext } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
-const CustomButton = ({ onPress, label, mt, ml, bg, width, alignSelf, disabled, my, mb, mx, leftIcon, rightIconName, loading }) => {
+const CustomButton = ({ onPress, label, mt, ml, bg, width, alignSelf, disabled, my, mb, mx, leftIcon, rightIconName, loading, style = {} }) => {
 
     return (
-        <TouchableOpacity
+        <Pressable
             onPress={onPress}
-            style={{
+            style={[{
                 marginLeft: ml,
                 marginTop: mt,
                 backgroundColor: bg,
@@ -23,14 +23,14 @@ const CustomButton = ({ onPress, label, mt, ml, bg, width, alignSelf, disabled, 
                 marginVertical: my,
                 marginBottom: mb,
                 marginHorizontal: mx,
-                flexDirection:'row'
-            }}
+                flexDirection: 'row'
+            }, style]}
             disabled={disabled}
         >
             {leftIcon}
-            {!loading ? <Text style={{ color: '#fff', fontFamily: 'Poppins-Bold', fontSize: 15, marginTop: Platform.OS === 'android' ? 4 : 1 }}>{label}</Text> : <ActivityIndicator color={'#fff'}/>}
-            {rightIconName&&<Ionicons name={rightIconName} color='#fff' size={25} position='absolute' right={15}/>}
-        </TouchableOpacity>
+            {!loading ? <Text style={{ color: '#fff', fontFamily: 'Poppins-Bold', fontSize: 15, marginTop: Platform.OS === 'android' ? 4 : 1 }}>{label}</Text> : <ActivityIndicator color={'#fff'} />}
+            {rightIconName && <Ionicons name={rightIconName} color='#fff' size={25} position='absolute' right={15} />}
+        </Pressable>
     )
 }
 

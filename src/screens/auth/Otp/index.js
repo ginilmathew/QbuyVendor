@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, Platform, } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, Platform, Alert, Pressable, } from 'react-native'
 import React, { useCallback, useContext } from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,20 +11,21 @@ import CommonTexts from '../../../Components/CommonTexts';
 import LoaderContext from '../../../contexts/Loader';
 import AuthContext from '../../../contexts/Auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import customAxios from '../../../CustomeAxios';
+import Toast from 'react-native-toast-message';
+import DeviceInfo from 'react-native-device-info';
 
-
-const Otp = ({ navigation }) => {
-
+const Otp = ({ navigation, route }) => {
+	const { type } = route?.params || {}
 	const userOtp = useContext(AuthContext)
 	const loadingg = useContext(LoaderContext)
 
 	let loader = loadingg?.loading
 	let mobileNo = userOtp.login.mobile
-	let token = 'drglisbgifiuefojejoiwe'
-
+	let endPoint;
 	let otpss = userOtp?.otp
 
-	console.log({otpss})
+	console.log({ otpss })
 
 
 	const schema = yup.object({
@@ -38,25 +39,76 @@ const Otp = ({ navigation }) => {
 	var cardnumber = mobileNo;
 	var first2 = cardnumber?.substring(0, 2);
 	var last1 = cardnumber?.substring(cardnumber.length - 1);
-	
-	mask = cardnumber?.substring(2, cardnumber.length - 1).replace(/\d/g,"*");
+
+	mask = cardnumber?.substring(2, cardnumber.length - 1).replace(/\d/g, "*");
 	let phoneNum = first2 + mask + last1
 
-	const onSubmit = useCallback(async(data) => {
-        navigation.navigate('TabNavigator')
-		userOtp.setOtp(data)
-		await AsyncStorage.setItem("token", token);
-    }, [])
+	const onSubmit = async (data) => {
+		if (type == "register") {
+			endPoint = "auth/vendorregisterotp"
+		} else {
+			endPoint = "auth/vendorlogin"
+		}
+		try {
+			const response = await customAxios.post(endPoint, { ...data, mobile: mobileNo })
+			console.log("response ", response.data);
+			if (type == "register") {
+				Alert.alert("Message", response?.data?.message, [
+					{
+						text: 'Ok',
+						onPress: () => navigation.replace('Login'),
+						// style: 'cancel',
+					},
+				])
+
+			} else {
+				if (response?.data?.access_token) {
+					const { access_token } = response?.data
+					navigation.replace('TabNavigator')
+					await AsyncStorage.setItem("token", access_token);
+					userOtp.getProfileDetails()
+				}
+			}
+
+		} catch (error) {
+			console.log("error", error)
+			Toast.show({
+				type: 'error',
+				text1: error
+			});
+		}
+
+	}
 
 	const backAction = useCallback(() => {
-        navigation.goBack()
-    }, [])
+		navigation.replace("Login")
+	}, [])
 
+
+	const handleResendOtp = async () => {
+		let bundleId = DeviceInfo.getBundleId();
+		const type = bundleId.replace("com.qbuystoreapp.", "")
+		try {
+			const response = await customAxios.post("auth/vendorloginotp", { mobile: mobileNo, type })
+			if (response) {
+				Toast.show({
+					type: 'success',
+					text1: response.data.message
+				});
+			}
+		} catch (error) {
+			console.log("error=>", error);
+			Toast.show({
+				type: 'error',
+				text1: error
+			});
+		}
+	}
 
 	return (
 		<CommonAuthBg>
 			<ScrollView style={{ flex: 1, paddingHorizontal: 40, }}>
-				<CommonTitle goBack={backAction} mt={ Platform.OS === 'android' ? 80 : 100 }/>
+				<CommonTitle goBack={backAction} mt={Platform.OS === 'android' ? 80 : 100} />
 				<CommonTexts
 					label={'Enter the 4 - digit code we sent to your registered mobile number'}
 					mt={40}
@@ -66,17 +118,22 @@ const Otp = ({ navigation }) => {
 					mt={40}
 					textAlign='center'
 				/>
-				<OtpInput 
+				<OtpInput
 					onchange={(text) => {
-						setValue("otp", text) 
+						setValue("otp", text)
 					}}
 				/>
-				<CommonTexts
-					label={'Resend OTP'}
-					mt={10}
-					textAlign='right'
-					color={'#5871D3'}
-				/>
+				<Pressable onPress={() => {
+					handleResendOtp()
+				}}>
+					<CommonTexts
+						label={'Resend OTP'}
+						mt={10}
+						textAlign='right'
+						color={'#5871D3'}
+
+					/>
+				</Pressable>
 				<CustomButton
 					onPress={handleSubmit(onSubmit)}
 					bg='#58D36E'

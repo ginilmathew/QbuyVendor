@@ -11,6 +11,7 @@ import SplashScreen from '../screens/SplashScreen';
 import TabNavigator from './TabNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import reactotron from '../ReactotronConfig';
+import AuthContext from '../contexts/Auth';
 
 
 // import Menu from './Menu';
@@ -19,15 +20,21 @@ import reactotron from '../ReactotronConfig';
 const Stack = createStackNavigator();
 
 const Navigation = () => {
+    const authContext = useContext(AuthContext)
     const [initialScreen, setInitialScreen] = useState(null)
-    useEffect(() => { 
-        checkLogin();   
+
+    useEffect(() => {
+        authContext.getOrderStatus()
+        checkLogin();
     }, [])
-    const checkLogin = async() => {
+    const checkLogin = async () => {
         // await AsyncStorage.clear()
+        authContext.venderCategories()
         const token = await AsyncStorage.getItem("token");
         // reactotron.log({token})
-        if(token){
+        if (token) {
+
+            authContext.getProfileDetails()
             // const user = await AsyncStorage.getItem("user");
             setInitialScreen('TabNavigator');
             // if(user){
@@ -40,31 +47,28 @@ const Navigation = () => {
             //     setInitialScreen('AppIntro');
             // }
         }
-        else{
+        else {
             setInitialScreen('Login');
         }
     }
-    if(!initialScreen){
-        return(
-            <SplashScreen/>
+    if (!initialScreen) {
+        return (
+            <SplashScreen />
         )
     }
 
 
-	return (
+    return (
         <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator initialRouteName={initialScreen} screenOptions={{ headerShown: false }}>
-
+            <Stack.Navigator initialRouteName={initialScreen} screenOptions={{ headerShown: false, gestureEnabled: false }}>
                 <Stack.Screen name="SplashScreen" component={SplashScreen} />
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Otp" component={Otp} />
                 <Stack.Screen name="Register" component={Register} />
                 <Stack.Screen name="TabNavigator" component={TabNavigator} />
-
-
             </Stack.Navigator>
         </NavigationContainer>
-	)
+    )
 }
 
 export default Navigation

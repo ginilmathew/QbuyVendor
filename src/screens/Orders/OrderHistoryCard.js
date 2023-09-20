@@ -1,20 +1,17 @@
 import { StyleSheet, Text, ScrollView, TouchableOpacity, View } from 'react-native'
 import React, { memo, useState } from 'react'
-
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import moment from 'moment';
 
 const OrderHistoryCard = memo(({ item }) => {
-
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.semiboldText}>Order ID {'#10765'}</Text>
-                <Text style={styles.dateText}>{'22/05/2022 10:30am'}</Text>
+                <Text style={styles.semiboldText}>{`Order ID #${item?.order_id}`}</Text>
+                <Text style={styles.dateText}>{moment(item?.created_at).format("DD-MM-YYYY hh:mm A")}</Text>
             </View>
             <View style={styles.totalDetails}>
                 <Text style={styles.semiboldText}>{'Total Bill'}</Text>
-              
-                <Text style={styles.boldText}>+ ₹ {item?.rate}</Text>
+                <Text style={styles.boldText}>+ ₹{item?.grand_total}</Text>
             </View>
         </View>
     )
@@ -70,13 +67,11 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: '#23233C'
     },
-    cod:{
+    cod: {
         fontFamily: 'Poppins-Bold',
         fontSize: 12,
         color: '#EC4949',
-        paddingHorizontal:20,
-        paddingVertical:2
+        paddingHorizontal: 20,
+        paddingVertical: 2
     }
-
-
 })

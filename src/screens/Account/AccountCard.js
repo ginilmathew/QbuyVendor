@@ -7,30 +7,30 @@ const AccountCard = memo(({item}) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.regularText}>{'Date and Time of Transaction'}</Text>
-                <Text style={styles.boldText}>{item?.date}</Text>
+                <Text style={styles.regularText}>{item?.transaction_date}</Text>
+                {/* <Text style={styles.boldText}>{item?.date}</Text> */}
             </View>
             <View style={styles.totalDetails}>
                 <View style={{ flex: 0.35 }}>
                     <Text style={styles.regularText}>{'Amount Settled'}</Text>
-                    <Text style={styles.totalCount}>₹ {'50000'}</Text>
+                    <Text style={styles.totalCount}>₹ {item?.amount}</Text>
                 </View>
                 <View style={{ flex: 0.35 }}>
                     <Text style={styles.regularText}>{'Payment Mode'}</Text>
-                    <Text style={styles.totalCount}>{'UPI'}</Text>
+                    <Text style={styles.totalCount}>{item?.payment_mode}</Text>
                 </View>
                 <View style={{ flex: 0.35 }}>
                     <Text style={styles.regularText}>{'Transaction ID'}</Text>
-                    <Text style={styles.totalCount}>{'#3452635532'}</Text>
+                    <Text style={styles.totalCount}>{item?.transaction_id}</Text>
                 </View>
             </View>
-            <View style={styles.bottom}>
+            {/* <View style={styles.bottom}>
                 <CommonStatusCard
                     bg={item?.status === 'Completed' ? '#BCFFC8' : '#FFF297'}
                     label={item?.status}
                     labelColor={item?.status === 'Completed' ?  '#07AF25' :'#B7A000'}
                 />
-            </View>
+            </View> */}
         </View>
     )
 })

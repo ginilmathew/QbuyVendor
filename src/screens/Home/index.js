@@ -1,5 +1,5 @@
-import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, SafeAreaView } from 'react-native'
-import React, { useCallback, useContext, useMemo, useState } from 'react'
+import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, useWindowDimensions, SafeAreaView, RefreshControl } from 'react-native'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { BlurView } from "@react-native-community/blur";
 import TotalCard from './TotalCard';
 import CommonTexts from '../../Components/CommonTexts';
@@ -9,107 +9,82 @@ import dark from '../../Images/dark.png'
 import light from '../../Images/light.png'
 import LoaderContext from '../../contexts/Loader';
 import reactotron from '../../ReactotronConfig';
+import Toast from 'react-native-toast-message';
+import { useIsFocused } from '@react-navigation/native';
+import customAxios from '../../CustomeAxios';
+import has from 'lodash/has';
+import AuthContext from '../../contexts/Auth';
 
 
 const Home = ({ navigation, }) => {
 
-    const{height} = useWindowDimensions()
+    const { height } = useWindowDimensions()
 
-    const loadingg = useContext(LoaderContext)
+    const { getProfileDetails, fcmToken, setPushDetails } = useContext(AuthContext)
 
+    const isFocused = useIsFocused()
 
-    const orders = [
-        {
-            id: '1',
-            customerName: 'Raj',
-            addr: 'Neendakara - Chinnakkada Rd, Kavanad, Kollam, Kerala 691003',
-            name: '#10765',
-            hotel: [
-                {
-                    id: '1',
-                    name: 'Brinjal',
-                    qty: 1,
-                    rate: 120
-                },
-                {
-                    id: '2',
-                    name: 'Tomato',
-                    qty: 1,
-                    rate: 110
+    const [homeData, setHomeData] = useState({})
+    const [refreshing, setRefreshing] = useState(false)
 
-                },
-
-
-            ],
-        },
-        {
-            id: '2',
-            name: '#87452',
-            hotel: [
-                {
-                    id: '1',
-                    name: 'Cabbage',
-                    qty: 1,
-                    rate: 150
-
-                },
-            ],
-        },
-        {
-            id: '3',
-            name: '#87452',
-            hotel: [
-                {
-                    id: '1',
-                    name: 'Cabbage',
-                    qty: 1,
-                    rate: 150
-
-                },
-            ],
-        },
-        {
-            id: '4',
-            name: '#87452',
-            hotel: [
-                {
-                    id: '1',
-                    name: 'Cabbage',
-                    qty: 1,
-                    rate: 150
-
-                },
-            ],
-        },
-
-    ]
-
+    const getHomeDetails = async () => {
+        try {
+            const response = await customAxios.get("vendor/home")
+            if (response && has(response, "data.data")) {
+                setHomeData(response.data.data)
+            }
+            setRefreshing(false)
+        } catch (error) {
+            setRefreshing(false)
+            console.log("error=>", error)
+            Toast.show({
+                type: 'error',
+                text1: error
+            });
+        }
+    }
 
     const ViewAllOrders = useCallback(() => {
         navigation.navigate('Orders')
     }, [])
 
+    useEffect(() => {
+        getHomeDetails()
+    }, [isFocused])
+
+    useEffect(() => {
+        if (fcmToken) {
+            setPushDetails({ token: fcmToken })
+        }
+    }, [])
+
     return (
         <>
-            <SafeAreaView style={{flex:1, backgroundColor:'#fff'}}>
-
-                <ScrollView 
-                    style={{ backgroundColor: '#fff', paddingHorizontal: 15, }} 
+            <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+                <UserImageName />
+                <ScrollView
+                    style={{ backgroundColor: '#fff', paddingHorizontal: 15, }}
                     showsVerticalScrollIndicator={false}
+                    refreshControl={<RefreshControl refreshing={refreshing}
+                        onRefresh={() => {
+                            setRefreshing(true)
+                            getHomeDetails()
+                            getProfileDetails()
+                        }}
+                    />}
                 >
-                    <UserImageName/>
-                    <TotalCard label={'Orders Today'} count={251} bg='#58D36E' bgImg={light}/>
-                    <TotalCard label={'Revenue'} count={'₹ 5250'} bg='#58D39D' bgImg={dark}/>
+                    <TotalCard label={'Orders Today'} count={homeData?.total_order || 0} bg='#58D36E' bgImg={light} />
+                    <TotalCard label={'Revenue'} count={`₹ ${homeData?.total_revenue || 0}`} bg='#58D39D' bgImg={dark} />
                     <View style={styles.newOrders}>
                         <CommonTexts label={'New Orders'} fontSize={18} />
                         <TouchableOpacity onPress={ViewAllOrders}>
                             <Text style={styles.viewAllText}>{"View All >>"}</Text>
                         </TouchableOpacity>
                     </View>
-                    {orders?.map((item)=>(
-                        <CommonOrderCard key={item?.id} item={item}/>
-                    ))}
-                    <View style={{height:80}}/>
+                    {homeData?.orders?.length > 0 ? homeData?.orders?.map((item) => <CommonOrderCard onRefresh={() => getHomeDetails()} key={item?.id} item={item} />) : <View style={{ flex: 1, justifyContent: "center", alignItems: "center", height: height * 0.4 }}>
+                        <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 15, color: '#00000030' }}>No Data Found</Text>
+                    </View>}
+                    <View style={{ height: 80 }} />
                 </ScrollView>
 
             </SafeAreaView>
@@ -136,11 +111,11 @@ const styles = StyleSheet.create({
         fontSize: 11,
     },
 
-    newOrders: { 
-        flexDirection: 'row', 
-        marginTop: 10, 
-        justifyContent: 'space-between', 
+    newOrders: {
+        flexDirection: 'row',
+        marginTop: 10,
+        justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom:10
+        marginBottom: 10
     }
 })

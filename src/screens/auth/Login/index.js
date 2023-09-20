@@ -1,8 +1,13 @@
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Platform, } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Platform, Alert, } from 'react-native'
 import React, { useCallback, useContext } from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import Toast from 'react-native-toast-message'
+import Fontisto from 'react-native-vector-icons/Fontisto'
+import DeviceInfo from 'react-native-device-info';
+import has from 'lodash/has'
+
 import CommonAuthBg from '../CommonAuthBg';
 import CommonInput from '../../../Components/CommonInput';
 import CommonAuthHeading from '../CommonAuthHeading';
@@ -10,24 +15,23 @@ import TermsAndPrivacyText from './TermsAndPrivacyText';
 import CustomButton from '../../../Components/CustomButton';
 import HelpAndSupportText from './HelpAndSupportText';
 import CommonTexts from '../../../Components/CommonTexts';
-import Fontisto from 'react-native-vector-icons/Fontisto'
 import AuthContext from '../../../contexts/Auth';
 import LoaderContext from '../../../contexts/Loader';
+import customAxios from '../../../CustomeAxios';
 
 
 const Login = ({ navigation }) => {
 
 	const loginUser = useContext(AuthContext)
 	const loadingg = useContext(LoaderContext)
-
 	let loader = loadingg?.loading
 
 	let user = loginUser?.login
-	console.log({user})
+	console.log({ user })
 
 
 	const schema = yup.object({
-		mobile: yup.string().required('Phone number is required'),
+		mobile: yup.string().required('Phone number is required').min(8).max(10),
 	}).required();
 
 	const { control, handleSubmit, formState: { errors }, setValue } = useForm({
@@ -37,14 +41,56 @@ const Login = ({ navigation }) => {
 
 
 	const register = useCallback(() => {
-        navigation.navigate('Register')
-    }, [])
+		navigation.navigate('Register')
+	}, [])
 
-	const onSubmit = useCallback((data) => {
-        navigation.navigate('Otp')
-		// loadingg.setLoading(true)
-		loginUser.setLogin(data)
-    }, [])
+	const onSubmit = async (data) => {
+		loadingg.setLoading(true)
+		//7952124568
+
+		let bundleId = DeviceInfo.getBundleId();
+		const type = bundleId.replace("com.qbuystoreapp.", "")
+		try {
+			const response = await customAxios.post("auth/vendorloginotp", { ...data, type })
+			if (response) {
+				loginUser.setLogin(data)
+				navigation.replace('Otp', { type: "login" })
+			}
+			loadingg.setLoading(false)
+		} catch (error) {
+			console.log("error=>", error);
+			loadingg.setLoading(false)
+			if (has(error, "user_exist") && !error?.user_exist) {
+				Alert.alert("Vendor not found",
+					`Vendor for QBUY ${type} not found, Do you want to create new one?`,
+					[
+						{
+							text: 'Cancel',
+							onPress: () => console.log('Cancel Pressed'),
+							style: 'cancel',
+						},
+						{
+							text: 'Register', onPress: () => {
+								loginUser.setLogin(data)
+								navigation.navigate('Register')
+							}
+						},
+					]
+				)
+			} else {
+				Alert.alert("Message",
+					error,
+					[
+						{
+							text: 'OK',
+							onPress: () => console.log('Cancel Pressed'),
+							style: 'cancel',
+						}
+					]
+				)
+			}
+		}
+	}
 
 
 	return (
@@ -76,6 +122,7 @@ const Login = ({ navigation }) => {
 					placeholder='Mobile Number'
 					inputMode={'numeric'}
 					mt={20}
+					maxLength={10}
 					icon={<Fontisto name='mobile' color='#58D36E' size={25} />}
 				/>
 
@@ -84,7 +131,7 @@ const Login = ({ navigation }) => {
 				<CustomButton
 					onPress={handleSubmit(onSubmit)}
 					bg='#58D36E'
-					label={'Sign In'}
+					label={'Verify'}
 					mt={20}
 					loading={loader}
 				/>
@@ -93,11 +140,11 @@ const Login = ({ navigation }) => {
 
 				<HelpAndSupportText />
 
-				<Text style={styles.textLight}>{"New to the family?"}</Text>
+				{/* <Text style={styles.textLight}>{"New to the family?"}</Text>
 
 				<TouchableOpacity onPress={register}>
 					<Text style={styles.textRegister}>{"Register Here"}</Text>
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 
 			</ScrollView>
 

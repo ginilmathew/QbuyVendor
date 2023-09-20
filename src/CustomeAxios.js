@@ -3,28 +3,29 @@ import axios from 'axios';
 import reactotron from './ReactotronConfig';
 import * as RootNavigation from './Navigations/RootNavigation'
 import { BASE_URL } from './config/constants';
+import has from 'lodash/has'
 // const axios = require('axios');
 
 // Step-1: Create a new Axios instance with a custom config.
 // The timeout is set to 10s. If the request takes longer than
 // that then the request will be aborted.
 const customAxios = axios.create({
-    // baseURL: BASE_URL,
+    baseURL: BASE_URL,
     timeout: 10000
 });
 
 
 // Step-2: Create request, response & error handlers
-const requestHandler =async request => {
+const requestHandler = async request => {
     let token = await AsyncStorage.getItem("token");
 
     // reactotron.log({token})
     // Token will be dynamic so we can use any app-specific way to always   
     // fetch the new token before making the call
-    if(token){
-        request.headers.Authorization = `Bearer ${token.replaceAll('"', '')}`;  
+    if (token) {
+        request.headers.Authorization = `Bearer ${token.replaceAll('"', '')}`;
     }
-    
+
     return request;
 };
 
@@ -42,23 +43,24 @@ const responseHandler = async response => {
 
 const errorHandler = async error => {
     //reactotron.log(error.response)
-    let err="";
+    let err = "";
     if (error?.response) {
-        if (error?.response.status === 405) {
+        if (error?.response.status === 403) {
             await AsyncStorage.clear()
             // store.dispatch({
             //     type: RESET_AUTH
             // })
+            err = "Authentication Error"
             RootNavigation.navigate("Login")
         }
-        else if(error?.response?.data === "undefined"){
+        else if (error?.response?.data === "undefined") {
             reactotron.log(error.message)
             err = "Network Error"
         }
-        else{
-            err = JSON.stringify(error?.response?.data?.message)
+        else {
+            err = !has(error?.response?.data, "user_exist") ? JSON.stringify(error?.response?.data?.message) : error?.response?.data
         }
-        
+
         /*if(error.response.status === 403){
             
             localStorage.removeItem("user");
@@ -72,9 +74,9 @@ const errorHandler = async error => {
         /*console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);*/
-    } 
-    else if(error?.message) {
-        reactotron.log("in",error?.message)
+    }
+    else if (error?.message) {
+        reactotron.log("in", error?.message)
         // Something happened in setting up the request that triggered an Error
         err = error?.message;
     }
@@ -83,8 +85,8 @@ const errorHandler = async error => {
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
         err = JSON.stringify(error?.request);
-    } 
-    else{
+    }
+    else {
         err = "Network Error"
     }
     return Promise.reject(err);
