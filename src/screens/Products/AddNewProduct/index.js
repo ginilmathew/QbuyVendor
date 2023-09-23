@@ -127,8 +127,13 @@ const AddNewProduct = ({ navigation, route }) => {
 
     const schema = yup.object({
         variant: yup.boolean(),
-        name: yup.string().required('Name is required'),
-        price: yup.number(),
+        name: yup.string().required('Product name is required'),
+        price: yup.number().test(
+            "priceError",
+            "Price must be a numeric value",
+            (value) => typeof value === "number" && !/[eE+-]/.test(value.toString())
+          ).nullable(true),
+        // price: yup.number(),
         category: yup.object({
             _id: yup.string().required("Category is required"),
             name: yup.string().required("Category is required")
@@ -174,7 +179,7 @@ const AddNewProduct = ({ navigation, route }) => {
     const imageGalleryLaunch = useCallback(() => {
         let options = {
             title: "Select Images/Videos",
-            mediaType: "mixed",
+            mediaType: "photo",
             selectionLimit: 1,
             storageOptions: {
                 skipBackup: true,
@@ -557,7 +562,7 @@ const AddNewProduct = ({ navigation, route }) => {
                 />}
                 <View style={{ marginBottom: 150 }} />
             </ScrollView>
-            {submitted && <View style={[StyleSheet.absoluteFillObject, { backgroundColor: "red" }]}></View>}
+            {/* {submitted && <View style={[StyleSheet.absoluteFillObject, { backgroundColor: "red" }]}></View>} */}
         </>
     )
 }

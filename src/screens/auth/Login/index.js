@@ -31,7 +31,7 @@ const Login = ({ navigation }) => {
 
 
 	const schema = yup.object({
-		mobile: yup.string().required('Phone number is required').min(8).max(10),
+		mobile: yup.string().required('Phone number is required').min(10).max(10),
 	}).required();
 
 	const { control, handleSubmit, formState: { errors }, setValue } = useForm({

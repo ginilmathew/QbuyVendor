@@ -13,6 +13,7 @@ import LoaderContext from '../../contexts/Loader'
 import customAxios from '../../CustomeAxios'
 import isEmpty from 'lodash/isEmpty'
 import has from 'lodash/has'
+import reactotron from 'reactotron-react-native'
 
 const filter = [
     {
@@ -49,6 +50,8 @@ const Orders = ({ navigation, route }) => {
     const [orderHistory, setOrderHistory] = useState({})
     const [refreshing, setRefreshing] = useState(false)
     const [refreshingHistory, setRefreshingHistory] = useState(false)
+
+    reactotron.log(orders, "ORDERSLIST")
 
     const { width, height } = useWindowDimensions()
     const loadingg = useContext(LoaderContext)
