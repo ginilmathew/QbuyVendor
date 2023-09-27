@@ -51,7 +51,7 @@ const Orders = ({ navigation, route }) => {
     const [refreshing, setRefreshing] = useState(false)
     const [refreshingHistory, setRefreshingHistory] = useState(false)
 
-    reactotron.log(orders, "ORDERSLIST")
+    reactotron.log(orderHistory, "ORDERSLIST")
 
     const { width, height } = useWindowDimensions()
     const loadingg = useContext(LoaderContext)
@@ -223,7 +223,7 @@ const Orders = ({ navigation, route }) => {
                         </ScrollView>
                     </>
                 }
-            </View >
+            </View>
         </>
     )
 }

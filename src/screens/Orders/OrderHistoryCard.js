@@ -1,18 +1,28 @@
 import { StyleSheet, Text, ScrollView, TouchableOpacity, View } from 'react-native'
 import React, { memo, useState } from 'react'
 import moment from 'moment';
+import reactotron from 'reactotron-react-native';
 
 const OrderHistoryCard = memo(({ item }) => {
+    //reactotron.log(item, "TESTFBSDAK")
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.semiboldText}>{`Order ID #${item?.order_id}`}</Text>
+                {item?.order_status === "cancelled" ? (<View
+                    style={{ width: 70, backgroundColor: "#FFC9C9", alignItems: 'center', borderRadius: 5, paddingVertical: 3 }}
+                >
+                    <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 10, color: '#FF7B7B', textTransform: "capitalize" }}>Cancelled</Text>
+                </View>) : null}
                 <Text style={styles.dateText}>{moment(item?.created_at).format("DD-MM-YYYY hh:mm A")}</Text>
             </View>
-            <View style={styles.totalDetails}>
+            {item?.order_status === "cancelled" ? (<View style={styles.totalDetails}>
                 <Text style={styles.semiboldText}>{'Total Bill'}</Text>
-                <Text style={styles.boldText}>+ ₹{item?.grand_total}</Text>
-            </View>
+                <Text style={styles.boldTextCancel}>₹{item?.vendor_order_total_price}</Text>
+            </View>) : (<View style={styles.totalDetails}>
+                <Text style={styles.semiboldText}>{'Total Bill'}</Text>
+                <Text style={styles.boldText}>+ ₹{item?.vendor_order_total_price}</Text>
+            </View>)}
         </View>
     )
 })
@@ -56,6 +66,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         fontSize: 9,
         color: '#23233C'
+    },
+    boldTextCancel: {
+        fontFamily: 'Poppins-Bold',
+        fontSize: 18,
+        color: '#FF7B7B'
     },
     boldText: {
         fontFamily: 'Poppins-Bold',
