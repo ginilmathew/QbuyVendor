@@ -25,7 +25,7 @@ const Otp = ({ navigation, route }) => {
 	let endPoint;
 	let otpss = userOtp?.otp
 
-	console.log({ otpss })
+
 
 
 	const schema = yup.object({
@@ -50,8 +50,10 @@ const Otp = ({ navigation, route }) => {
 			endPoint = "auth/vendorlogin"
 		}
 		try {
-			const response = await customAxios.post(endPoint, { ...data, mobile: mobileNo })
-			console.log("response ", response.data);
+			let bundleId = DeviceInfo.getBundleId();
+			const type = bundleId.replace("com.qbuystoreapp.", "")
+			const response = await customAxios.post(endPoint, { ...data, mobile: mobileNo, type })
+
 			if (type == "register") {
 				Alert.alert("Message", response?.data?.message, [
 					{
@@ -90,6 +92,7 @@ const Otp = ({ navigation, route }) => {
 		const type = bundleId.replace("com.qbuystoreapp.", "")
 		try {
 			const response = await customAxios.post("auth/vendorloginotp", { mobile: mobileNo, type })
+		
 			if (response) {
 				Toast.show({
 					type: 'success',
