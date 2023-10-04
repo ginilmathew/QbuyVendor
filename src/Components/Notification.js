@@ -20,53 +20,53 @@ const Notification = () => {
     const [notificationData, setNotificationData] = useState({})
     const Auth = useContext(AuthContext)
 
-    useEffect(() => {
-        //PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS)
-        messaging().getInitialNotification().then((data) => {
-            // dispatch(commonAction.setRouteName(data == null ? "Home" : { name: "Home", params: { screen: "TabScreens", params: { screen: "NotificationScreen", initial: false, } } }))
-        }
-        )
-        getToken()
-        messaging().onTokenRefresh(async token => {
-            console.log("fcmToken", token);
-            Auth.setFcmToken(token)
-        });
-        messaging().onMessage(msg => {
-            setNotificationData(msg.notification)
-            console.log(msg.notification);
-            clearTimeout(timeOut)
-            startAnimation()
-            timeOut
-            if (msg?.notification?.android?.channelId) {
-                let whoosh = new Sound(`${msg.notification?.android?.channelId}.mp3`, Sound.MAIN_BUNDLE, (error) => {
-                    if (error) {
-                        console.log('failed to load the sound', error);
-                        return;
-                    }
-                    // Play the sound with an onEnd callback
-                    whoosh.play((success) => {
-                        if (success) {
-                            console.log('successfully finished playing');
-                        } else {
-                            console.log('playback failed due to audio decoding errors');
-                        }
-                    });
-                });
-            }
-        })
-        messaging().onNotificationOpenedApp(() => {
-            // navigate("NotificationScreen")
-        })
-    }, [])
+    // useEffect(() => {
+    //     //PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS)
+    //     messaging().getInitialNotification().then((data) => {
+    //         // dispatch(commonAction.setRouteName(data == null ? "Home" : { name: "Home", params: { screen: "TabScreens", params: { screen: "NotificationScreen", initial: false, } } }))
+    //     }
+    //     )
+    //     getToken()
+    //     messaging().onTokenRefresh(async token => {
+    //         console.log("fcmToken", token);
+    //         Auth.setFcmToken(token)
+    //     });
+    //     messaging().onMessage(msg => {
+    //         setNotificationData(msg.notification)
+    //         console.log(msg.notification);
+    //         clearTimeout(timeOut)
+    //         startAnimation()
+    //         timeOut
+    //         if (msg?.notification?.android?.channelId) {
+    //             let whoosh = new Sound(`${msg.notification?.android?.channelId}.mp3`, Sound.MAIN_BUNDLE, (error) => {
+    //                 if (error) {
+    //                     console.log('failed to load the sound', error);
+    //                     return;
+    //                 }
+    //                 // Play the sound with an onEnd callback
+    //                 whoosh.play((success) => {
+    //                     if (success) {
+    //                         console.log('successfully finished playing');
+    //                     } else {
+    //                         console.log('playback failed due to audio decoding errors');
+    //                     }
+    //                 });
+    //             });
+    //         }
+    //     })
+    //     messaging().onNotificationOpenedApp(() => {
+    //         // navigate("NotificationScreen")
+    //     })
+    // }, [])
 
-    const timeOut = setTimeout(() => {
-        if (!isEmpty(notificationData)) {
-            startAnimation(outputValue, inputValue)
-            setTimeout(() => {
-                !isEmpty(notificationData) && setNotificationData({})
-            }, 200);
-        }
-    }, 3500);
+    // const timeOut = setTimeout(() => {
+    //     if (!isEmpty(notificationData)) {
+    //         startAnimation(outputValue, inputValue)
+    //         setTimeout(() => {
+    //             !isEmpty(notificationData) && setNotificationData({})
+    //         }, 200);
+    //     }
+    // }, 3500);
 
     const startAnimation = (startValue = inputValue, endValue = outputValue) => {
         animationValue1.value = startValue

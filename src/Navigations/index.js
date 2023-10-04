@@ -26,7 +26,8 @@ const Navigation = () => {
     useEffect(() => {
         authContext.getOrderStatus()
         checkLogin();
-    }, [])
+    }, []);
+    
     const checkLogin = async () => {
         // await AsyncStorage.clear()
         authContext.venderCategories()
