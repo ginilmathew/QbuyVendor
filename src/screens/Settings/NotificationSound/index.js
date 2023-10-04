@@ -21,16 +21,16 @@ const NotificationSound = ({ navigation }) => {
             name: 'Sound 1',
             uri: "sound1.mp3"
         },
-        {
-            _id: 'sound2',
-            name: 'Sound 2',
-            uri: "sound2.mp3"
-        },
-        {
-            _id: 'sound3',
-            name: 'Sound 3',
-            uri: "sound3.mp3"
-        },
+        // {
+        //     _id: 'sound2',
+        //     name: 'Sound 2',
+        //     uri: "sound2.mp3"
+        // },
+        // {
+        //     _id: 'sound3',
+        //     name: 'Sound 3',
+        //     uri: "sound3.mp3"
+        // },
     ]
 
     const playSound = async (item) => {

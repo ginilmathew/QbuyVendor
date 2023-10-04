@@ -15,10 +15,14 @@ import customAxios from '../../CustomeAxios';
 import Toast from 'react-native-toast-message'
 import isEmpty from 'lodash/isEmpty'
 import has from 'lodash/has'
+import reactotron from 'reactotron-react-native';
 
 const CommonOrderCard = memo((props) => {
 
     const { item, onRefresh } = props
+
+    reactotron.log(item, "FIND")
+
     const { width } = useWindowDimensions()
 
     const navigation = useNavigation();
@@ -144,9 +148,9 @@ const CommonOrderCard = memo((props) => {
 
                     {item?.product_details?.map((item, index) => (<CommonItems item={item} key={index} />))}
 
-                    <TotalBill value={item?.total_amount} label="Item Total" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} />
-                    <TotalBill value={item?.delivery_charge} label="Delivery Fee" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} />
-                    {item?.grand_total && <TotalBill value={item?.grand_total} />}
+                    {/* <TotalBill value={item?.total_amount} label="Item Total" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} /> */}
+                    {/* <TotalBill value={item?.delivery_charge} label="Delivery Fee" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} /> */}
+                    {item?.grand_total && <TotalBill value={item?.vendor_order_total_price} />}
 
                     {renderButton(item?.order_status)}
 

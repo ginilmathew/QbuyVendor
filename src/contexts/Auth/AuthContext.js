@@ -15,6 +15,7 @@ const AuthProvider = (props) => {
     const [fcmToken, setFcmToken] = useState(null);
     const [orderStatus, setOrderStatus] = useState([]);
     const [vendorCategoryList, setVendorCategoryList] = useState([]);
+    const [filterCategoryList, setFilterCategoryList] = useState([]);
     const loading = useContext(LoaderContext)
     let bundleId = DeviceInfo.getBundleId();
     const type = bundleId.replace("com.qbuystoreapp.", "")
@@ -83,6 +84,21 @@ const AuthProvider = (props) => {
         }
     }
 
+    const filterCategories = async () => {
+        try {
+            const response = await customAxios.get("vendor/vendor-categories")
+            if (response && has(response, "data.data")) {
+                setFilterCategoryList(response?.data?.data)
+            }
+        } catch (error) {
+            console.log("error", error)
+            Toast.show({
+                type: 'error',
+                text1: error
+            });
+        }
+    }
+
     return (
         <Context.Provider
             value={{
@@ -92,6 +108,7 @@ const AuthProvider = (props) => {
                 userData,
                 orderStatus,
                 vendorCategoryList,
+                filterCategoryList,
                 fcmToken,
                 setOtp,
                 setLogin,
@@ -99,6 +116,7 @@ const AuthProvider = (props) => {
                 getProfileDetails,
                 getOrderStatus,
                 venderCategories,
+                filterCategories,
                 setPushDetails,
                 setFcmToken
             }}

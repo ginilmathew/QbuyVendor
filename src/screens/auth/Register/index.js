@@ -23,7 +23,7 @@ const Register = ({ navigation }) => {
 	const { vendorCategoryList, login } = useContext(AuthContext)
 	const schema = yup.object({
 		vendor_name: yup.string().required('Vendor name is required'),
-		vendor_email: yup.string().email().required('Vendor name is required'),
+		vendor_email: yup.string().email().required('Vendor email is required'),
 		store_name: yup.string().required('Store name is required'),
 		location: yup.string().required('Location is required'),
 		license_number: yup.string().required('License number is required'),
