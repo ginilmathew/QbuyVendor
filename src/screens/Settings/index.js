@@ -27,6 +27,9 @@ const Settings = ({ navigation }) => {
             console.log("response ", response.data);
             if (response?.data) {
                 authContext.getProfileDetails()
+                if (status === false) {
+                    onLogout();
+                }
             }
         } catch (error) {
             console.log("error", error)

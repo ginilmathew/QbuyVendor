@@ -36,6 +36,7 @@ const Navigation = () => {
         if (token) {
 
             authContext.getProfileDetails()
+            authContext.filterCategories()
             // const user = await AsyncStorage.getItem("user");
             setInitialScreen('TabNavigator');
             // if(user){

@@ -74,7 +74,7 @@ const Home = ({ navigation, }) => {
                     />}
                 >
                     <TotalCard label={'Orders Today'} count={homeData?.total_order || 0} bg='#58D36E' bgImg={light} />
-                    <TotalCard label={'Revenue'} count={`₹ ${homeData?.total_revenue || 0}`} bg='#58D39D' bgImg={dark} />
+                    <TotalCard label={'Revenue'} count={homeData?.total_revenue ? `₹ ${parseFloat(homeData?.total_revenue).toFixed(2) || 0}` : ""} bg='#58D39D' bgImg={dark} />
                     <View style={styles.newOrders}>
                         <CommonTexts label={'New Orders'} fontSize={18} />
                         <TouchableOpacity onPress={ViewAllOrders}>

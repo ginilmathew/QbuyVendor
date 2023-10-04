@@ -19,7 +19,7 @@ import reactotron from 'reactotron-react-native';
 
 const CommonOrderCard = memo((props) => {
 
-    const { item, onRefresh } = props;
+    const { item, onRefresh } = props
 
 
 
@@ -152,11 +152,9 @@ const CommonOrderCard = memo((props) => {
 
                     {item?.product_details?.map((item, index) => (<CommonItems item={item} key={index} />))}
 
-                    <TotalBill value={item?.total_amount} label="Item Total" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} />
-                    <TotalBill value={item?.delivery_charge} label="Delivery Fee" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} />
-                    {item?.grand_total && <TotalBill value={item?.grand_total} />}
-                 
-                    { item?.status !== "completed"  && renderButton(item?.order_status)}
+                    {/* <TotalBill value={item?.total_amount} label="Item Total" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} /> */}
+                    {/* <TotalBill value={item?.delivery_charge} label="Delivery Fee" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} /> */}
+                    {item?.grand_total && <TotalBill value={item?.vendor_order_total_price} />}
 
 
                 </View>

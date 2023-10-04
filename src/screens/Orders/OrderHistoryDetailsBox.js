@@ -16,7 +16,7 @@ const OrderHistoryDetailsBox = ({ data }) => {
 
                 <View style={styles.topBoxRight}>
                     <Text style={styles.titleText}>Total Earnings</Text>
-                    <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 17, color: '#2EA10C' }}>{total_earnings}</Text>
+                    <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 17, color: '#2EA10C' }}>{parseFloat(total_earnings).toFixed(2) || 0}</Text>
                 </View>
             </View>
             <View style={styles.bottom}>
@@ -26,7 +26,7 @@ const OrderHistoryDetailsBox = ({ data }) => {
                 </View>
                 <View style={styles.bottomBoxRight}>
                     <Text style={styles.titleText}>Total Payable</Text>
-                    <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 17, color: '#2EA10C' }}>{total_payable}</Text>
+                    <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 17, color: '#2EA10C' }}>{parseFloat(total_payable).toFixed(2) || 0}</Text>
                 </View>
             </View>
         </View>

@@ -18,6 +18,7 @@ import Toast from 'react-native-toast-message';
 import has from 'lodash/has'
 import isEmpty from 'lodash/isEmpty'
 import AuthContext from '../../contexts/Auth';
+import reactotron from 'reactotron-react-native';
 
 const initialItem = {
     "_id": "all",
@@ -27,7 +28,9 @@ const initialItem = {
 
 const Products = ({ navigation }) => {
     const authContext = useContext(AuthContext)
-    const { vendorCategoryList = [], userData } = authContext
+    const { filterCategoryList = [], userData } = authContext
+
+    reactotron.log(filterCategoryList, "Category")
 
     const { width, height } = useWindowDimensions()
     const [currentTab, setCurrentTab] = useState(0)
@@ -170,7 +173,7 @@ const Products = ({ navigation }) => {
                     style={{ marginTop: 15, backgroundColor: '#F7F7F7', paddingLeft: 10, height: 80, }}
                     showsHorizontalScrollIndicator={false}
                 >
-                    {[initialItem, ...vendorCategoryList]?.map((item, index) => (
+                    {[initialItem, ...filterCategoryList]?.map((item, index) => (
                         <FilterBox
                             key={index}
                             item={{ ...item, value: item?._id }}
