@@ -52,7 +52,7 @@ const Otp = ({ navigation, route }) => {
 		try {
 			let bundleId = DeviceInfo.getBundleId();
 			const type = bundleId.replace("com.qbuystoreapp.", "")
-			const response = await customAxios.post(endPoint, { ...data, mobile: mobileNo, type })
+			const response = await customAxios.post(endPoint, { ...data, mobile: mobileNo, type });
 
 			if (type == "register") {
 				Alert.alert("Message", response?.data?.message, [
@@ -62,16 +62,14 @@ const Otp = ({ navigation, route }) => {
 						// style: 'cancel',
 					},
 				])
-
 			} else {
 				if (response?.data?.access_token) {
 					const { access_token } = response?.data
-					navigation.replace('TabNavigator')
+					navigation.replace('TabNavigator');
 					await AsyncStorage.setItem("token", access_token);
 					userOtp.getProfileDetails()
 				}
 			}
-
 		} catch (error) {
 			console.log("error", error)
 			Toast.show({
@@ -79,12 +77,11 @@ const Otp = ({ navigation, route }) => {
 				text1: error
 			});
 		}
-
 	}
-
 	const backAction = useCallback(() => {
 		navigation.replace("Login")
-	}, [])
+	}, [navigation])
+
 
 
 	const handleResendOtp = async () => {

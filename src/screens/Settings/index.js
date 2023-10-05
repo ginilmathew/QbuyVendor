@@ -9,22 +9,24 @@ import AuthContext from '../../contexts/Auth';
 import customAxios from '../../CustomeAxios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-
+import DeviceInfo from "react-native-device-info";
 const Settings = ({ navigation }) => {
     const authContext = useContext(AuthContext)
     const { userData } = authContext
     const goProfile = useCallback(() => {
         navigation.navigate('Profile')
-    }, [])
+    }, [navigation])
 
     const goNotificatnSound = useCallback(() => {
         navigation.navigate('NotificationSound')
-    }, [])
+    }, [navigation])
 
     const onStatusChange = useCallback(async (status) => {
         try {
-            const response = await customAxios.post("vendor/store-change-status", { status: status ? "active" : "inactive" })
-            console.log("response ", response.data);
+            let bundleId = DeviceInfo.getBundleId();
+            const type = bundleId.replace("com.qbuystoreapp.", "")
+            const response = await customAxios.post("vendor/store-change-status", { status: status ? "active" : "inactive", type })
+
             if (response?.data) {
                 authContext.getProfileDetails()
                 if (status === false) {
@@ -32,7 +34,7 @@ const Settings = ({ navigation }) => {
                 }
             }
         } catch (error) {
-            console.log("error", error)
+
             Toast.show({
                 type: 'error',
                 text1: error

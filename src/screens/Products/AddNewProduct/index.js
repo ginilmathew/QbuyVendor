@@ -18,8 +18,10 @@ import Toast from 'react-native-toast-message';
 import { IMG_URL, mode } from '../../../config/constants';
 import LoaderContext from '../../../contexts/Loader';
 import CommonSquareButton from '../../../Components/CommonSquareButton';
+import ImageGrid from '@baronha/react-native-image-grid';
 
-
+import { openPicker } from '@baronha/react-native-multiple-image-picker';
+import reactotron from 'reactotron-react-native';
 const CustomTextInput = ({ label = "", error, onChangeText, value, keyboardType = "default", editable = true }) => {
     return <View style={{ flex: 1 }}>
         <Text style={{
@@ -109,22 +111,31 @@ const CustomOptionInput = ({ onChangeText, value, err, editable }) => {
 
 
 const AddNewProduct = ({ navigation, route }) => {
-
+    const { width, height } = useWindowDimensions();
     const { vendorCategoryList = [], userData } = useContext(AuthContext)
     const { setLoading, loading } = useContext(LoaderContext)
     const item = route?.params?.item || {}
+
     const disabled = /* true// */item?.approval_status ? !(item?.approval_status == "pending") : false
     const [filePath, setFilePath] = useState(null);
+    const [filePathMultiple, setFilePathMultiple] = useState(null);
     const [variant, setVariant] = useState(!isEmpty(item?.variants) || false);
     const [attributess, setAttributess] = useState(item?.attributes || []);
     const [error, setErrorFn] = useState({});
     const [options, setOptions] = useState(item?.variants || []);
+    const [images, setImages] = useState([]);
+
+
+  
+
 
     const setFormData = (field, value) => {
         setAttributess([...value]);
         setErrorFn({})
     }
 
+
+   
     const schema = yup.object({
         variant: yup.boolean(),
         name: yup.string().required('Product name is required'),
@@ -140,7 +151,7 @@ const AddNewProduct = ({ navigation, route }) => {
             _id: yup.string().required("Category is required"),
             name: yup.string().required("Category is required")
         }),
-        image: yup.object({
+        product_image: yup.object({
             fileName: yup.string().required("Image is required"),
             uri: yup.string().required("Image is required"),
             type: yup.string().required("Image is required"),
@@ -158,22 +169,34 @@ const AddNewProduct = ({ navigation, route }) => {
         if (!isEmpty(item)) {
             let newData = {
                 name: item.name,
-                category: item?.category
+                category: item?.category,
+                description:item?.description,
+              
             }
             if (item?.seller_price) {
                 newData.price = item?.seller_price
+            }
+            if(item?.image){
+                newData.image = item?.image
             }
             if (item?.variants) {
                 newData.variant = !isEmpty(item?.variants)
             }
             if (item.product_image) {
-                newData.image = {
+                newData.product_image = {
                     fileName: item?.product_image,
                     uri: IMG_URL + item?.product_image,
                     type: `image/${item?.product_image.split(".")[1]}`
                 }
             }
             setFilePath({ uri: IMG_URL + item?.product_image })
+            const multiple = item?.image && item?.image?.map((res)=>({
+                uri : IMG_URL + res
+            })
+              
+            )
+            reactotron.log({multiple})
+            setFilePathMultiple(multiple)
             reset(newData)
         }
     }, [])
@@ -201,14 +224,71 @@ const AddNewProduct = ({ navigation, route }) => {
             } else {
                 // const source = { uri: res.uri };
                 setFilePath(res?.assets[0])
-                setValue("image", res?.assets[0])
+                setValue("product_image", res?.assets[0])
                 clearErrors()
             }
         });
     }, [])
 
+
+    const imageGalleryLaunchMultiple = useCallback(() => {
+        let options = {
+            title: "Select Images/Videos",
+            mediaType: "photo",
+            selectionLimit: 4,
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+
+        };
+        launchImageLibrary(options, (res) => {
+
+            if (res.didCancel) {
+                // console.log('User cancelled image picker');
+            } else if (res.error) {
+                setFilePathMultiple(null)
+            } else if (res.customButton) {
+                // console.log('User tapped custom button: ', res.customButton);
+                // alert(res.customButton);
+            } else {
+                // const source = { uri: res.uri };
+
+                setFilePathMultiple(res?.assets)
+                MultipleImageSubmit(res?.assets)
+                // setValue("image", res?.assets[0])
+                clearErrors()
+            }
+        });
+    }, [])
+
+    const MultipleImageSubmit = async (imagesArray) => {
+        try {
+            let body = new FormData()
+            imagesArray.forEach((data, index) => {
+                body.append(`image[${index}]`, {
+                    uri: data.uri,
+                    type: data.type,
+                    name: data.fileName,
+                });
+            });
+            const response = await customAxios.post(`vendor/product/multipleupload`, body, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            })
+            setValue('image', response?.data?.data)
+            setImages(response?.data?.data)
+
+        } catch (err) {
+
+        }
+    }
+
+
+
     const onSubmit = async (data) => {
-        console.log("111", options, data);
+
         //console.log("data ==>", data);
         setLoading(true)
         try {
@@ -217,13 +297,14 @@ const AddNewProduct = ({ navigation, route }) => {
             body.append("store", JSON.stringify(userData?.store))
             body.append("franchisee", JSON.stringify(userData?.franchisee))
             body.append("name", data.name)
+            body.append("description", data.description)
             body.append("category", JSON.stringify(data.category))
-            body.append("image", {
-                uri: data?.image?.uri,
-                type: data?.image?.type,
-                name: data?.image?.fileName,
-            })
-
+            body.append("product_image", {
+                uri: data?.product_image?.uri,
+                type: data?.product_image?.type,
+                name: data?.product_image?.fileName,
+            }),
+                body.append('image', data?.image);
             if (item?._id) {
                 body.append("id", item?._id)
             }
@@ -234,7 +315,7 @@ const AddNewProduct = ({ navigation, route }) => {
                 if (valid) {
                     //setLoading(false)
                     // return false
-                    console.log("attributess", JSON.stringify(attributess), "variants", JSON.stringify(options));
+                    // console.log("attributess", JSON.stringify(attributess), "variants", JSON.stringify(options));
                     body.append("attributess", JSON.stringify(attributess))
                     body.append("variants", JSON.stringify(options))
 
@@ -251,7 +332,7 @@ const AddNewProduct = ({ navigation, route }) => {
                     body.append("price", data.price)
                 }
             }
-            console.log("body ==>", JSON.stringify(body));
+       
             // return false
             const response = await customAxios.post(`vendor/newproduct/${item?._id ? 'update' : 'create'}`, body, {
                 headers: {
@@ -269,7 +350,7 @@ const AddNewProduct = ({ navigation, route }) => {
             setLoading(false)
         } catch (error) {
             setLoading(false)
-            console.log("error", error)
+    
             Toast.show({
                 type: 'error',
                 text1: error
@@ -317,7 +398,7 @@ const AddNewProduct = ({ navigation, route }) => {
     }
 
     const removeAttribute = (index) => {
-        console.log(index);
+     
         let error = {}
         if (attributess?.length == 1) {
             error.attribute = {}
@@ -367,6 +448,8 @@ const AddNewProduct = ({ navigation, route }) => {
         }
     }
 
+
+
     return (
         <>
             <HeaderWithTitle title={isEmpty(item) ? 'Add New Product' : "Edit Product"} backAction />
@@ -393,6 +476,26 @@ const AddNewProduct = ({ navigation, route }) => {
                         </View>
                     }
                 </TouchableOpacity>
+                <View>
+                    <TouchableOpacity onPress={imageGalleryLaunchMultiple} style={{ display: 'flex', justifyContent: 'center', width: width / 3, height: 30, alignItems: 'center', backgroundColor: '#58D36E', marginVertical: 5, borderRadius: 8 }}>
+                        <Text style={{ color: '#fff', letterSpacing: .5 }}>Upload Images</Text>
+
+
+                    </TouchableOpacity>
+                    <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 5 }}>
+                        {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath) => (
+                            <Image
+                                style={{ width: 60, height: 60, borderRadius: 20 }}
+                                alignSelf='center'
+                                source={{ uri: filpath?.uri }} alt='img'
+                            />
+                        ))}
+
+                    </View>
+
+
+
+                </View>
                 {!isEmpty(errors?.image?.fileName) && <Text style={styles.errorText}>{errors?.image?.fileName?.message || ""}</Text>}
                 <CommonInput
                     control={control}
@@ -413,7 +516,7 @@ const AddNewProduct = ({ navigation, route }) => {
                     labelField="name"
                     valueField="name"
                     onChange={value => {
-                        console.log("value", value);
+
                         delete value?._index
                         setValue("category", { _id: value.id, name: value?.name })
                         clearErrors()
@@ -556,8 +659,18 @@ const AddNewProduct = ({ navigation, route }) => {
                         top={15}
                         rightIcon={<Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 30, color: '#58D36E' }}>₹</Text>}
                     />}
+
+                <CommonInput
+                    control={control}
+                    error={errors.description}
+                    fieldName="description"
+                    backgroundColor='#F2F2F2'
+                    topLabel={'Description'}
+                    top={15}
+                    editable={!disabled}
+                />
                 {!disabled && <CustomButton label={'Submit'} bg='#58D36E' mt={25} onPress={handleSubmit(onSubmit, (err) => {
-                    console.log(err);
+              
                 })}
                     loading={loading}
                     disabled={loading}

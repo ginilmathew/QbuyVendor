@@ -9,7 +9,8 @@ import AccountCard from './AccountCard';
 import customAxios from '../../CustomeAxios';
 import Toast from 'react-native-toast-message';
 import has from 'lodash/has'
-import isEmpty from 'lodash/isEmpty'
+import isEmpty from 'lodash/isEmpty';
+import DeviceInfo from 'react-native-device-info';
 
 const Account = ({ navigation }) => {
 
@@ -47,7 +48,9 @@ const Account = ({ navigation }) => {
     const getAccountData = async (date) => {
         //loadingg.setLoading(true)
         try {
-            const response = date ? await customAxios.post(`vendor/accounts-filter`, { date: moment(date).format("DD-MM-YYYY") }) : await customAxios.get(`vendor/accounts`)
+            let bundleId = DeviceInfo.getBundleId();
+            const type = bundleId.replace("com.qbuystoreapp.", "")
+            const response = date ? await customAxios.post(`vendor/accounts-filter`, { date: moment(date).format("DD-MM-YYYY"),type}) : await customAxios.get(`vendor/accounts/${type}`)
             if (response && has(response, "data.data") && !isEmpty(response.data.data)) {
                 setAccountData(response.data.data)
             }

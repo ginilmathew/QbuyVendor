@@ -59,12 +59,12 @@ const Register = ({ navigation }) => {
 				"kyc_details": { "license_number": data?.license_number },
 				type
 			})
-			console.log("response", response);
+		
 			if (response?.status) {
 				navigation.replace('Otp', { type: "register" })
 			}
 		} catch (error) {
-			console.log("error", error);
+			
 
 		}
 	}

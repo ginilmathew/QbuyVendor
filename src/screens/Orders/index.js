@@ -14,6 +14,7 @@ import customAxios from '../../CustomeAxios'
 import isEmpty from 'lodash/isEmpty'
 import has from 'lodash/has'
 import reactotron from 'reactotron-react-native'
+import DeviceInfo from 'react-native-device-info';
 
 const filter = [
     {
@@ -51,7 +52,6 @@ const Orders = ({ navigation, route }) => {
     const [refreshing, setRefreshing] = useState(false)
     const [refreshingHistory, setRefreshingHistory] = useState(false)
 
-    reactotron.log(orderHistory, "ORDERSLIST")
 
     const { width, height } = useWindowDimensions()
     const loadingg = useContext(LoaderContext)
@@ -98,7 +98,9 @@ const Orders = ({ navigation, route }) => {
     const getOrdersData = async (url) => {
         //loadingg.setLoading(true)
         try {
-            const response = await customAxios.get(`vendor/orders/${url}`)
+            let bundleId = DeviceInfo.getBundleId();
+            const type = bundleId.replace("com.qbuystoreapp.", "")
+            const response = await customAxios.get(`vendor/orders/${type}/${url}`)
             if (response && has(response, "data.data") && !isEmpty(response.data.data)) {
                 setOrders(response.data.data)
             } else {
@@ -124,7 +126,9 @@ const Orders = ({ navigation, route }) => {
     const getOrdersHistoryData = async (date) => {
         //loadingg.setLoading(true)
         try {
-            const response = date ? await customAxios.post(`vendor/orders-history-filter`, { date: moment(date).format("DD-MM-YYYY") }) : await customAxios.get(`vendor/orders-history`)
+            let bundleId = DeviceInfo.getBundleId();
+            const type = bundleId.replace("com.qbuystoreapp.", "")
+            const response = date ? await customAxios.post(`vendor/orders-history-filter`, { date: moment(date).format("DD-MM-YYYY"),type }) : await customAxios.get(`vendor/orders-history/${type}`)
             if (response && has(response, "data.data") && !isEmpty(response.data.data)) {
                 // console.log(response.data);
                 setOrderHistory(response.data.data)

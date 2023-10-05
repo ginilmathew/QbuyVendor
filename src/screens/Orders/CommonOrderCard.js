@@ -16,12 +16,12 @@ import Toast from 'react-native-toast-message'
 import isEmpty from 'lodash/isEmpty'
 import has from 'lodash/has'
 import reactotron from 'reactotron-react-native';
-
+import DeviceInfo from 'react-native-device-info';
 const CommonOrderCard = memo((props) => {
 
     const { item, onRefresh } = props
 
-
+reactotron.log({item})
 
     const { width } = useWindowDimensions()
 
@@ -40,9 +40,12 @@ const CommonOrderCard = memo((props) => {
     const onSubmit = async () => {
         loadingg.setLoading(true)
         try {
+            let bundleId = DeviceInfo.getBundleId();
+            const type = bundleId.replace("com.qbuystoreapp.", "")
             const response = await customAxios.post(`vendor/order-accept`, {
                 "id": item?._id,
-                "status": modalVisible?.status
+                "status": modalVisible?.status,
+                type
             })
             if (response && has(response, "data.data") && !isEmpty(response.data.data)) {
                 Toast.show({
@@ -64,10 +67,10 @@ const CommonOrderCard = memo((props) => {
 
     const renderButton = (status) => {
 
-        reactotron.log({status})
+     
         switch (status) {
 
-            
+
             case "created":
                 return (<View style={{ flexDirection: "row" }}>
                     <CustomButton
@@ -108,6 +111,13 @@ const CommonOrderCard = memo((props) => {
                     onPress={() => navigation.navigate('Orders', { mode: 'complete' })}
                     label={'Order Cancelled'} bg='#FF7B7B' mx={8}
                 />)
+            case "readyTopickup":
+                return (
+                    <CustomButton
+                    onPress={null}
+                    label={'Ready To PickUp'} bg='#58D36E' mx={8}
+                />
+                )    
 
             default:
                 return (
@@ -145,6 +155,7 @@ const CommonOrderCard = memo((props) => {
                             <Text style={styles.orderIdLabel}>{"Order ID :"}</Text>
                             <Text style={styles.orderId}>{item?.order_id}</Text>
                         </View>
+                     
                         {renderStatusLabel(item?.order_status)}
                     </View>
 
@@ -155,6 +166,8 @@ const CommonOrderCard = memo((props) => {
                     {/* <TotalBill value={item?.total_amount} label="Item Total" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} /> */}
                     {/* <TotalBill value={item?.delivery_charge} label="Delivery Fee" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} /> */}
                     {item?.grand_total && <TotalBill value={item?.vendor_order_total_price} />}
+                    {item?.order_status === "ready" ? renderButton("readyTopickup") : renderButton(item?.order_status) }
+                    
 
 
                 </View>

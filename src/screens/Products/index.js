@@ -30,7 +30,6 @@ const Products = ({ navigation }) => {
     const authContext = useContext(AuthContext)
     const { filterCategoryList = [], userData } = authContext
 
-    reactotron.log(filterCategoryList, "Category")
 
     const { width, height } = useWindowDimensions()
     const [currentTab, setCurrentTab] = useState(0)
@@ -55,7 +54,7 @@ const Products = ({ navigation }) => {
         return productHistory?.filter(item => item?.name?.toLowerCase().includes(historySearch.toLowerCase())) || []
     }
     const productSearch = async ({ search }) => {
-        console.log(search);
+     
         try {
             const response = await customAxios.post("vendor/newproduct/search", {
                 "type": userData?.type, search
@@ -77,6 +76,8 @@ const Products = ({ navigation }) => {
                     "type": userData?.type,
                     "category_id": selected?._id
                 })
+
+              
                 if (response && has(response, "data.data")) {
                     setFilterList(response?.data?.data)
                 }
@@ -84,7 +85,7 @@ const Products = ({ navigation }) => {
             setRefreshing(false)
         } catch (error) {
             setRefreshing(false)
-            console.log("error-", error)
+          
             Toast.show({
                 type: 'error',
                 text1: error
