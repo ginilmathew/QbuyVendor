@@ -25,7 +25,7 @@ const Otp = ({ navigation, route }) => {
 	let endPoint;
 	let otpss = userOtp?.otp
 
-	console.log({ otpss })
+
 
 
 	const schema = yup.object({
@@ -49,9 +49,14 @@ const Otp = ({ navigation, route }) => {
 		} else {
 			endPoint = "auth/vendorlogin"
 		}
+
+		loadingg.setLoading(true)
+
 		try {
-			const response = await customAxios.post(endPoint, { ...data, mobile: mobileNo })
-			console.log("response ", response.data);
+			let bundleId = DeviceInfo.getBundleId();
+			const type = bundleId.replace("com.qbuystoreapp.", "")
+			const response = await customAxios.post(endPoint, { ...data, mobile: mobileNo, type });
+
 			if (type == "register") {
 				Alert.alert("Message", response?.data?.message, [
 					{
@@ -60,29 +65,28 @@ const Otp = ({ navigation, route }) => {
 						// style: 'cancel',
 					},
 				])
-
 			} else {
 				if (response?.data?.access_token) {
 					const { access_token } = response?.data
-					navigation.replace('TabNavigator')
+					navigation.replace('TabNavigator');
 					await AsyncStorage.setItem("token", access_token);
 					userOtp.getProfileDetails()
 				}
 			}
-
+			loadingg.setLoading(false)
 		} catch (error) {
+			loadingg.setLoading(false)
 			console.log("error", error)
 			Toast.show({
 				type: 'error',
 				text1: error
 			});
 		}
-
 	}
-
 	const backAction = useCallback(() => {
 		navigation.replace("Login")
-	}, [])
+	}, [navigation])
+
 
 
 	const handleResendOtp = async () => {
@@ -90,6 +94,7 @@ const Otp = ({ navigation, route }) => {
 		const type = bundleId.replace("com.qbuystoreapp.", "")
 		try {
 			const response = await customAxios.post("auth/vendorloginotp", { mobile: mobileNo, type })
+		
 			if (response) {
 				Toast.show({
 					type: 'success',
@@ -142,6 +147,7 @@ const Otp = ({ navigation, route }) => {
 					width={100}
 					alignSelf='center'
 					loading={loader}
+					disabled={loader ? true : false}
 				/>
 			</ScrollView>
 		</CommonAuthBg>

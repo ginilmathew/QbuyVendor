@@ -10,11 +10,11 @@ import light from '../../Images/light.png'
 import LoaderContext from '../../contexts/Loader';
 import reactotron from '../../ReactotronConfig';
 import Toast from 'react-native-toast-message';
-import { useIsFocused } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import customAxios from '../../CustomeAxios';
 import has from 'lodash/has';
 import AuthContext from '../../contexts/Auth';
-
+import DeviceInfo from 'react-native-device-info';
 
 const Home = ({ navigation, }) => {
 
@@ -29,7 +29,10 @@ const Home = ({ navigation, }) => {
 
     const getHomeDetails = async () => {
         try {
-            const response = await customAxios.get("vendor/home")
+            let bundleId = DeviceInfo.getBundleId();
+			const type = bundleId.replace("com.qbuystoreapp.", "")
+            
+            const response = await customAxios.get(`vendor/home/${type}`)
             if (response && has(response, "data.data")) {
                 setHomeData(response.data.data)
             }
@@ -46,11 +49,18 @@ const Home = ({ navigation, }) => {
 
     const ViewAllOrders = useCallback(() => {
         navigation.navigate('Orders')
-    }, [])
+    }, [navigation])
 
-    useEffect(() => {
-        getHomeDetails()
-    }, [isFocused])
+    // useEffect(() => {
+    //     getHomeDetails()
+    // }, [isFocused])
+
+    useFocusEffect(
+        React.useCallback(() => {
+            getHomeDetails()
+        }, [])
+      );
+    
 
     useEffect(() => {
         if (fcmToken) {

@@ -15,7 +15,9 @@
     "build:android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/"
   },
   "dependencies": {
+    "@baronha/react-native-image-grid": "^0.2.7",
     "@hookform/resolvers": "^3.0.0",
+    "@notifee/react-native": "^7.8.0",
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-native-firebase/app": "^18.0.0",
     "@react-native-firebase/messaging": "^18.0.0",
@@ -32,6 +34,7 @@
     "react-native-device-info": "^10.6.0",
     "react-native-element-dropdown": "^2.9.0",
     "react-native-gesture-handler": "^2.9.0",
+    "react-native-gradle-plugin": "^0.71.19",
     "react-native-image-picker": "^5.3.1",
     "react-native-otp-textinput": "^1.0.0",
     "react-native-reanimated": "^3.0.2",

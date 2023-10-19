@@ -18,6 +18,7 @@ import CommonTexts from '../../../Components/CommonTexts';
 import AuthContext from '../../../contexts/Auth';
 import LoaderContext from '../../../contexts/Loader';
 import customAxios from '../../../CustomeAxios';
+import reactotron from '../../../ReactotronConfig';
 
 
 const Login = ({ navigation }) => {
@@ -27,7 +28,7 @@ const Login = ({ navigation }) => {
 	let loader = loadingg?.loading
 
 	let user = loginUser?.login
-	console.log({ user })
+
 
 
 	const schema = yup.object({
@@ -50,6 +51,7 @@ const Login = ({ navigation }) => {
 
 		let bundleId = DeviceInfo.getBundleId();
 		const type = bundleId.replace("com.qbuystoreapp.", "")
+	
 		try {
 			const response = await customAxios.post("auth/vendorloginotp", { ...data, type })
 			if (response) {

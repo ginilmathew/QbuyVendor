@@ -20,12 +20,14 @@ const AuthProvider = (props) => {
     let bundleId = DeviceInfo.getBundleId();
     const type = bundleId.replace("com.qbuystoreapp.", "")
 
+
     const getProfileDetails = async () => {
         try {
-            const response = await customAxios.get("vendor/profile")
+            const response = await customAxios.get(`vendor/profile/${type}`);
+             
             setUserData(response?.data?.data)
         } catch (error) {
-            console.log("error<=>", error)
+   
             Toast.show({
                 type: 'error',
                 text1: error
@@ -38,7 +40,7 @@ const AuthProvider = (props) => {
             const response = await customAxios.post("auth/update-devicetoken", data)
             if (response.data?.data) {
                 getProfileDetails()
-                console.log(response.data?.data);
+         
                 loading.setLoading(false)
                 /* Toast.show({
                     text1: "Notification sound updated successfully",
@@ -46,7 +48,7 @@ const AuthProvider = (props) => {
             }
         } catch (error) {
             loading.setLoading(false)
-            console.log("error<=>", error)
+        
             Toast.show({
                 type: 'error',
                 text1: error
@@ -59,7 +61,7 @@ const AuthProvider = (props) => {
             const response = await customAxios.get("common/order-status-list")
             setOrderStatus(response?.data?.data)
         } catch (error) {
-            console.log("error<=>", error)
+
             Toast.show({
                 type: 'error',
                 text1: error
@@ -86,7 +88,9 @@ const AuthProvider = (props) => {
 
     const filterCategories = async () => {
         try {
-            const response = await customAxios.get("vendor/vendor-categories")
+            let bundleId = DeviceInfo.getBundleId();
+            const type = bundleId.replace("com.qbuystoreapp.", "")
+            const response = await customAxios.get(`vendor/vendor-categories/${type}`)
             if (response && has(response, "data.data")) {
                 setFilterCategoryList(response?.data?.data)
             }

@@ -59,12 +59,12 @@ const Register = ({ navigation }) => {
 				"kyc_details": { "license_number": data?.license_number },
 				type
 			})
-			console.log("response", response);
+		
 			if (response?.status) {
 				navigation.replace('Otp', { type: "register" })
 			}
 		} catch (error) {
-			console.log("error", error);
+			
 
 		}
 	}
@@ -94,7 +94,7 @@ const Register = ({ navigation }) => {
 					error={errors.vendor_name}
 					fieldName="vendor_name"
 					placeholder='Vendor Name'
-					inputMode={'none'}
+					//inputMode={'none'}
 					mt={20}
 					icon={<Ionicons name='person' color='#58D36E' size={25} />}
 				/>
@@ -114,7 +114,7 @@ const Register = ({ navigation }) => {
 					error={errors.store_name}
 					fieldName="store_name"
 					placeholder='Store Name'
-					inputMode={'none'}
+					//inputMode={'none'}
 					mt={20}
 					icon={<Image source={require('../../../Images/storeIcon.jpeg')} style={{ width: 25, height: 25 }} resizeMode='contain' />}
 				/>
@@ -159,7 +159,7 @@ const Register = ({ navigation }) => {
 					error={errors.license_number}
 					fieldName="license_number"
 					placeholder='License Number'
-					inputMode={'none'}
+					//inputMode={'none'}
 					mt={20}
 					icon={<Entypo name='v-card' color='#58D36E' size={18} marginTop={1.5} />}
 				/>

@@ -9,7 +9,8 @@ import AccountCard from './AccountCard';
 import customAxios from '../../CustomeAxios';
 import Toast from 'react-native-toast-message';
 import has from 'lodash/has'
-import isEmpty from 'lodash/isEmpty'
+import isEmpty from 'lodash/isEmpty';
+import DeviceInfo from 'react-native-device-info';
 
 const Account = ({ navigation }) => {
 
@@ -47,7 +48,9 @@ const Account = ({ navigation }) => {
     const getAccountData = async (date) => {
         //loadingg.setLoading(true)
         try {
-            const response = date ? await customAxios.post(`vendor/accounts-filter`, { date: moment(date).format("DD-MM-YYYY") }) : await customAxios.get(`vendor/accounts`)
+            let bundleId = DeviceInfo.getBundleId();
+            const type = bundleId.replace("com.qbuystoreapp.", "")
+            const response = date ? await customAxios.post(`vendor/accounts-filter`, { date: moment(date).format("DD-MM-YYYY"),type}) : await customAxios.get(`vendor/accounts/${type}`)
             if (response && has(response, "data.data") && !isEmpty(response.data.data)) {
                 setAccountData(response.data.data)
             }
@@ -68,17 +71,6 @@ const Account = ({ navigation }) => {
         <>
             <HeaderWithTitle title={'Account'} drawerOpen={openDrawer} />
             <View style={{ flex: 1, backgroundColor: '#F3F3F3', paddingHorizontal: 15, }}>
-                <CommonDatePicker
-                    onPress={calendarOpen}
-                    date={date ? date : new Date()}
-                    label={date ? moment(date).format("DD-MM-YYYY") : null}
-                    openCalendar={openCalendar}
-                    onConfirm={selectDate}
-                    onCancel={calendarClose}
-                    clearAction={() => {
-                        selectDate(null)
-                    }}
-                />
                 <DetailsBox
                     count={accountData?.total_earnings || 0}
                     label='Total Earned'
@@ -91,7 +83,18 @@ const Account = ({ navigation }) => {
                     label='Total Outstanding'
                     alignSelf={'center'}
                 />
-                <ScrollView style={{ backgroundColor: '#F3F3F3', marginBottom: 80, marginTop: 10 }} showsVerticalScrollIndicator={false}
+                <CommonDatePicker
+                    onPress={calendarOpen}
+                    date={date ? date : new Date()}
+                    label={date ? moment(date).format("DD-MM-YYYY") : null}
+                    openCalendar={openCalendar}
+                    onConfirm={selectDate}
+                    onCancel={calendarClose}
+                    clearAction={() => {
+                        selectDate(null)
+                    }}
+                />
+                <ScrollView style={{ backgroundColor: '#F3F3F3', marginBottom: 80, marginTop: 20 }} showsVerticalScrollIndicator={false}
                     refreshControl={<RefreshControl refreshing={refreshing}
                         onRefresh={() => {
                             setRefreshing(true)

@@ -12,7 +12,7 @@ const IMG_BASEPATH = {
     dev: "https://apiqbuypanda.diginestsolutions.in/public/"
 }
 
-export const mode = "green" //"green" // "fashion" // "panda"
+export const mode = "fashion" //"green" // "fashion" // "panda"
 
 
 export const BASE_URL = URLS[env]
