@@ -36,7 +36,7 @@ const Notification = () => {
         const token = await messaging().getToken();
     
     
-        reactotron.log({token})
+        reactotron.log({token}, "Notification Token")
       
         // Save the token
         //await postToApi('/users/1234/tokens', { token });

@@ -75,11 +75,11 @@ const Settings = ({ navigation }) => {
                     label={'Profile'}
                     leftElement={<Ionicons name='person' color='#586DD3' size={20} />}
                 />
-                <SettingsCard
+                {/* <SettingsCard
                     onPress={goNotificatnSound}
                     label={'Notification Sound'}
                     leftElement={<Ionicons name='notifications' color='#586DD3' size={20} />}
-                />
+                /> */}
                 <SettingsCard
                     label={'Support'}
                     leftElement={<Ionicons name='headset' color='#586DD3' size={18} />}

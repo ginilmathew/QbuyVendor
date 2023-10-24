@@ -77,10 +77,10 @@ const Otp = ({ navigation, route }) => {
 		} catch (error) {
 			loadingg.setLoading(false)
 			console.log("error", error)
-			// Toast.show({
-			// 	type: 'error',
-			// 	text1: error
-			// });
+			Toast.show({
+				type: 'error',
+				text1: error
+			});
 		}
 	}
 
