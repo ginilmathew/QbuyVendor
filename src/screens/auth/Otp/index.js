@@ -54,8 +54,8 @@ const Otp = ({ navigation, route }) => {
 
 		try {
 			let bundleId = DeviceInfo.getBundleId();
-			const type = bundleId.replace("com.qbuystoreapp.", "")
-			const response = await customAxios.post(endPoint, { ...data, mobile: mobileNo, type });
+			const types = bundleId.replace("com.qbuystoreapp.", "")
+			const response = await customAxios.post(endPoint, { ...data, mobile: mobileNo, type: types });
 
 			if (type == "register") {
 				Alert.alert("Message", response?.data?.message, [
@@ -77,12 +77,13 @@ const Otp = ({ navigation, route }) => {
 		} catch (error) {
 			loadingg.setLoading(false)
 			console.log("error", error)
-			Toast.show({
-				type: 'error',
-				text1: error
-			});
+			// Toast.show({
+			// 	type: 'error',
+			// 	text1: error
+			// });
 		}
 	}
+
 	const backAction = useCallback(() => {
 		navigation.replace("Login")
 	}, [navigation])

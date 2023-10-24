@@ -18,6 +18,7 @@ const TabNavigator = () => {
         <Tab.Navigator
             initialRouteName='HomeNav'
             screenOptions={({ route }) => ({
+                unmountOnBlur: true,
                 tabBarHideOnKeyboard: true,
                 headerShown: false,
                 tabBarActiveTintColor: '#58D36E',
