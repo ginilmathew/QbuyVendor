@@ -66,7 +66,7 @@ const Home = ({ navigation, }) => {
         if (fcmToken) {
             setPushDetails({ token: fcmToken })
         }
-    }, [])
+    }, [fcmToken])
 
     return (
         <>

@@ -1,15 +1,18 @@
 import notifee, { AndroidImportance, AndroidVisibility } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import reactotron from 'reactotron-react-native';
+import AuthContext from '../contexts/Auth';
 
 
 const Notification = () => {
 
+    const auth = useContext(AuthContext)
+
     useEffect(() => {
         onAppBootstrap()
         messaging().onMessage(onMessageReceived);
-        messaging().setBackgroundMessageHandler(onMessageReceived);
+        //messaging().setBackgroundMessageHandler(onMessageReceived);
     }, [])
 
 
@@ -34,7 +37,7 @@ const Notification = () => {
       
         // Get the token
         const token = await messaging().getToken();
-    
+        auth.setFcmToken(token)
     
         reactotron.log({token}, "Notification Token")
       
@@ -51,6 +54,7 @@ const Notification = () => {
             android: {
                 channelId: message?.notification?.android?.channelId,
                 vibration: true,
+                sound:'order',
                 smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
                 // pressAction is needed if you want the notification to open the app when pressed
                 pressAction: {
