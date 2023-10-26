@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, Platform, Alert, Pressable, } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, Platform, Alert, Pressable, Keyboard, } from 'react-native'
 import React, { useCallback, useContext } from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -44,6 +44,9 @@ const Otp = ({ navigation, route }) => {
 	let phoneNum = first2 + mask + last1
 
 	const onSubmit = async (data) => {
+
+		Keyboard.dismiss()
+
 		if (type == "register") {
 			endPoint = "auth/vendorregisterotp"
 		} else {
@@ -113,7 +116,7 @@ const Otp = ({ navigation, route }) => {
 
 	return (
 		<CommonAuthBg>
-			<ScrollView style={{ flex: 1, paddingHorizontal: 40, }}>
+			<ScrollView style={{ flex: 1, paddingHorizontal: 40, }} keyboardShouldPersistTaps="always">
 				<CommonTitle goBack={backAction} mt={Platform.OS === 'android' ? 80 : 100} />
 				<CommonTexts
 					label={'Enter the 4 - digit code we sent to your registered mobile number'}

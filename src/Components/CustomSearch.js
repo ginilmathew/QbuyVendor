@@ -67,7 +67,7 @@ const CustomSearch
 
                 </View> */}
 
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <View style={{ flexDirection: "row", alignItems: "center", paddingRight: 2 }}>
                         {clearAction && <TouchableOpacity style={{ marginRight: 10 }} onPress={() => clearAction()
                         }>
                             <Ionicons name={'close-circle-sharp'} size={25} color={"#80808080"} />

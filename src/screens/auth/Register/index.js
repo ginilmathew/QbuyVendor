@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Alert, } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Alert, Keyboard, } from 'react-native'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -40,6 +40,9 @@ const Register = ({ navigation }) => {
 	}, [])
 
 	const onSubmit = async (data) => {
+
+		Keyboard.dismiss()
+
 		let bundleId = DeviceInfo.getBundleId();
 		const type = bundleId.replace("com.qbuystoreapp.", "")
 		let category_id = []
@@ -72,7 +75,7 @@ const Register = ({ navigation }) => {
 	return (
 		<CommonAuthBg>
 
-			<ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, paddingHorizontal: 40, }}>
+			<ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, paddingHorizontal: 40, }} keyboardShouldPersistTaps="always">
 
 				<Image
 					style={styles.logo}

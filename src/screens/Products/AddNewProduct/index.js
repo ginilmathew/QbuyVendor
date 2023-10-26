@@ -1,4 +1,4 @@
-import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Platform, TextInput, Pressable } from 'react-native'
+import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Platform, TextInput, Pressable, Keyboard } from 'react-native'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../../Components/HeaderWithTitle'
 import { useForm } from "react-hook-form";
@@ -285,6 +285,8 @@ const AddNewProduct = ({ navigation, route }) => {
 
     const onSubmit = async (data) => {
 
+        Keyboard.dismiss()
+
         //console.log("data ==>", data);
         setLoading(true)
         try {
@@ -449,7 +451,7 @@ const AddNewProduct = ({ navigation, route }) => {
     return (
         <>
             <HeaderWithTitle title={isEmpty(item) ? 'Add New Product' : "Edit Product"} backAction />
-            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: '#fff', flex: 1, paddingHorizontal: 15 }}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: '#fff', flex: 1, paddingHorizontal: 15 }} keyboardShouldPersistTaps="always">
 
                 <TouchableOpacity
                     disabled={disabled}
@@ -472,7 +474,7 @@ const AddNewProduct = ({ navigation, route }) => {
                         </View>
                     }
                 </TouchableOpacity>
-                {errors.product_image && <Text style={{color:"#FF0000", fontSize: 12, fontFamily:"Poppins-Medium", marginTop:2 }}>{errors.product_image.message}</Text>}
+                {errors.product_image && <Text style={{color:"#FF0000", fontSize: 11, fontFamily:"Poppins-Regular", marginTop:2 }}>{errors.product_image.message}</Text>}
                 <View>
                   {item.approval_status === "approved" ? null : (<TouchableOpacity onPress={imageGalleryLaunchMultiple} style={{ display: 'flex', justifyContent: 'center', width: width / 1.8, height: 35, alignItems: 'center', backgroundColor: '#58D36E', marginVertical: 5, borderRadius: 8 }}>
                         <Text style={{ color: '#fff', letterSpacing: .5, fontFamily: 'Poppins-Regular'}}>Upload Additional Images</Text>
