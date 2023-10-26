@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 
 const CommonReadonlyBox = ({topLabel,label, mb, mt, width}) => {
     return (
@@ -33,6 +33,6 @@ const CommonReadonlyBox = ({topLabel,label, mb, mt, width}) => {
     )
 }
 
-export default CommonReadonlyBox
+export default memo(CommonReadonlyBox);
 
 const styles = StyleSheet.create({})

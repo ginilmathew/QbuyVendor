@@ -30,7 +30,6 @@ const Products = ({ navigation }) => {
     const authContext = useContext(AuthContext)
     const { filterCategoryList = [], userData } = authContext
 
-
     const { width, height } = useWindowDimensions()
     const [currentTab, setCurrentTab] = useState(0)
     const [selected, setSelected] = useState(initialItem)

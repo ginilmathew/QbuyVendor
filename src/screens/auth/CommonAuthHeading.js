@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 
 const CommonAuthHeading = ({label, mt, textAlign}) => {
     return (
@@ -15,6 +15,6 @@ const CommonAuthHeading = ({label, mt, textAlign}) => {
     )
 }
 
-export default CommonAuthHeading
+export default memo(CommonAuthHeading);
 
 const styles = StyleSheet.create({})

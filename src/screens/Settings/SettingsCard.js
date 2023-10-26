@@ -1,11 +1,11 @@
-import { StyleSheet, Text, Switch, ScrollView, View, TouchableOpacity, Pressable } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import { StyleSheet, Text, Switch, ScrollView, View, TouchableOpacity } from 'react-native'
+import React, { memo, useCallback, useState } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const SettingsCard = ({ label, leftElement, onPress, toggle, value, showArrow = true }) => {
 
     return (
-        <Pressable
+        <TouchableOpacity
             onPress={onPress}
             style={styles.container}
             disabled={toggle}
@@ -26,10 +26,10 @@ const SettingsCard = ({ label, leftElement, onPress, toggle, value, showArrow = 
                     style={{ transform: [{ scaleX: .7 }, { scaleY: .7 }], marginRight: -7 }}
                 /> : showArrow ? <Ionicons name='md-arrow-forward' color='#58D36E' size={20} /> : null}
             </View>
-        </Pressable>
+        </TouchableOpacity>
     )
 }
-export default SettingsCard
+export default memo(SettingsCard);
 
 const styles = StyleSheet.create({
     container: {

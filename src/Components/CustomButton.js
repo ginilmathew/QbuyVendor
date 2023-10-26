@@ -1,5 +1,5 @@
 import { ActivityIndicator, Platform, Pressable, StyleSheet, Text, TouchableOpacity, } from 'react-native'
-import React, { useContext } from 'react'
+import React, { memo, useContext } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const CustomButton = ({ onPress, label, mt, ml, bg, width, alignSelf, disabled, my, mb, mx, leftIcon, rightIconName, loading, style = {} }) => {
@@ -34,6 +34,6 @@ const CustomButton = ({ onPress, label, mt, ml, bg, width, alignSelf, disabled, 
     )
 }
 
-export default CustomButton
+export default memo(CustomButton);
 
 const styles = StyleSheet.create({})
