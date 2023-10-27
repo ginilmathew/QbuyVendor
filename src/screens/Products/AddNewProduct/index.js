@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Platform, TextInput, Pressable } from 'react-native'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../../Components/HeaderWithTitle'
@@ -23,14 +24,14 @@ import ImageGrid from '@baronha/react-native-image-grid';
 import { openPicker } from '@baronha/react-native-multiple-image-picker';
 import reactotron from 'reactotron-react-native';
 const CustomTextInput = ({ label = "", error, onChangeText, value, keyboardType = "default", editable = true }) => {
-    return <View style={{ flex: 1 }}>
-        <Text style={{
+    return <View style={ { flex: 1 } }>
+        <Text style={ {
             fontFamily: 'Poppins-Regular',
             color: '#23233C',
             fontSize: 11,
             marginLeft: 5,
-        }}>{label}</Text>
-        <View style={{
+        } }>{ label }</Text>
+        <View style={ {
             backgroundColor: '#F2F2F2',
             borderRadius: 7,
             shadowOpacity: 0.1,
@@ -38,22 +39,22 @@ const CustomTextInput = ({ label = "", error, onChangeText, value, keyboardType 
             elevation: 2,
             marginLeft: 1,
             shadowOffset: { width: 1, height: 5 },
-        }}>
-            <TextInput style={{ flex: 1, height: 45 }}
-                onChangeText={onChangeText} value={value}
-                keyboardType={keyboardType}
-                editable={editable}
+        } }>
+            <TextInput style={ { flex: 1, height: 45 } }
+                onChangeText={ onChangeText } value={ value }
+                keyboardType={ keyboardType }
+                editable={ editable }
                 color='#23233C'
             />
         </View>
-        <Text style={{
+        <Text style={ {
             fontFamily: 'Poppins-Regular',
             color: 'red',
             fontSize: 9,
             marginLeft: 5,
             position: "absolute",
             bottom: -15
-        }}>{error}</Text>
+        } }>{ error }</Text>
     </View>
 }
 
@@ -67,8 +68,8 @@ const CustomOptionInput = ({ onChangeText, value, err, editable }) => {
     }, [err])
 
 
-    return <View style={{ flex: 1, flexDirection: "row" }}>
-        <View style={{
+    return <View style={ { flex: 1, flexDirection: "row" } }>
+        <View style={ {
             backgroundColor: '#F2F2F2',
             borderRadius: 7,
             shadowOpacity: 0.1,
@@ -77,34 +78,34 @@ const CustomOptionInput = ({ onChangeText, value, err, editable }) => {
             marginLeft: 1,
             shadowOffset: { width: 1, height: 5 },
             flex: 1,
-        }}>
-            <TextInput style={{ flex: 1, height: 45 }}
-                onChangeText={(v) => {
+        } }>
+            <TextInput style={ { flex: 1, height: 45 } }
+                onChangeText={ (v) => {
                     setData(v)
                     setErrorFn("")
-                }} value={data}
-                editable={editable}
+                } } value={ data }
+                editable={ editable }
                 color='#23233C'
             />
-            <Text style={{
+            <Text style={ {
                 fontFamily: 'Poppins-Regular',
                 color: 'red',
                 fontSize: 9,
                 marginLeft: 5,
                 position: "absolute",
                 bottom: -15
-            }}>{error}</Text>
+            } }>{ error }</Text>
         </View>
-        <CommonSquareButton ml={10} iconName={"add-circle-outline"}
-            disabled={!editable}
-            onPress={() => {
+        <CommonSquareButton ml={ 10 } iconName={ "add-circle-outline" }
+            disabled={ !editable }
+            onPress={ () => {
                 if (!isEmpty(data)) {
                     onChangeText(data)
                     setData("")
                 } else {
                     setErrorFn("Please enter an option value")
                 }
-            }}
+            } }
         />
     </View>
 }
@@ -126,7 +127,7 @@ const AddNewProduct = ({ navigation, route }) => {
     const [images, setImages] = useState([]);
 
 
-  
+
 
 
     const setFormData = (field, value) => {
@@ -135,7 +136,7 @@ const AddNewProduct = ({ navigation, route }) => {
     }
 
 
-   
+
     const schema = yup.object({
         variant: yup.boolean(),
         name: yup.string().required('Product name is required'),
@@ -170,13 +171,13 @@ const AddNewProduct = ({ navigation, route }) => {
             let newData = {
                 name: item.name,
                 category: item?.category,
-                description:item?.description,
-              
+                description: item?.description,
+
             }
             if (item?.seller_price) {
                 newData.price = item?.seller_price
             }
-            if(item?.image){
+            if (item?.image) {
                 newData.image = item?.image
             }
             if (item?.variants) {
@@ -190,12 +191,12 @@ const AddNewProduct = ({ navigation, route }) => {
                 }
             }
             setFilePath({ uri: IMG_URL + item?.product_image })
-            const multiple = item?.image && item?.image?.map((res)=>({
-                uri : IMG_URL + res
+            const multiple = item?.image && item?.image?.map((res) => ({
+                uri: IMG_URL + res
             })
-              
+
             )
-            reactotron.log({multiple})
+            reactotron.log({ multiple })
             setFilePathMultiple(multiple)
             reset(newData)
         }
@@ -235,7 +236,7 @@ const AddNewProduct = ({ navigation, route }) => {
         let options = {
             title: "Select Images/Videos",
             mediaType: "photo",
-            selectionLimit: 4,
+            selectionLimit: 6,
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
@@ -332,7 +333,7 @@ const AddNewProduct = ({ navigation, route }) => {
                     body.append("price", data.price)
                 }
             }
-       
+
             // return false
             const response = await customAxios.post(`vendor/newproduct/${item?._id ? 'update' : 'create'}`, body, {
                 headers: {
@@ -350,7 +351,7 @@ const AddNewProduct = ({ navigation, route }) => {
             setLoading(false)
         } catch (error) {
             setLoading(false)
-    
+
             Toast.show({
                 type: 'error',
                 text1: error
@@ -398,7 +399,7 @@ const AddNewProduct = ({ navigation, route }) => {
     }
 
     const removeAttribute = (index) => {
-     
+
         let error = {}
         if (attributess?.length == 1) {
             error.attribute = {}
@@ -446,238 +447,251 @@ const AddNewProduct = ({ navigation, route }) => {
                 indices[i] = 0;
             attributs = []
         }
+    };
+
+    const DeleteImages = (images) => {
+        const filter = filePathMultiple.filter((res) => res?.fileName !== images.fileName);
+        MultipleImageSubmit(filter)
+        setFilePathMultiple(filter)
     }
 
 
 
     return (
         <>
-            <HeaderWithTitle title={isEmpty(item) ? 'Add New Product' : "Edit Product"} backAction />
-            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: '#fff', flex: 1, paddingHorizontal: 15 }}>
+            <HeaderWithTitle title={ isEmpty(item) ? 'Add New Product' : "Edit Product" } backAction />
+            <ScrollView showsVerticalScrollIndicator={ false } style={ { backgroundColor: '#fff', flex: 1, paddingHorizontal: 15 } }>
 
                 <TouchableOpacity
-                    disabled={disabled}
-                    onPress={imageGalleryLaunch}
-                    style={styles.imageContainer}
+                    disabled={ disabled }
+                    onPress={ imageGalleryLaunch }
+                    style={ styles.imageContainer }
                 >
-                    {filePath ? <Image
-                        style={{ width: '100%', height: 200, borderRadius: 20 }}
+                    { filePath ? <Image
+                        style={ { width: '100%', height: 200, borderRadius: 20 } }
                         alignSelf='center'
-                        source={{ uri: filePath?.uri }} alt='img'
+                        source={ { uri: filePath?.uri } } alt='img'
                     /> :
-                        <View style={{ marginTop: 50 }}>
+                        <View style={ { marginTop: 50 } }>
                             <TouchableOpacity
-                                onPress={imageGalleryLaunch}
-                                style={styles.openCam}
+                                onPress={ imageGalleryLaunch }
+                                style={ styles.openCam }
                             >
-                                <Ionicons name='ios-cloud-upload' color='#58D36E' size={45} />
-                                <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 11, color: '#707070', }}>Upload Image</Text>
+                                <Ionicons name='ios-cloud-upload' color='#58D36E' size={ 45 } />
+                                <Text style={ { fontFamily: 'Poppins-Regular', fontSize: 11, color: '#707070', } }>Upload Image</Text>
                             </TouchableOpacity>
                         </View>
                     }
                 </TouchableOpacity>
                 <View>
-                    <TouchableOpacity onPress={imageGalleryLaunchMultiple} style={{ display: 'flex', justifyContent: 'center', width: width / 3, height: 30, alignItems: 'center', backgroundColor: '#58D36E', marginVertical: 5, borderRadius: 8 }}>
-                        <Text style={{ color: '#fff', letterSpacing: .5 }}>Upload Images</Text>
+                    <TouchableOpacity onPress={ imageGalleryLaunchMultiple } style={ { display: 'flex', justifyContent: 'center', width: width / 3, height: 30, alignItems: 'center', backgroundColor: '#58D36E', marginVertical: 5, borderRadius: 8 } }>
+                        <Text style={ { color: '#fff', letterSpacing: .5 } }>Upload Images</Text>
 
 
                     </TouchableOpacity>
-                    <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 5 }}>
-                        {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath) => (
-                            <Image
-                                style={{ width: 60, height: 60, borderRadius: 20 }}
-                                alignSelf='center'
-                                source={{ uri: filpath?.uri }} alt='img'
-                            />
-                        ))}
+                    <View style={ { display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 5, marginTop: 5 } }>
+                        { filePathMultiple?.length > 0 && filePathMultiple?.map((filpath) => (
+                            <View >
+                                <Image
+                                    style={ { width: 60, height: 60, borderRadius: 20, } }
+                                    alignSelf='center'
+                                    source={ { uri: filpath?.uri } } alt='img'
+                                />
+
+                                <TouchableOpacity style={ { position: 'absolute', right: -2, top: -10 } } onPress={ () => DeleteImages(filpath) }>
+                                    <Ionicons name='close-circle' color='red' size={ 25 } />
+                                </TouchableOpacity>
+                            </View>
+
+                        )) }
 
                     </View>
 
 
 
                 </View>
-                {!isEmpty(errors?.image?.fileName) && <Text style={styles.errorText}>{errors?.image?.fileName?.message || ""}</Text>}
+                { !isEmpty(errors?.image?.fileName) && <Text style={ styles.errorText }>{ errors?.image?.fileName?.message || "" }</Text> }
                 <CommonInput
-                    control={control}
-                    error={errors.name}
+                    control={ control }
+                    error={ errors.name }
                     fieldName="name"
                     backgroundColor='#F2F2F2'
-                    topLabel={'Product Name'}
-                    top={15}
-                    editable={!disabled}
+                    topLabel={ 'Product Name' }
+                    top={ 15 }
+                    editable={ !disabled }
                 />
                 <CommonSelectDropdown
-                    error={errors.category?._id}
-                    topLabel={'Category'}
-                    data={userData?.category_id}
-                    value={getValues("category")}
+                    error={ errors.category?._id }
+                    topLabel={ 'Category' }
+                    data={ userData?.category_id }
+                    value={ getValues("category") }
                     backgroundColor='#F2F2F2'
-                    mt={15}
+                    mt={ 15 }
                     labelField="name"
                     valueField="name"
-                    onChange={value => {
+                    onChange={ value => {
 
                         delete value?._index
                         setValue("category", { _id: value.id, name: value?.name })
                         clearErrors()
-                    }}
-                    disable={disabled}
+                    } }
+                    disable={ disabled }
                 />
-                <View style={{ justifyContent: "space-between", flexDirection: "row", marginVertical: 20 }}>
-                    <Text style={{
+                <View style={ { justifyContent: "space-between", flexDirection: "row", marginVertical: 20 } }>
+                    <Text style={ {
                         fontFamily: 'Poppins-Regular',
                         color: '#23233C',
                         fontSize: 12,
                         marginLeft: 5,
-                    }}>Product Attributes</Text>
+                    } }>Product Attributes</Text>
                     <Switch
-                        disabled={disabled}
-                        trackColor={{ false: '#f0c9c9', true: '#c7f2cf' }}
-                        thumbColor={variant ? '#58D36E' : '#D35858'}
+                        disabled={ disabled }
+                        trackColor={ { false: '#f0c9c9', true: '#c7f2cf' } }
+                        thumbColor={ variant ? '#58D36E' : '#D35858' }
                         ios_backgroundColor="#f0c9c9"
-                        onValueChange={(value) => {
+                        onValueChange={ (value) => {
                             setVariant(value)
                             setValue("variant", value)
-                        }}
-                        value={variant}
-                        style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }] }}
+                        } }
+                        value={ variant }
+                        style={ { transform: [{ scaleX: .8 }, { scaleY: .8 }] } }
                     />
                 </View>
-                {variant ? <View style={{}}>
+                { variant ? <View style={ {} }>
                     {
                         (attributess?.length > 0 ? attributess : [{ name: "", options: [], variant: true }])?.map((item, index) => {
-                            return <View style={{ borderWidth: 1, borderColor: "#58D36E", borderStyle: "dashed", borderRadius: 5, padding: 5, marginBottom: 10 }}>
-                                <View style={{ flexDirection: "row", alignItems: "flex-end", marginBottom: 10 }}>
+                            return <View style={ { borderWidth: 1, borderColor: "#58D36E", borderStyle: "dashed", borderRadius: 5, padding: 5, marginBottom: 10 } }>
+                                <View style={ { flexDirection: "row", alignItems: "flex-end", marginBottom: 10 } }>
                                     <CustomTextInput label="Attribute Name"
-                                        error={error?.attribute?.[index]?.name}
-                                        value={item?.name || ""}
-                                        onChangeText={(name) => {
+                                        error={ error?.attribute?.[index]?.name }
+                                        value={ item?.name || "" }
+                                        onChangeText={ (name) => {
                                             let tmp = attributess
                                             tmp[index] = { ...item, name }
                                             setFormData("attributess", tmp)
-                                        }}
-                                        editable={!disabled}
+                                        } }
+                                        editable={ !disabled }
                                     />
                                 </View>
-                                <View style={{ borderWidth: 0, marginLeft: 15 }}>
-                                    <Text style={{
+                                <View style={ { borderWidth: 0, marginLeft: 15 } }>
+                                    <Text style={ {
                                         fontFamily: 'Poppins-Regular',
                                         color: '#23233C',
                                         fontSize: 12,
                                         marginLeft: 5,
-                                    }}>Product Attributes options</Text>
-                                    {!disabled && <CustomOptionInput label="Options Name"
+                                    } }>Product Attributes options</Text>
+                                    { !disabled && <CustomOptionInput label="Options Name"
                                         //value={item?.name || ""}
-                                        err={error?.attribute?.[index]?.options}
-                                        onChangeText={(name) => {
+                                        err={ error?.attribute?.[index]?.options }
+                                        onChangeText={ (name) => {
                                             let tmp = attributess
                                             tmp[index].options.push(name)
                                             setFormData("attributess", tmp)
-                                        }}
-                                        editable={!disabled}
-                                    />}
-                                    <View style={{ flexWrap: "wrap", flexDirection: "row", marginBottom: 5 }}>
+                                        } }
+                                        editable={ !disabled }
+                                    /> }
+                                    <View style={ { flexWrap: "wrap", flexDirection: "row", marginBottom: 5 } }>
                                         {
-                                            item?.options?.length > 0 && item?.options?.map((option, i) => <View style={{ flexDirection: "row", backgroundColor: "#F2F2F2", marginTop: disabled ? 10 : 15, marginRight: 5, borderRadius: 20 }}>
-                                                <Text style={{
+                                            item?.options?.length > 0 && item?.options?.map((option, i) => <View style={ { flexDirection: "row", backgroundColor: "#F2F2F2", marginTop: disabled ? 10 : 15, marginRight: 5, borderRadius: 20 } }>
+                                                <Text style={ {
                                                     fontFamily: 'Poppins-Regular',
                                                     color: '#23233C',
                                                     fontSize: 12,
                                                     margin: 5,
                                                     marginHorizontal: 10
-                                                }}>{option}</Text>
-                                                {!disabled && <Pressable
-                                                    disabled={disabled}
-                                                    onPress={() => {
+                                                } }>{ option }</Text>
+                                                { !disabled && <Pressable
+                                                    disabled={ disabled }
+                                                    onPress={ () => {
                                                         let tmp = attributess
                                                         //tmp[index].options = []
                                                         tmp[index].options = item?.options?.filter(op => op != option)
                                                         setFormData("attributess", tmp)
-                                                    }} style={{ paddingRight: 5, justifyContent: "center" }}>
-                                                    <Ionicons name={"close-circle-outline"} color='red' size={15} marginLeft={2} />
-                                                </Pressable>}
+                                                    } } style={ { paddingRight: 5, justifyContent: "center" } }>
+                                                    <Ionicons name={ "close-circle-outline" } color='red' size={ 15 } marginLeft={ 2 } />
+                                                </Pressable> }
                                             </View>)
                                         }
                                     </View>
                                 </View>
-                                {!disabled && <View style={{ flexDirection: "row", margin: 10 }}>
-                                    {attributess?.length > 1 && <CustomButton
-                                        style={{ flex: 1, marginRight: 10 }}
-                                        label={"Remove"}
+                                { !disabled && <View style={ { flexDirection: "row", margin: 10 } }>
+                                    { attributess?.length > 1 && <CustomButton
+                                        style={ { flex: 1, marginRight: 10 } }
+                                        label={ "Remove" }
                                         bg="#FF4B4B"
-                                        onPress={() => {
+                                        onPress={ () => {
                                             removeAttribute(index)
-                                        }}
-                                        disabled={disabled}
-                                    />}
-                                    {attributess?.length == (index + 1) && <CustomButton
+                                        } }
+                                        disabled={ disabled }
+                                    /> }
+                                    { attributess?.length == (index + 1) && <CustomButton
                                         bg="#58D36E"
-                                        style={{ flex: 1 }}
-                                        label={"Add New Attribute"}
-                                        onPress={() => {
+                                        style={ { flex: 1 } }
+                                        label={ "Add New Attribute" }
+                                        onPress={ () => {
                                             addAttribute()
-                                        }}
-                                        disabled={disabled}
-                                    />}
-                                </View>}
+                                        } }
+                                        disabled={ disabled }
+                                    /> }
+                                </View> }
                             </View>
                         })
                     }
-                    <Text style={{
+                    <Text style={ {
                         fontFamily: 'Poppins-Regular',
                         color: '#23233C',
                         fontSize: 12,
                         marginLeft: 5,
                         marginTop: 5
-                    }}>Product Attributes Options Prices</Text>
+                    } }>Product Attributes Options Prices</Text>
                     {
                         options?.map((item, index) => {
-                            return <View style={{ paddingLeft: 10, paddingVertical: 5 }}>
+                            return <View style={ { paddingLeft: 10, paddingVertical: 5 } }>
                                 <CustomTextInput
-                                    label={`Selling price for ${item?.attributs?.join("-")}`}
-                                    value={item?.seller_price || ""}
+                                    label={ `Selling price for ${item?.attributs?.join("-")}` }
+                                    value={ item?.seller_price || "" }
                                     keyboardType='number-pad'
-                                    onChangeText={(seller_price) => {
+                                    onChangeText={ (seller_price) => {
                                         let tmp = options
                                         tmp[index] = { ...tmp[index], seller_price }
                                         setOptions([...tmp])
-                                    }}
-                                    error={error?.options?.[index]}
-                                    editable={!disabled}
+                                    } }
+                                    error={ error?.options?.[index] }
+                                    editable={ !disabled }
                                 />
                             </View>
                         })
                     }
                 </View> :
                     <CommonInput
-                        editable={!disabled}
-                        control={control}
-                        error={errors.price}
+                        editable={ !disabled }
+                        control={ control }
+                        error={ errors.price }
                         fieldName="price"
                         backgroundColor='#F2F2F2'
-                        topLabel={'Price'}
-                        top={15}
-                        rightIcon={<Text style={{ fontFamily: 'Poppins-ExtraBold', fontSize: 30, color: '#58D36E' }}>₹</Text>}
-                    />}
+                        topLabel={ 'Price' }
+                        top={ 15 }
+                        rightIcon={ <Text style={ { fontFamily: 'Poppins-ExtraBold', fontSize: 30, color: '#58D36E' } }>₹</Text> }
+                    /> }
 
                 <CommonInput
-                    control={control}
-                    error={errors.description}
+                    control={ control }
+                    error={ errors.description }
                     fieldName="description"
                     backgroundColor='#F2F2F2'
-                    topLabel={'Description'}
-                    top={15}
-                    editable={!disabled}
+                    topLabel={ 'Description' }
+                    top={ 15 }
+                    editable={ !disabled }
                 />
-                {!disabled && <CustomButton label={'Submit'} bg='#58D36E' mt={25} onPress={handleSubmit(onSubmit, (err) => {
-              
-                })}
-                    loading={loading}
-                    disabled={loading}
-                />}
-                <View style={{ marginBottom: 150 }} />
-            </ScrollView>
-            {/* {submitted && <View style={[StyleSheet.absoluteFillObject, { backgroundColor: "red" }]}></View>} */}
+                { !disabled && <CustomButton label={ 'Submit' } bg='#58D36E' mt={ 25 } onPress={ handleSubmit(onSubmit, (err) => {
+
+                }) }
+                    loading={ loading }
+                    disabled={ loading }
+                /> }
+                <View style={ { marginBottom: 150 } } />
+            </ScrollView >
+            {/* {submitted && <View style={[StyleSheet.absoluteFillObject, { backgroundColor: "red" }]}></View>} */ }
         </>
     )
 }
