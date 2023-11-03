@@ -78,11 +78,11 @@ const ProductCard = ({ item, onRefresh = () => { } }) => {
                 </View>
             </View>
             {item?.status ? <View style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                <Pressable onPress={() => {
+                <TouchableOpacity onPress={() => {
                     navigation.navigate('AddNewProduct', { item })
                 }}>
                     <CommonTexts label={item?.approval_status == "pending" ? 'EDIT' : "VIEW"} color='#089321' fontSize={13} />
-                </Pressable>
+                </TouchableOpacity>
                 <Switch
                     // disabled={item?.approval_status != "approved"}
                     trackColor={{ false: '#f0c9c9', true: '#c7f2cf' }}
@@ -101,6 +101,6 @@ const ProductCard = ({ item, onRefresh = () => { } }) => {
     )
 }
 
-export default ProductCard
+export default memo(ProductCard);
 
 const styles = StyleSheet.create({})

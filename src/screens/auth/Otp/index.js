@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, Platform, Alert, Pressable, } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, Platform, Alert, Pressable, Keyboard, } from 'react-native'
 import React, { useCallback, useContext } from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -44,15 +44,21 @@ const Otp = ({ navigation, route }) => {
 	let phoneNum = first2 + mask + last1
 
 	const onSubmit = async (data) => {
+
+		Keyboard.dismiss()
+
 		if (type == "register") {
 			endPoint = "auth/vendorregisterotp"
 		} else {
 			endPoint = "auth/vendorlogin"
 		}
+
+		loadingg.setLoading(true)
+
 		try {
 			let bundleId = DeviceInfo.getBundleId();
-			const type = bundleId.replace("com.qbuystoreapp.", "")
-			const response = await customAxios.post(endPoint, { ...data, mobile: mobileNo, type });
+			const types = bundleId.replace("com.qbuystoreapp.", "")
+			const response = await customAxios.post(endPoint, { ...data, mobile: mobileNo, type: types });
 
 			if (type == "register") {
 				Alert.alert("Message", response?.data?.message, [
@@ -70,7 +76,9 @@ const Otp = ({ navigation, route }) => {
 					userOtp.getProfileDetails()
 				}
 			}
+			loadingg.setLoading(false)
 		} catch (error) {
+			loadingg.setLoading(false)
 			console.log("error", error)
 			Toast.show({
 				type: 'error',
@@ -81,6 +89,7 @@ const Otp = ({ navigation, route }) => {
 	const backAction = useCallback(() => {
 		navigation.replace("Login")
 	}, [navigation])
+
 
 
 
@@ -107,7 +116,7 @@ const Otp = ({ navigation, route }) => {
 
 	return (
 		<CommonAuthBg>
-			<ScrollView style={{ flex: 1, paddingHorizontal: 40, }}>
+			<ScrollView style={{ flex: 1, paddingHorizontal: 40, }} keyboardShouldPersistTaps="always">
 				<CommonTitle goBack={backAction} mt={Platform.OS === 'android' ? 80 : 100} />
 				<CommonTexts
 					label={'Enter the 4 - digit code we sent to your registered mobile number'}
@@ -142,6 +151,7 @@ const Otp = ({ navigation, route }) => {
 					width={100}
 					alignSelf='center'
 					loading={loader}
+					disabled={loader ? true : false}
 				/>
 			</ScrollView>
 		</CommonAuthBg>

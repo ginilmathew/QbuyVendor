@@ -71,17 +71,6 @@ const Account = ({ navigation }) => {
         <>
             <HeaderWithTitle title={'Account'} drawerOpen={openDrawer} />
             <View style={{ flex: 1, backgroundColor: '#F3F3F3', paddingHorizontal: 15, }}>
-                <CommonDatePicker
-                    onPress={calendarOpen}
-                    date={date ? date : new Date()}
-                    label={date ? moment(date).format("DD-MM-YYYY") : null}
-                    openCalendar={openCalendar}
-                    onConfirm={selectDate}
-                    onCancel={calendarClose}
-                    clearAction={() => {
-                        selectDate(null)
-                    }}
-                />
                 <DetailsBox
                     count={accountData?.total_earnings || 0}
                     label='Total Earned'
@@ -94,7 +83,18 @@ const Account = ({ navigation }) => {
                     label='Total Outstanding'
                     alignSelf={'center'}
                 />
-                <ScrollView style={{ backgroundColor: '#F3F3F3', marginBottom: 80, marginTop: 10 }} showsVerticalScrollIndicator={false}
+                <CommonDatePicker
+                    onPress={calendarOpen}
+                    date={date ? date : new Date()}
+                    label={date ? moment(date).format("DD-MM-YYYY") : null}
+                    openCalendar={openCalendar}
+                    onConfirm={selectDate}
+                    onCancel={calendarClose}
+                    clearAction={() => {
+                        selectDate(null)
+                    }}
+                />
+                <ScrollView style={{ backgroundColor: '#F3F3F3', marginBottom: 80, marginTop: 20 }} showsVerticalScrollIndicator={false}
                     refreshControl={<RefreshControl refreshing={refreshing}
                         onRefresh={() => {
                             setRefreshing(true)

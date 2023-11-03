@@ -1,5 +1,4 @@
-/* eslint-disable prettier/prettier */
-import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Platform, TextInput, Pressable } from 'react-native'
+import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Platform, TextInput, Pressable, Keyboard } from 'react-native'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../../Components/HeaderWithTitle'
 import { useForm } from "react-hook-form";
@@ -129,12 +128,10 @@ const AddNewProduct = ({ navigation, route }) => {
 
 
 
-
     const setFormData = (field, value) => {
         setAttributess([...value]);
         setErrorFn({})
     }
-
 
 
     const schema = yup.object({
@@ -152,19 +149,14 @@ const AddNewProduct = ({ navigation, route }) => {
             _id: yup.string().required("Category is required"),
             name: yup.string().required("Category is required")
         }),
-        product_image: yup.object({
-            fileName: yup.string().required("Image is required"),
-            uri: yup.string().required("Image is required"),
-            type: yup.string().required("Image is required"),
-            fileSize: yup.string(),
-            height: yup.string(),
-            width: yup.string(),
-        })
+        product_image: yup.object().required("Product Image is required")
     }).required();
 
     const { control, handleSubmit, formState: { errors }, setValue, clearErrors, getValues, reset, setError } = useForm({
         resolver: yupResolver(schema),
     });
+
+    reactotron.log(errors, "ERR")
 
     useEffect(() => {
         if (!isEmpty(item)) {
@@ -191,12 +183,12 @@ const AddNewProduct = ({ navigation, route }) => {
                 }
             }
             setFilePath({ uri: IMG_URL + item?.product_image })
-            const multiple = item?.image && item?.image?.map((res) => ({
-                uri: IMG_URL + res
+            const multiple = item?.image && item?.image?.map((res)=>({
+                uri : IMG_URL + res
             })
-
+              
             )
-            reactotron.log({ multiple })
+            reactotron.log({multiple})
             setFilePathMultiple(multiple)
             reset(newData)
         }
@@ -219,6 +211,7 @@ const AddNewProduct = ({ navigation, route }) => {
                 // console.log('User cancelled image picker');
             } else if (res.error) {
                 setFilePath(null)
+                //setError("product_image", null)
             } else if (res.customButton) {
                 // console.log('User tapped custom button: ', res.customButton);
                 // alert(res.customButton);
@@ -236,7 +229,7 @@ const AddNewProduct = ({ navigation, route }) => {
         let options = {
             title: "Select Images/Videos",
             mediaType: "photo",
-            selectionLimit: 6,
+            selectionLimit: 4,
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
@@ -290,6 +283,8 @@ const AddNewProduct = ({ navigation, route }) => {
 
     const onSubmit = async (data) => {
 
+        Keyboard.dismiss()
+
         //console.log("data ==>", data);
         setLoading(true)
         try {
@@ -333,7 +328,7 @@ const AddNewProduct = ({ navigation, route }) => {
                     body.append("price", data.price)
                 }
             }
-
+       
             // return false
             const response = await customAxios.post(`vendor/newproduct/${item?._id ? 'update' : 'create'}`, body, {
                 headers: {
@@ -351,7 +346,7 @@ const AddNewProduct = ({ navigation, route }) => {
             setLoading(false)
         } catch (error) {
             setLoading(false)
-
+    
             Toast.show({
                 type: 'error',
                 text1: error
@@ -399,7 +394,7 @@ const AddNewProduct = ({ navigation, route }) => {
     }
 
     const removeAttribute = (index) => {
-
+     
         let error = {}
         if (attributess?.length == 1) {
             error.attribute = {}
@@ -459,8 +454,8 @@ const AddNewProduct = ({ navigation, route }) => {
 
     return (
         <>
-            <HeaderWithTitle title={ isEmpty(item) ? 'Add New Product' : "Edit Product" } backAction />
-            <ScrollView showsVerticalScrollIndicator={ false } style={ { backgroundColor: '#fff', flex: 1, paddingHorizontal: 15 } }>
+            <HeaderWithTitle title={isEmpty(item) ? 'Add New Product' : "Edit Product"} backAction />
+            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: '#fff', flex: 1, paddingHorizontal: 15 }} keyboardShouldPersistTaps="always">
 
                 <TouchableOpacity
                     disabled={ disabled }

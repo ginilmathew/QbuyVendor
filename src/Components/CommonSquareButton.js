@@ -12,7 +12,7 @@ const CommonSquareButton = ({ position, bottom, mt, right, onPress, iconName, ml
                 backgroundColor,
                 alignItems: 'center',
                 justifyContent: 'center',
-                borderRadius: 10,
+                borderRadius: 15,
                 marginTop: mt,
                 position: position,
                 bottom: bottom,
@@ -21,7 +21,7 @@ const CommonSquareButton = ({ position, bottom, mt, right, onPress, iconName, ml
             onPress={onPress}
             disabled={disabled}
         >
-            <Ionicons name={iconName} color='#fff' size={30} marginLeft={2} />
+            <Ionicons name={iconName} color='#fff' size={28} marginLeft={2} />
 
         </TouchableOpacity>
     )

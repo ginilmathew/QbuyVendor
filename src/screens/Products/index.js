@@ -1,4 +1,4 @@
-import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, RefreshControl } from 'react-native'
+import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, RefreshControl, Keyboard } from 'react-native'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../Components/HeaderWithTitle'
 import moment from 'moment';
@@ -30,7 +30,6 @@ const Products = ({ navigation }) => {
     const authContext = useContext(AuthContext)
     const { filterCategoryList = [], userData } = authContext
 
-
     const { width, height } = useWindowDimensions()
     const [currentTab, setCurrentTab] = useState(0)
     const [selected, setSelected] = useState(initialItem)
@@ -54,6 +53,8 @@ const Products = ({ navigation }) => {
         return productHistory?.filter(item => item?.name?.toLowerCase().includes(historySearch.toLowerCase())) || []
     }
     const productSearch = async ({ search }) => {
+
+        Keyboard.dismiss()
      
         try {
             const response = await customAxios.post("vendor/newproduct/search", {
