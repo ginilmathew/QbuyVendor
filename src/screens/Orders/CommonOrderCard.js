@@ -27,11 +27,13 @@ const CommonOrderCard = memo((props) => {
 
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState({ visible: false });
+    const [cancelled, setCancelled] = useState(false); // dummy state for loading the page
     const loadingg = useContext(LoaderContext)
 
     const openModal = (data) => {
         setModalVisible({ visible: true, ...data })
     }
+
 
     const returnOrder = async () => {
 
@@ -82,8 +84,8 @@ const CommonOrderCard = memo((props) => {
 
     const renderButton = (status) => {
 
-        switch (status) {
 
+        switch (status) {
 
             case "created":
                 return (<View style={{ flexDirection: "row" }}>
@@ -124,9 +126,8 @@ const CommonOrderCard = memo((props) => {
                     />
                 )
 
-            case "completed":
-                return null
-            //return (<CustomButton onPress={() => navigation.navigate('Orders', { mode: 'complete' })} label={'Order Completed'} bg='#58D36E' mx={8}/>)
+            // case "completed":
+            //     return (<CustomButton onPress={() => navigation.navigate('Orders', { mode: 'complete' })} label={'Order Completed'} bg='#58D36E' mx={8} />)
 
             case "cancelled":
                 return (<CustomButton
@@ -135,14 +136,7 @@ const CommonOrderCard = memo((props) => {
                 />)
 
             default:
-                return (
-                    <CustomButton
-                        onPress={null}
-                        disabled
-                        label={status === "orderRetrived" ? 'Order Retrieved' : "readyTopickup" ? 'Ready To PickUp' : status}
-                        bg='#58D36E'
-                    />
-                )
+                return 
         }
     }
 
