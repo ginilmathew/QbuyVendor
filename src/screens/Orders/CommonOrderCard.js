@@ -45,8 +45,12 @@ const CommonOrderCard = memo((props) => {
                 text1: 'Order returned successfully'
             });
 
+            setCancelled(true);
         } catch (error) {
-
+            Toast.show({
+                type: 'error',
+                text1: error?.response?.data?.message || error?.message
+            });
         }
     }
 
@@ -84,7 +88,6 @@ const CommonOrderCard = memo((props) => {
 
     const renderButton = (status) => {
 
-
         switch (status) {
 
             case "created":
@@ -119,7 +122,7 @@ const CommonOrderCard = memo((props) => {
                 />)
 
             case "orderReturn":
-                return (
+                return !cancelled &&  (
                     <CustomButton
                         onPress={returnOrder}
                         label={'Accept Return'} bg='#58D36E' mx={8}
