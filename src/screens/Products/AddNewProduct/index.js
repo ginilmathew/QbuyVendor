@@ -126,7 +126,7 @@ const AddNewProduct = ({ navigation, route }) => {
     const [images, setImages] = useState([]);
 
 
-  
+
 
 
     const setFormData = (field, value) => {
@@ -135,7 +135,7 @@ const AddNewProduct = ({ navigation, route }) => {
     }
 
 
-   
+
     const schema = yup.object({
         variant: yup.boolean(),
         name: yup.string().required('Product name is required'),
@@ -170,13 +170,13 @@ const AddNewProduct = ({ navigation, route }) => {
             let newData = {
                 name: item.name,
                 category: item?.category,
-                description:item?.description,
-              
+                description: item?.description,
+
             }
             if (item?.seller_price) {
                 newData.price = item?.seller_price
             }
-            if(item?.image){
+            if (item?.image) {
                 newData.image = item?.image
             }
             if (item?.variants) {
@@ -190,12 +190,12 @@ const AddNewProduct = ({ navigation, route }) => {
                 }
             }
             setFilePath({ uri: IMG_URL + item?.product_image })
-            const multiple = item?.image && item?.image?.map((res)=>({
-                uri : IMG_URL + res
+            const multiple = item?.image && item?.image?.map((res) => ({
+                uri: IMG_URL + res
             })
-              
+
             )
-            reactotron.log({multiple})
+            reactotron.log({ multiple })
             setFilePathMultiple(multiple)
             reset(newData)
         }
@@ -235,7 +235,7 @@ const AddNewProduct = ({ navigation, route }) => {
         let options = {
             title: "Select Images/Videos",
             mediaType: "photo",
-            selectionLimit: 4,
+            selectionLimit: 6,
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
@@ -332,7 +332,7 @@ const AddNewProduct = ({ navigation, route }) => {
                     body.append("price", data.price)
                 }
             }
-       
+
             // return false
             const response = await customAxios.post(`vendor/newproduct/${item?._id ? 'update' : 'create'}`, body, {
                 headers: {
@@ -350,7 +350,7 @@ const AddNewProduct = ({ navigation, route }) => {
             setLoading(false)
         } catch (error) {
             setLoading(false)
-    
+
             Toast.show({
                 type: 'error',
                 text1: error
@@ -398,7 +398,7 @@ const AddNewProduct = ({ navigation, route }) => {
     }
 
     const removeAttribute = (index) => {
-     
+
         let error = {}
         if (attributess?.length == 1) {
             error.attribute = {}
@@ -483,8 +483,9 @@ const AddNewProduct = ({ navigation, route }) => {
 
                     </TouchableOpacity>
                     <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 5 }}>
-                        {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath) => (
+                        {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath, index) => (
                             <Image
+                                key={index}
                                 style={{ width: 60, height: 60, borderRadius: 20 }}
                                 alignSelf='center'
                                 source={{ uri: filpath?.uri }} alt='img'
@@ -670,7 +671,7 @@ const AddNewProduct = ({ navigation, route }) => {
                     editable={!disabled}
                 />
                 {!disabled && <CustomButton label={'Submit'} bg='#58D36E' mt={25} onPress={handleSubmit(onSubmit, (err) => {
-              
+
                 })}
                     loading={loading}
                     disabled={loading}
