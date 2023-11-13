@@ -4,6 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import { Controller } from 'react-hook-form'
 import CommonSquareButton from './CommonSquareButton'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const CustomSearch
     = ({ placeholder, control, fieldName, error, bgColor, placeHoldeColor, icon, width, keyboardType, heights, weight, label, mt, mb, paddingLeft, onpress, onChangeText, readonly, clearAction }) => {
@@ -66,11 +67,11 @@ const CustomSearch
 
                 </View> */}
 
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        {clearAction && <Pressable style={{ marginRight: 10 }} onPress={() => clearAction()
+                    <View style={{ flexDirection: "row", alignItems: "center", paddingRight: 2 }}>
+                        {clearAction && <TouchableOpacity style={{ marginRight: 10 }} onPress={() => clearAction()
                         }>
                             <Ionicons name={'close-circle-sharp'} size={25} color={"#80808080"} />
-                        </Pressable>}
+                        </TouchableOpacity>}
                         <CommonSquareButton onPress={onpress} iconName={'search'} />
                     </View>
                 </View>

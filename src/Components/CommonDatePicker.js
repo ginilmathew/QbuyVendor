@@ -1,5 +1,5 @@
 import { StyleSheet, Text, ScrollView, Pressable, View, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import DatePicker from 'react-native-date-picker'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import moment from 'moment';
@@ -47,6 +47,6 @@ const CommonDatePicker = ({ date, onConfirm, onCancel, label, openCalendar, onPr
     )
 }
 
-export default CommonDatePicker
+export default memo(CommonDatePicker);
 
 const styles = StyleSheet.create({})

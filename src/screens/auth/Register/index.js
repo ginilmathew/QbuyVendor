@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Alert, } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Alert, Keyboard, } from 'react-native'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -40,6 +40,9 @@ const Register = ({ navigation }) => {
 	}, [])
 
 	const onSubmit = async (data) => {
+
+		Keyboard.dismiss()
+
 		let bundleId = DeviceInfo.getBundleId();
 		const type = bundleId.replace("com.qbuystoreapp.", "")
 		let category_id = []
@@ -72,7 +75,7 @@ const Register = ({ navigation }) => {
 	return (
 		<CommonAuthBg>
 
-			<ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, paddingHorizontal: 40, }}>
+			<ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, paddingHorizontal: 40, }} keyboardShouldPersistTaps="always">
 
 				<Image
 					style={styles.logo}
@@ -94,7 +97,7 @@ const Register = ({ navigation }) => {
 					error={errors.vendor_name}
 					fieldName="vendor_name"
 					placeholder='Vendor Name'
-					inputMode={'none'}
+					//inputMode={'none'}
 					mt={20}
 					icon={<Ionicons name='person' color='#58D36E' size={25} />}
 				/>
@@ -114,7 +117,7 @@ const Register = ({ navigation }) => {
 					error={errors.store_name}
 					fieldName="store_name"
 					placeholder='Store Name'
-					inputMode={'none'}
+					//inputMode={'none'}
 					mt={20}
 					icon={<Image source={require('../../../Images/storeIcon.jpeg')} style={{ width: 25, height: 25 }} resizeMode='contain' />}
 				/>
@@ -159,7 +162,7 @@ const Register = ({ navigation }) => {
 					error={errors.license_number}
 					fieldName="license_number"
 					placeholder='License Number'
-					inputMode={'none'}
+					//inputMode={'none'}
 					mt={20}
 					icon={<Entypo name='v-card' color='#58D36E' size={18} marginTop={1.5} />}
 				/>

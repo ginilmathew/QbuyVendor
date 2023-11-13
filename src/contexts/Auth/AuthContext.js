@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import Context from "./index";
 import customAxios from "../../CustomeAxios";
 import Toast from 'react-native-toast-message'
-import { mode } from "../../config/constants";
 import isEmpty from 'lodash/isEmpty'
 import has from 'lodash/has'
 import DeviceInfo from "react-native-device-info";
@@ -18,6 +17,7 @@ const AuthProvider = (props) => {
     const [filterCategoryList, setFilterCategoryList] = useState([]);
     const loading = useContext(LoaderContext)
     let bundleId = DeviceInfo.getBundleId();
+
     const type = bundleId.replace("com.qbuystoreapp.", "")
 
 

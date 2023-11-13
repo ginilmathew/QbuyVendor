@@ -1,4 +1,4 @@
-import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Platform, TextInput, Pressable } from 'react-native'
+import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Platform, TextInput, Pressable, Keyboard } from 'react-native'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../../Components/HeaderWithTitle'
 import { useForm } from "react-hook-form";
@@ -126,7 +126,10 @@ const AddNewProduct = ({ navigation, route }) => {
     const [images, setImages] = useState([]);
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3895080f18a1bdb0fef2423f93bca610fdd7463f
 
 
     const setFormData = (field, value) => {
@@ -135,7 +138,10 @@ const AddNewProduct = ({ navigation, route }) => {
     }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3895080f18a1bdb0fef2423f93bca610fdd7463f
     const schema = yup.object({
         variant: yup.boolean(),
         name: yup.string().required('Product name is required'),
@@ -151,19 +157,14 @@ const AddNewProduct = ({ navigation, route }) => {
             _id: yup.string().required("Category is required"),
             name: yup.string().required("Category is required")
         }),
-        product_image: yup.object({
-            fileName: yup.string().required("Image is required"),
-            uri: yup.string().required("Image is required"),
-            type: yup.string().required("Image is required"),
-            fileSize: yup.string(),
-            height: yup.string(),
-            width: yup.string(),
-        })
+        product_image: yup.object().required("Product Image is required")
     }).required();
 
     const { control, handleSubmit, formState: { errors }, setValue, clearErrors, getValues, reset, setError } = useForm({
         resolver: yupResolver(schema),
     });
+
+    reactotron.log(errors, "ERR")
 
     useEffect(() => {
         if (!isEmpty(item)) {
@@ -218,6 +219,7 @@ const AddNewProduct = ({ navigation, route }) => {
                 // console.log('User cancelled image picker');
             } else if (res.error) {
                 setFilePath(null)
+                //setError("product_image", null)
             } else if (res.customButton) {
                 // console.log('User tapped custom button: ', res.customButton);
                 // alert(res.customButton);
@@ -288,6 +290,8 @@ const AddNewProduct = ({ navigation, route }) => {
 
 
     const onSubmit = async (data) => {
+
+        Keyboard.dismiss()
 
         //console.log("data ==>", data);
         setLoading(true)
@@ -446,14 +450,20 @@ const AddNewProduct = ({ navigation, route }) => {
                 indices[i] = 0;
             attributs = []
         }
+    };
+
+    const DeleteImages = (images) => {
+        const filter = filePathMultiple.filter((res) => res?.fileName !== images.fileName);
+        MultipleImageSubmit(filter)
+        setFilePathMultiple(filter)
     }
 
 
 
     return (
         <>
-            <HeaderWithTitle title={isEmpty(item) ? 'Add New Product' : "Edit Product"} backAction />
-            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: '#fff', flex: 1, paddingHorizontal: 15 }}>
+            <HeaderWithTitle title={isEmpty(item) ? 'Add New Product' : `${item?.approval_status === "pending" ? "Edit" : "View"} Product`} backAction />
+            <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: '#fff', flex: 1, paddingHorizontal: 15 }} keyboardShouldPersistTaps="always">
 
                 <TouchableOpacity
                     disabled={disabled}
@@ -477,10 +487,14 @@ const AddNewProduct = ({ navigation, route }) => {
                     }
                 </TouchableOpacity>
                 <View>
-                    <TouchableOpacity onPress={imageGalleryLaunchMultiple} style={{ display: 'flex', justifyContent: 'center', width: width / 3, height: 30, alignItems: 'center', backgroundColor: '#58D36E', marginVertical: 5, borderRadius: 8 }}>
-                        <Text style={{ color: '#fff', letterSpacing: .5 }}>Upload Images</Text>
+                    {
+                        item?.approval_status === "pending" && (
+                            <>
+                                <TouchableOpacity onPress={imageGalleryLaunchMultiple} style={{ display: 'flex', justifyContent: 'center', width: width / 3, height: 30, alignItems: 'center', backgroundColor: '#58D36E', marginVertical: 5, borderRadius: 8 }}>
+                                    <Text style={{ color: '#fff', letterSpacing: .5 }}>Upload Images</Text>
 
 
+<<<<<<< HEAD
                     </TouchableOpacity>
                     <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 5 }}>
                         {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath, index) => (
@@ -491,9 +505,30 @@ const AddNewProduct = ({ navigation, route }) => {
                                 source={{ uri: filpath?.uri }} alt='img'
                             />
                         ))}
+=======
+                                </TouchableOpacity>
+                                <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 5, marginTop: 5 }}>
+                                    {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath) => (
+                                        <View >
+                                            <Image
+                                                style={{ width: 60, height: 60, borderRadius: 20, }}
+                                                alignSelf='center'
+                                                source={{ uri: filpath?.uri }} alt='img'
+                                            />
+>>>>>>> 3895080f18a1bdb0fef2423f93bca610fdd7463f
 
-                    </View>
+                                            <TouchableOpacity style={{ position: 'absolute', right: -2, top: -10 }} onPress={() => DeleteImages(filpath)}>
+                                                <Ionicons name='close-circle' color='red' size={25} />
+                                            </TouchableOpacity>
+                                        </View>
 
+                                    ))}
+
+                                </View>
+
+                            </>
+                        )
+                    }
 
 
                 </View>
@@ -677,7 +712,7 @@ const AddNewProduct = ({ navigation, route }) => {
                     disabled={loading}
                 />}
                 <View style={{ marginBottom: 150 }} />
-            </ScrollView>
+            </ScrollView >
             {/* {submitted && <View style={[StyleSheet.absoluteFillObject, { backgroundColor: "red" }]}></View>} */}
         </>
     )

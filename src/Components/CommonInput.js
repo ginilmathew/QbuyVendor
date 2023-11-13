@@ -1,5 +1,5 @@
 import { StyleSheet, useWindowDimensions, TextInput, View, Image, Platform, Text } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { memo, useContext, useState } from 'react'
 import { Controller } from 'react-hook-form'
 
 
@@ -72,8 +72,7 @@ const CommonInput = ({ placeholder, control, fieldName, error, inputMode, mt, ic
     )
 }
 
-export default CommonInput
-
+export default memo(CommonInput);
 
 const styles = StyleSheet.create({
     logo: {

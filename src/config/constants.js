@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 export const env = "live"
+=======
+import DeviceInfo from "react-native-device-info"
+
+export const env = "dev"
+>>>>>>> 3895080f18a1bdb0fef2423f93bca610fdd7463f
 
 const URLS = {
     live: "https://apiqbuygreen.diginestsolutions.in/public/api/",
@@ -13,6 +19,8 @@ const IMG_BASEPATH = {
 }
 
 export const mode = "fashion" //"green" // "fashion" // "panda"
+
+export const BUNDLE_ID = DeviceInfo.getBundleId()?.replace("com.qbuystoreapp.", "");
 
 
 export const BASE_URL = URLS[env]
