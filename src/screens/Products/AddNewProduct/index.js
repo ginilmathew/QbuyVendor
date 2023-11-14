@@ -116,6 +116,8 @@ const AddNewProduct = ({ navigation, route }) => {
     const { setLoading, loading } = useContext(LoaderContext)
     const item = route?.params?.item || {}
 
+    reactotron.log(item, "ITEM!23")
+
     const disabled = /* true// */item?.approval_status ? !(item?.approval_status == "pending") : false
     const [filePath, setFilePath] = useState(null);
     const [filePathMultiple, setFilePathMultiple] = useState(null);
@@ -124,9 +126,6 @@ const AddNewProduct = ({ navigation, route }) => {
     const [error, setErrorFn] = useState({});
     const [options, setOptions] = useState(item?.variants || []);
     const [images, setImages] = useState([]);
-
-
-
 
     const setFormData = (field, value) => {
         setAttributess([...value]);
@@ -183,13 +182,21 @@ const AddNewProduct = ({ navigation, route }) => {
                 }
             }
             setFilePath({ uri: IMG_URL + item?.product_image })
-            const multiple = item?.image && item?.image?.map((res) => ({
-                uri: IMG_URL + res
-            })
 
-            )
-            reactotron.log({ multiple })
-            setFilePathMultiple(multiple)
+             if((item?.image && !item?.image.includes('null'))){
+                const multiple = item?.image && item?.image?.map((res) => ({
+                    uri: IMG_URL + res
+                })
+    
+                )
+                setFilePathMultiple(multiple)
+             }else{
+                setFilePathMultiple([])
+             }
+        
+       
+    
+   
             reset(newData)
         }
     }, [])
@@ -299,8 +306,11 @@ const AddNewProduct = ({ navigation, route }) => {
                 uri: data?.product_image?.uri,
                 type: data?.product_image?.type,
                 name: data?.product_image?.fileName,
-            }),
-                body.append('image', data?.image);
+            })
+        
+                body.append('image',images?.length  > 0 ? data?.image : null)
+            
+
             if (item?._id) {
                 body.append("id", item?._id)
             }
@@ -479,35 +489,28 @@ const AddNewProduct = ({ navigation, route }) => {
                     }
                 </TouchableOpacity>
                 <View>
-                    {
-                        item?.approval_status === "pending" && (
-                            <>
-                                <TouchableOpacity onPress={imageGalleryLaunchMultiple} style={{ display: 'flex', justifyContent: 'center', width: width / 3, height: 30, alignItems: 'center', backgroundColor: '#58D36E', marginVertical: 5, borderRadius: 8 }}>
-                                    <Text style={{ color: '#fff', letterSpacing: .5 }}>Upload Images</Text>
 
+                    {item?.approval_status === "pending" || isEmpty(item) ? (<TouchableOpacity onPress={imageGalleryLaunchMultiple} style={{ display: 'flex', justifyContent: 'center', width: width / 3, height: 30, alignItems: 'center', backgroundColor: '#58D36E', marginVertical: 5, borderRadius: 8 }}>
+                        <Text style={{ color: '#fff', letterSpacing: .5 }}>Upload Images</Text>
+                    </TouchableOpacity>) : null}
+                    <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 5, marginTop: 5 }}>
+                        {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath) => (
+                            <View >
+                                <Image
+                                    style={{ width: 60, height: 60, borderRadius: 20, }}
+                                    alignSelf='center'
+                                    source={{ uri: filpath?.uri }} alt='img'
+                                />
 
-                                </TouchableOpacity>
-                                <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 5, marginTop: 5 }}>
-                                    {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath) => (
-                                        <View >
-                                            <Image
-                                                style={{ width: 60, height: 60, borderRadius: 20, }}
-                                                alignSelf='center'
-                                                source={{ uri: filpath?.uri }} alt='img'
-                                            />
+                                {item?.approval_status === "pending" || isEmpty(item) ? (<TouchableOpacity style={{ position: 'absolute', right: -2, top: -10 }} onPress={() => DeleteImages(filpath)}>
+                                    <Ionicons name='close-circle' color='red' size={25} />
+                                </TouchableOpacity>) : null}
+                            </View>
 
-                                            <TouchableOpacity style={{ position: 'absolute', right: -2, top: -10 }} onPress={() => DeleteImages(filpath)}>
-                                                <Ionicons name='close-circle' color='red' size={25} />
-                                            </TouchableOpacity>
-                                        </View>
+                        ))}
 
-                                    ))}
+                    </View>
 
-                                </View>
-
-                            </>
-                        )
-                    }
 
 
                 </View>
