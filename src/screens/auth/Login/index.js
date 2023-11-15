@@ -63,7 +63,7 @@ const Login = ({ navigation }) => {
 			loadingg.setLoading(false)
 		} catch (error) {
 			console.log("error=>", error);
-			loadingg.setLoading(false)
+			
 			if (has(error, "user_exist") && !error?.user_exist) {
 				Alert.alert("Vendor not found",
 					`Vendor for QBUY ${type} not found, Do you want to create new one?`,
@@ -81,6 +81,7 @@ const Login = ({ navigation }) => {
 						},
 					]
 				)
+				loadingg.setLoading(false)
 			} else {
 				Alert.alert("Message",
 					error,
@@ -93,6 +94,8 @@ const Login = ({ navigation }) => {
 					]
 				)
 			}
+		}finally{
+			loadingg.setLoading(false)
 		}
 	}
 
@@ -137,7 +140,7 @@ const Login = ({ navigation }) => {
 					bg='#58D36E'
 					label={'Verify'}
 					mt={20}
-					loading={loader}
+					loading={loadingg?.loading}
 				/>
 
 				<Text style={styles.textLight}>{"Need Support to Login?"}</Text>

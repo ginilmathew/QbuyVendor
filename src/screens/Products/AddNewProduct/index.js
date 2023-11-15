@@ -126,10 +126,6 @@ const AddNewProduct = ({ navigation, route }) => {
     const [images, setImages] = useState([]);
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 3895080f18a1bdb0fef2423f93bca610fdd7463f
 
 
     const setFormData = (field, value) => {
@@ -138,10 +134,6 @@ const AddNewProduct = ({ navigation, route }) => {
     }
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 3895080f18a1bdb0fef2423f93bca610fdd7463f
     const schema = yup.object({
         variant: yup.boolean(),
         name: yup.string().required('Product name is required'),
@@ -494,18 +486,6 @@ const AddNewProduct = ({ navigation, route }) => {
                                     <Text style={{ color: '#fff', letterSpacing: .5 }}>Upload Images</Text>
 
 
-<<<<<<< HEAD
-                    </TouchableOpacity>
-                    <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 5 }}>
-                        {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath, index) => (
-                            <Image
-                                key={index}
-                                style={{ width: 60, height: 60, borderRadius: 20 }}
-                                alignSelf='center'
-                                source={{ uri: filpath?.uri }} alt='img'
-                            />
-                        ))}
-=======
                                 </TouchableOpacity>
                                 <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 5, marginTop: 5 }}>
                                     {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath) => (
@@ -515,7 +495,6 @@ const AddNewProduct = ({ navigation, route }) => {
                                                 alignSelf='center'
                                                 source={{ uri: filpath?.uri }} alt='img'
                                             />
->>>>>>> 3895080f18a1bdb0fef2423f93bca610fdd7463f
 
                                             <TouchableOpacity style={{ position: 'absolute', right: -2, top: -10 }} onPress={() => DeleteImages(filpath)}>
                                                 <Ionicons name='close-circle' color='red' size={25} />

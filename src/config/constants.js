@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-export const env = "live"
-=======
 import DeviceInfo from "react-native-device-info"
 
 export const env = "dev"
->>>>>>> 3895080f18a1bdb0fef2423f93bca610fdd7463f
 
 const URLS = {
     live: "https://apiqbuygreen.diginestsolutions.in/public/api/",
