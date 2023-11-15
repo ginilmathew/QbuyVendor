@@ -16,6 +16,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import customAxios from '../../../CustomeAxios';
 import AuthContext from '../../../contexts/Auth';
 import CommonMultiSelectDropdown from '../../../Components/CommonMultiSelectDropdown';
+import Toast from 'react-native-toast-message';
 
 const Register = ({ navigation }) => {
 
@@ -67,7 +68,10 @@ const Register = ({ navigation }) => {
 				navigation.replace('Otp', { type: "register" })
 			}
 		} catch (error) {
-			
+			Toast.show({
+                type: 'error',
+                text1: JSON.parse(error)
+            });
 
 		}
 	}
@@ -126,7 +130,7 @@ const Register = ({ navigation }) => {
 					control={control}
 					error={errors.location}
 					fieldName="location"
-					placeholder='Location'
+					placeholder='Store Address'
 					mt={20}
 					icon={<Ionicons name='location' color='#58D36E' size={25} />}
 				/>

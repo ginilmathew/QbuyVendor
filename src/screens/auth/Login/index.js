@@ -53,7 +53,7 @@ const Login = ({ navigation }) => {
 
 		let bundleId = DeviceInfo.getBundleId();
 		const type = bundleId.replace("com.qbuystoreapp.", "")
-	
+
 		try {
 			const response = await customAxios.post("auth/vendorloginotp", { ...data, type })
 			if (response) {
@@ -63,8 +63,9 @@ const Login = ({ navigation }) => {
 			loadingg.setLoading(false)
 		} catch (error) {
 			console.log("error=>", error);
-			
-			if (has(error, "user_exist") && !error?.user_exist) {
+			loadingg.setLoading(false)
+			//if (has(error, "user_exist") && !error?.user_exist) {
+			if (error?.message === "Vendor Not Found") {
 				Alert.alert("Vendor not found",
 					`Vendor for QBUY ${type} not found, Do you want to create new one?`,
 					[
@@ -81,7 +82,12 @@ const Login = ({ navigation }) => {
 						},
 					]
 				)
-				loadingg.setLoading(false)
+			} else if (error?.message === "Admin Not Approved User Account.You Can Login After Admin Approval") {
+				Toast.show({
+					type: 'error',
+					text1: "Admin approval needed for logging in!",
+					visibilityTime: 2000,
+				});
 			} else {
 				Alert.alert("Message",
 					error,
@@ -94,8 +100,6 @@ const Login = ({ navigation }) => {
 					]
 				)
 			}
-		}finally{
-			loadingg.setLoading(false)
 		}
 	}
 
