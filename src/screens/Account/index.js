@@ -1,5 +1,5 @@
 import { StyleSheet, Text, ScrollView, View, useWindowDimensions, RefreshControl } from 'react-native'
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../Components/HeaderWithTitle'
 import moment from 'moment';
 import CommonDatePicker from '../../Components/CommonDatePicker'
@@ -11,6 +11,8 @@ import Toast from 'react-native-toast-message';
 import has from 'lodash/has'
 import isEmpty from 'lodash/isEmpty';
 import DeviceInfo from 'react-native-device-info';
+import reactotron from 'reactotron-react-native';
+import AuthContext from '../../contexts/Auth';
 
 const Account = ({ navigation }) => {
 
@@ -19,6 +21,10 @@ const Account = ({ navigation }) => {
     const { width, height } = useWindowDimensions()
     const [accountData, setAccountData] = useState({})
     const [refreshing, setRefreshing] = useState(false)
+
+    const { userData } = useContext(AuthContext)
+
+    reactotron.log(userData, "userData")
 
     useEffect(() => {
         getAccountData()
@@ -76,13 +82,13 @@ const Account = ({ navigation }) => {
                     label='Total Earned'
                     alignSelf={'center'}
                 />
-                <DetailsBox
+                {userData?.account_type === "Ready Cash" ? null : (<DetailsBox
                     bg={'#fae1e1'}
                     bgBox={'#FF6565'}
                     count={accountData?.total_outstanding || 0}
                     label='Total Outstanding'
                     alignSelf={'center'}
-                />
+                />)}
                 <CommonDatePicker
                     onPress={calendarOpen}
                     date={date ? date : new Date()}
