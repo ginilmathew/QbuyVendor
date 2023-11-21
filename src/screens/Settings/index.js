@@ -15,11 +15,11 @@ const Settings = ({ navigation }) => {
     const { userData } = authContext
     const goProfile = useCallback(() => {
         navigation.navigate('Profile')
-    }, [])
+    }, [navigation])
 
     const goNotificatnSound = useCallback(() => {
         navigation.navigate('NotificationSound')
-    }, [])
+    }, [navigation])
 
     const onStatusChange = useCallback(async (status) => {
         try {

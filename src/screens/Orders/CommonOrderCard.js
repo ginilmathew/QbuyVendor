@@ -19,18 +19,39 @@ import reactotron from 'reactotron-react-native';
 import DeviceInfo from 'react-native-device-info';
 const CommonOrderCard = memo((props) => {
 
+
     const { item, onRefresh } = props
 
-reactotron.log({item})
 
     const { width } = useWindowDimensions()
 
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState({ visible: false });
+    const [cancelled, setCancelled] = useState(false); // dummy state for loading the page
     const loadingg = useContext(LoaderContext)
 
     const openModal = (data) => {
         setModalVisible({ visible: true, ...data })
+    }
+
+
+    const returnOrder = async () => {
+
+        try {
+            const returnData = await customAxios.post('vendor/vendor-order-retrived', { order_id: item?._id })
+
+            Toast.show({
+                type: 'success',
+                text1: 'Order returned successfully'
+            });
+
+            setCancelled(true);
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: error?.response?.data?.message || error?.message
+            });
+        }
     }
 
     const closeModal = useCallback(() => {
@@ -67,9 +88,7 @@ reactotron.log({item})
 
     const renderButton = (status) => {
 
-     
         switch (status) {
-
 
             case "created":
                 return (<View style={{ flexDirection: "row" }}>
@@ -102,9 +121,16 @@ reactotron.log({item})
                     label={'Complete Order'} bg='#58D36E' mx={8}
                 />)
 
-            case "completed":
-                return null
-            //return (<CustomButton onPress={() => navigation.navigate('Orders', { mode: 'complete' })} label={'Order Completed'} bg='#58D36E' mx={8}/>)
+            case "orderReturn":
+                return !cancelled &&  (
+                    <CustomButton
+                        onPress={returnOrder}
+                        label={'Accept Return'} bg='#58D36E' mx={8}
+                    />
+                )
+
+            // case "completed":
+            //     return (<CustomButton onPress={() => navigation.navigate('Orders', { mode: 'complete' })} label={'Order Completed'} bg='#58D36E' mx={8} />)
 
             case "cancelled":
                 return (
@@ -123,17 +149,12 @@ reactotron.log({item})
                 )    
 
             default:
-                return (
-                    <CustomButton
-                        onPress={() => { }}
-                        label={status}
-                        bg='#58D36E'
-                    />
-                )
+                return 
         }
     }
 
     const renderStatusLabel = (status) => {
+
         switch (status) {
             case "created":
                 return <CommonStatusCard label={status} bg='#BCE4FF' labelColor={'#0098FF'} />
@@ -144,7 +165,7 @@ reactotron.log({item})
             case "cancelled":
                 return <CommonStatusCard label={status} bg='#FFC9C9' labelColor={'#FF7B7B'} />
             default:
-                return <CommonStatusCard label={status} bg='#FFF082' labelColor={'#A99500'} />
+                return <CommonStatusCard label={status === "orderReturn" ? "Return" : status} bg='#FFF082' labelColor={'#A99500'} />
         }
     }
 
@@ -158,7 +179,7 @@ reactotron.log({item})
                             <Text style={styles.orderIdLabel}>{"Order ID :"}</Text>
                             <Text style={styles.orderId}>{item?.order_id}</Text>
                         </View>
-                     
+
                         {renderStatusLabel(item?.order_status)}
                     </View>
 
@@ -169,8 +190,8 @@ reactotron.log({item})
                     {/* <TotalBill value={item?.total_amount} label="Item Total" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} /> */}
                     {/* <TotalBill value={item?.delivery_charge} label="Delivery Fee" containerStyle={{ marginTop: 0, paddingBottom: 0, paddingTop: 5 }} textStyle={{ fontFamily: 'Poppins-Regular', fontSize: 12, }} /> */}
                     {item?.grand_total && <TotalBill value={item?.vendor_order_total_price} />}
-                    {item?.order_status === "ready" ? renderButton("readyTopickup") : renderButton(item?.order_status) }
-                    
+                    {item?.order_status === "ready" ? renderButton("readyTopickup") : renderButton(item?.order_status)}
+
 
 
                 </View>

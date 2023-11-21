@@ -1,4 +1,4 @@
-import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Platform, TextInput, Pressable, Keyboard } from 'react-native'
+import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Platform, TextInput, Pressable, Keyboard, Modal } from 'react-native'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../../Components/HeaderWithTitle'
 import { useForm } from "react-hook-form";
@@ -22,6 +22,7 @@ import ImageGrid from '@baronha/react-native-image-grid';
 
 import { openPicker } from '@baronha/react-native-multiple-image-picker';
 import reactotron from 'reactotron-react-native';
+import CommonModal from '../../../Components/CommonModal';
 const CustomTextInput = ({ label = "", error, onChangeText, value, keyboardType = "default", editable = true }) => {
     return <View style={{ flex: 1 }}>
         <Text style={{
@@ -116,6 +117,8 @@ const AddNewProduct = ({ navigation, route }) => {
     const { setLoading, loading } = useContext(LoaderContext)
     const item = route?.params?.item || {}
 
+    reactotron.log(item, "ITEM!23")
+
     const disabled = /* true// */item?.approval_status ? !(item?.approval_status == "pending") : false
     const [filePath, setFilePath] = useState(null);
     const [filePathMultiple, setFilePathMultiple] = useState(null);
@@ -125,17 +128,14 @@ const AddNewProduct = ({ navigation, route }) => {
     const [options, setOptions] = useState(item?.variants || []);
     const [images, setImages] = useState([]);
 
-
-  
-
-
     const setFormData = (field, value) => {
         setAttributess([...value]);
         setErrorFn({})
     }
 
+    reactotron.log(filePathMultiple, "filePathMultiple!23")
 
-   
+
     const schema = yup.object({
         variant: yup.boolean(),
         name: yup.string().required('Product name is required'),
@@ -165,13 +165,13 @@ const AddNewProduct = ({ navigation, route }) => {
             let newData = {
                 name: item.name,
                 category: item?.category,
-                description:item?.description,
-              
+                description: item?.description,
+
             }
             if (item?.seller_price) {
                 newData.price = item?.seller_price
             }
-            if(item?.image){
+            if (item?.image) {
                 newData.image = item?.image
             }
             if (item?.variants) {
@@ -185,13 +185,21 @@ const AddNewProduct = ({ navigation, route }) => {
                 }
             }
             setFilePath({ uri: IMG_URL + item?.product_image })
-            const multiple = item?.image && item?.image?.map((res)=>({
-                uri : IMG_URL + res
-            })
-              
-            )
-            reactotron.log({multiple})
-            setFilePathMultiple(multiple)
+
+            if ((item?.image && !item?.image.includes('null'))) {
+                const multiple = item?.image && item?.image?.map((res) => ({
+                    uri: IMG_URL + res
+                })
+
+                )
+                setFilePathMultiple(multiple)
+            } else {
+                setFilePathMultiple([])
+            }
+
+
+
+
             reset(newData)
         }
     }, [])
@@ -301,8 +309,11 @@ const AddNewProduct = ({ navigation, route }) => {
                 uri: data?.product_image?.uri,
                 type: data?.product_image?.type,
                 name: data?.product_image?.fileName,
-            }),
-                body.append('image', data?.image);
+            })
+
+            body.append('image', images?.length > 0 ? data?.image : null)
+
+
             if (item?._id) {
                 body.append("id", item?._id)
             }
@@ -330,7 +341,7 @@ const AddNewProduct = ({ navigation, route }) => {
                     body.append("price", data.price)
                 }
             }
-       
+
             // return false
             const response = await customAxios.post(`vendor/newproduct/${item?._id ? 'update' : 'create'}`, body, {
                 headers: {
@@ -348,7 +359,7 @@ const AddNewProduct = ({ navigation, route }) => {
             setLoading(false)
         } catch (error) {
             setLoading(false)
-    
+
             Toast.show({
                 type: 'error',
                 text1: error
@@ -396,7 +407,7 @@ const AddNewProduct = ({ navigation, route }) => {
     }
 
     const removeAttribute = (index) => {
-     
+
         let error = {}
         if (attributess?.length == 1) {
             error.attribute = {}
@@ -444,13 +455,32 @@ const AddNewProduct = ({ navigation, route }) => {
                 indices[i] = 0;
             attributs = []
         }
+    };
+
+    const DeleteImages = (images) => {
+        const filter = filePathMultiple.filter((res) => res?.fileName !== images.fileName);
+        MultipleImageSubmit(filter)
+        setFilePathMultiple(filter)
     }
+
+    const [modalVisible, setModalVisible] = useState({ visible: false });
+    const [selectedImage, setSelectedImage] = useState(null)
+
+    const openModal = (index) => {
+        setSelectedImage(filePathMultiple[index])
+        setModalVisible({ visible: true })
+    }
+
+    const closeModal = useCallback(() => {
+        setModalVisible({ visible: false })
+        setSelectedImage(null)
+    }, [])
 
 
 
     return (
         <>
-            <HeaderWithTitle title={isEmpty(item) ? 'Add New Product' : "Edit Product"} backAction />
+            <HeaderWithTitle title={isEmpty(item) ? 'Add New Product' : `${item?.approval_status === "pending" ? "Edit" : "View"} Product`} backAction />
             <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: '#fff', flex: 1, paddingHorizontal: 15 }} keyboardShouldPersistTaps="always">
 
                 <TouchableOpacity
@@ -474,21 +504,45 @@ const AddNewProduct = ({ navigation, route }) => {
                         </View>
                     }
                 </TouchableOpacity>
-                {errors.product_image && <Text style={{color:"#FF0000", fontSize: 11, fontFamily:"Poppins-Regular", marginTop:2 }}>{errors.product_image.message}</Text>}
+                {errors.product_image && <Text style={{ color: "#FF0000", fontSize: 11, fontFamily: "Poppins-Regular", marginTop: 2 }}>{errors.product_image.message}</Text>}
                 <View>
-                  {item.approval_status === "approved" ? null : (<TouchableOpacity onPress={imageGalleryLaunchMultiple} style={{ display: 'flex', justifyContent: 'center', width: width / 1.8, height: 35, alignItems: 'center', backgroundColor: '#58D36E', marginVertical: 5, borderRadius: 8 }}>
-                        <Text style={{ color: '#fff', letterSpacing: .5, fontFamily: 'Poppins-Regular'}}>Upload Additional Images</Text>
-                    </TouchableOpacity>)}
-                    <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 5 }}>
-                        {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath) => (
-                            <Image
-                                style={{ width: 60, height: 60, borderRadius: 20 }}
-                                alignSelf='center'
-                                source={{ uri: filpath?.uri }} alt='img'
-                            />
+
+                    {item?.approval_status === "pending" || isEmpty(item) ? (<TouchableOpacity onPress={imageGalleryLaunchMultiple} style={{ display: 'flex', justifyContent: 'center', width: width / 2, height: 35, alignItems: 'center', backgroundColor: '#58D36E', marginVertical: 5, borderRadius: 8 }}>
+                        <Text style={{ color: '#fff', letterSpacing: .5 }}>Upload Additional Images</Text>
+                    </TouchableOpacity>) : null}
+                    <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 5, marginTop: 5 }}>
+                        {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath, index) => (
+                            <View >
+                                <TouchableOpacity key={index} onPress={() => openModal(index)}>
+                                    <Image
+                                        style={{ width: 60, height: 60, borderRadius: 20, }}
+                                        alignSelf='center'
+                                        source={{ uri: filpath?.uri }} alt='img'
+                                    />
+                                </TouchableOpacity>
+
+                                {item?.approval_status === "pending" || isEmpty(item) ? (<TouchableOpacity style={{ position: 'absolute', right: -2, top: -10 }} onPress={() => DeleteImages(filpath)}>
+                                    <Ionicons name='close-circle' color='red' size={25} />
+                                </TouchableOpacity>) : null}
+                            </View>
+
                         ))}
+                        <Modal style={{backgroundColor: "#000"}} transparent={true} animationType="slide" visible={modalVisible?.visible} >
+                            <View style={{ marginTop:height/3, backgroundColor: "red", alignSelf: "center", justifyContent: "center", width: 350, height:250, borderRadius: 20 }}>
+                                <TouchableOpacity onPress={closeModal} style={{ alignSelf: 'flex-end', padding: 10, zIndex: 1, position: "absolute", top: -5 }}>
+                                    <Ionicons name={'close-circle'} size={28} color={'#000'} />
+                                </TouchableOpacity>
+                                {selectedImage && <Image
+                                    style={{ width: '100%', height: '100%', borderRadius: 20, resizeMode: "cover" }}
+                                    source={selectedImage} alt='img'
+                                />}
+                            </View>
+                        </Modal>
 
                     </View>
+
+
+
                 </View>
                 {!isEmpty(errors?.image?.fileName) && <Text style={styles.errorText}>{errors?.image?.fileName?.message || ""}</Text>}
                 <CommonInput
@@ -664,13 +718,13 @@ const AddNewProduct = ({ navigation, route }) => {
                     editable={!disabled}
                 />
                 {!disabled && <CustomButton label={'Submit'} bg='#58D36E' mt={25} onPress={handleSubmit(onSubmit, (err) => {
-              
+
                 })}
                     loading={loading}
                     disabled={loading}
                 />}
                 <View style={{ marginBottom: 150 }} />
-            </ScrollView>
+            </ScrollView >
             {/* {submitted && <View style={[StyleSheet.absoluteFillObject, { backgroundColor: "red" }]}></View>} */}
         </>
     )

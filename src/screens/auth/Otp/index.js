@@ -86,10 +86,10 @@ const Otp = ({ navigation, route }) => {
 			});
 		}
 	}
-
 	const backAction = useCallback(() => {
 		navigation.replace("Login")
-	}, [])
+	}, [navigation])
+
 
 
 
