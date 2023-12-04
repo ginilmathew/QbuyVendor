@@ -1,8 +1,9 @@
-import notifee, { AndroidImportance, AndroidVisibility } from '@notifee/react-native';
+import notifee, { AndroidImportance, AndroidVisibility, EventType } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import { useContext, useEffect } from 'react';
 import reactotron from 'reactotron-react-native';
 import AuthContext from '../contexts/Auth';
+import { navigationRef } from '../Navigations/RootNavigation';
 
 
 const Notification = () => {
@@ -67,6 +68,21 @@ const Notification = () => {
         });
     
     }
+
+    useEffect(() => {
+        return notifee.onForegroundEvent(({ type, detail }) => {
+            reactotron.log({detail})
+          switch (type) {
+            case EventType.DISMISSED:
+              console.log('User dismissed notification', detail.notification);
+              break;
+            case EventType.PRESS:
+              //console.log('User pressed notification', detail.notification);
+              navigationRef.navigate('Orders')
+              break;
+          }
+        });
+      }, []);
       
    
     
