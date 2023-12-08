@@ -53,14 +53,14 @@ const Notification = () => {
         const token = await messaging().getToken();
         auth.setFcmToken(token)
     
-        reactotron.log({token}, "Notification Token")
+        //reactotron.log({token}, "Notification Token")
       
         // Save the token
         //await postToApi('/users/1234/tokens', { token });
     }
 
     async function onMessageReceived(message) {
-        reactotron.log({message})
+        //reactotron.log({message})
         notifee.displayNotification({
             title: message?.notification?.title,
             body: message?.notification?.body,
@@ -84,7 +84,7 @@ const Notification = () => {
 
     useEffect(() => {
         return notifee.onForegroundEvent(({ type, detail }) => {
-            reactotron.log({detail})
+            //reactotron.log({detail})
           switch (type) {
             case EventType.DISMISSED:
               console.log('User dismissed notification', detail.notification);
