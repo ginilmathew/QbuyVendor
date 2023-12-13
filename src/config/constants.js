@@ -14,7 +14,7 @@ const IMG_BASEPATH = {
     dev: "https://apiqbuypanda.diginestsolutions.in/public/"
 }
 
-export const mode = "fashion" //"green" // "fashion" // "panda"
+export const mode = "panda" //"green" // "fashion" // "panda"
 
 export const BUNDLE_ID = DeviceInfo.getBundleId()?.replace("com.qbuystoreapp.", "");
 
