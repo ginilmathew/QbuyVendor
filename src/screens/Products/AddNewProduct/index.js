@@ -171,9 +171,9 @@ const AddNewProduct = ({ navigation, route }) => {
             if (item?.image) {
                 newData.image = item?.image
             }
-            if (item?.variants) {
-                newData.variant = !isEmpty(item?.variants)
-            }
+        
+                newData.variant = item?.variant
+            
             if (item.product_image) {
                 newData.product_image = {
                     fileName: item?.product_image,
@@ -315,7 +315,7 @@ const AddNewProduct = ({ navigation, route }) => {
                 body.append("id", item?._id)
             }
 
-            body.append("variant", data?.variant)
+            body.append("variant", data?.variant ? data?.variant : false )
             if (data?.variant) {
                 const valid = validateData()
                 if (valid) {
