@@ -1,3 +1,5 @@
+import DeviceInfo from "react-native-device-info"
+
 export const env = "dev"
 
 const URLS = {
@@ -13,6 +15,8 @@ const IMG_BASEPATH = {
 }
 
 export const mode = "fashion" //"green" // "fashion" // "panda"
+
+export const BUNDLE_ID = DeviceInfo.getBundleId()?.replace("com.qbuystoreapp.", "");
 
 
 export const BASE_URL = URLS[env]

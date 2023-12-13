@@ -153,14 +153,14 @@ const Orders = ({ navigation, route }) => {
                     <SelectTab
                         label={"New Orders"}
                         onPress={selectNewOrders}
-                        selected={currentTab === 0 ? true : false}
+                        selected={currentTab === 0}
                         wid={width / 2.3}
                         fontSize={16}
                     />
                     <SelectTab
                         label={"Order History"}
                         onPress={selectOrderHistory}
-                        selected={currentTab === 1 ? true : false}
+                        selected={currentTab === 1}
                         wid={width / 2.3}
                         fontSize={16}
                     />

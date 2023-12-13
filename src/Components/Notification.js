@@ -1,8 +1,10 @@
-import notifee, { AndroidImportance, AndroidVisibility } from '@notifee/react-native';
+import notifee, { AndroidImportance, AndroidVisibility, EventType } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import { useContext, useEffect } from 'react';
 import reactotron from 'reactotron-react-native';
 import AuthContext from '../contexts/Auth';
+import { navigationRef } from '../Navigations/RootNavigation';
+import DeviceInfo from 'react-native-device-info';
 
 
 const Notification = () => {
@@ -34,27 +36,39 @@ const Notification = () => {
             importance: AndroidImportance.DEFAULT,
             visibility: AndroidVisibility.PUBLIC
         });
+
+        let bundleId = DeviceInfo.getBundleId();
+        const type = bundleId.replace("com.qbuystoreapp.", "")
+
+        messaging()
+            .subscribeToTopic(`${type}_dev_vendor_general`)
+            .then(() => console.log("Subscribed to topic:", `${type}_dev_vendor_general`))
+            .catch((e) => {
+              console.log(e);
+            });
+        
+          
       
         // Get the token
         const token = await messaging().getToken();
         auth.setFcmToken(token)
     
-        reactotron.log({token}, "Notification Token")
+        //reactotron.log({token}, "Notification Token")
       
         // Save the token
         //await postToApi('/users/1234/tokens', { token });
     }
 
     async function onMessageReceived(message) {
-        reactotron.log({message})
+        //reactotron.log({message})
         notifee.displayNotification({
             title: message?.notification?.title,
             body: message?.notification?.body,
             data: message?.data,
             android: {
-                channelId: message?.notification?.android?.channelId,
+                channelId: message?.data?.type === "admin" ? 'default' : message?.notification?.android?.channelId,
                 vibration: true,
-                sound:'order',
+                sound: message?.data?.type === "admin" ? null : 'order',
                 smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
                 // pressAction is needed if you want the notification to open the app when pressed
                 pressAction: {
@@ -67,6 +81,25 @@ const Notification = () => {
         });
     
     }
+
+    useEffect(() => {
+        return notifee.onForegroundEvent(({ type, detail }) => {
+            //reactotron.log({detail})
+          switch (type) {
+            case EventType.DISMISSED:
+              console.log('User dismissed notification', detail.notification);
+              break;
+            case EventType.PRESS:
+              console.log('User pressed notification', detail.notification);
+              if(detail?.notification?.data?.type === "admin") {
+                navigationRef.navigate('HomeNav')
+              } else {
+                navigationRef.navigate('Orders')
+              }
+              break;
+          }
+        });
+      }, []);
       
    
     

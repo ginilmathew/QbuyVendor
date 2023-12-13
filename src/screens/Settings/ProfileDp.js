@@ -12,7 +12,7 @@ const ProfileDp = ({ item }) => {
                 style={{ width: 100, height: 100, borderRadius: 12 }}
                 source={{ uri: IMG_URL + userData?.original_store_logo }} alt='img'
             />
-            <View style={{ marginLeft: 8, justifyContent: 'space-evenly', }}>
+            <View style={{ marginLeft: 8, justifyContent: 'space-evenly', flexShrink: 1 }}>
                 <CommonTexts label={userData?.store_name} fontSize={20} />
                 <View >
                     <Text style={styles.regularText}> {userData?.vendor_name}</Text>
@@ -42,6 +42,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         fontSize: 11,
         color: '#8D8D8D',
-        marginBottom: 1.5
+        marginBottom: 1.5,
     }
 })

@@ -11,7 +11,7 @@ const UserImageName = () => {
                 style={styles.imgBox}
                 source={{ uri: IMG_URL + userData?.original_store_logo }} alt='img'
             />
-            <View style={{ marginLeft: 10 }}>
+            <View style={{ marginLeft: 10, flexShrink: 1 }}>
                 <Text style={styles.textRegular}>{"Welcome"}</Text>
                 <Text style={styles.textBold}>{userData?.store_name}</Text>
                 <Text style={[styles.textRegular, { fontSize: 12 }]}>{userData?.vendor_name}</Text>

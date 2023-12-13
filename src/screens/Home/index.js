@@ -16,7 +16,7 @@ import has from 'lodash/has';
 import AuthContext from '../../contexts/Auth';
 import DeviceInfo from 'react-native-device-info';
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, }) => {
 
     const { height } = useWindowDimensions()
 
@@ -49,7 +49,7 @@ const Home = ({ navigation }) => {
 
     const ViewAllOrders = useCallback(() => {
         navigation.navigate('Orders')
-    }, [])
+    }, [navigation])
 
     // useEffect(() => {
     //     getHomeDetails()
