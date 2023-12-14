@@ -66,7 +66,7 @@ const Profile = ({ navigation }) => {
                             label={userData?.kyc_details?.pan_card_number}
                         />
                         <CommonReadonlyBox
-                            topLabel={'FFSSAI'}
+                            topLabel={'FSSAI'}
                             label={userData?.kyc_details?.ffsai_number}
                         />
                         <CommonReadonlyBox

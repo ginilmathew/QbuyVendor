@@ -23,6 +23,7 @@ import ImageGrid from '@baronha/react-native-image-grid';
 import { openPicker } from '@baronha/react-native-multiple-image-picker';
 import reactotron from 'reactotron-react-native';
 import CommonModal from '../../../Components/CommonModal';
+
 const CustomTextInput = ({ label = "", error, onChangeText, value, keyboardType = "default", editable = true }) => {
     return <View style={{ flex: 1 }}>
         <Text style={{
@@ -117,7 +118,7 @@ const AddNewProduct = ({ navigation, route }) => {
     const { setLoading, loading } = useContext(LoaderContext)
     const item = route?.params?.item || {}
 
-    reactotron.log(item, "ITEM!23")
+    // reactotron.log(item, "ITEM!23")
 
     const disabled = /* true// */item?.approval_status ? !(item?.approval_status == "pending") : false
     const [filePath, setFilePath] = useState(null);
@@ -133,7 +134,7 @@ const AddNewProduct = ({ navigation, route }) => {
         setErrorFn({})
     }
 
-    reactotron.log(filePathMultiple, "filePathMultiple!23")
+    reactotron.log(options, "filePathMultiple!23")
 
 
     const schema = yup.object({
@@ -174,9 +175,9 @@ const AddNewProduct = ({ navigation, route }) => {
             if (item?.image) {
                 newData.image = item?.image
             }
-            if (item?.variants) {
-                newData.variant = !isEmpty(item?.variants)
-            }
+        
+                newData.variant = item?.variant
+            
             if (item.product_image) {
                 newData.product_image = {
                     fileName: item?.product_image,
@@ -197,8 +198,8 @@ const AddNewProduct = ({ navigation, route }) => {
                 setFilePathMultiple([])
             }
 
-
-
+    reactotron.log({newData},'NEW DATATA')
+             
 
             reset(newData)
         }
@@ -239,7 +240,7 @@ const AddNewProduct = ({ navigation, route }) => {
         let options = {
             title: "Select Images/Videos",
             mediaType: "photo",
-            selectionLimit: 4,
+            selectionLimit: 6,
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
@@ -292,7 +293,7 @@ const AddNewProduct = ({ navigation, route }) => {
 
 
     const onSubmit = async (data) => {
-
+reactotron.log({data},'DATATAT')
         Keyboard.dismiss()
 
         //console.log("data ==>", data);
@@ -318,7 +319,7 @@ const AddNewProduct = ({ navigation, route }) => {
                 body.append("id", item?._id)
             }
 
-            body.append("variant", data?.variant)
+            body.append("variant", data?.variant ?  data?.variant : false)
             if (data?.variant) {
                 const valid = validateData()
                 if (valid) {
@@ -393,7 +394,7 @@ const AddNewProduct = ({ navigation, route }) => {
 
     const addAttribute = () => {
         let error = {}
-        attributess.map((attribute, index) => {
+        attributess?.map((attribute, index) => {
             if (isEmpty(attribute?.name)) {
                 error.attribute = {}
                 error.attribute[index] = "Please enter attribute name"

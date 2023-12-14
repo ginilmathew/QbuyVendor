@@ -11,11 +11,11 @@ const Notification = () => {
 
     const auth = useContext(AuthContext)
 
-    useEffect(() => {
-        onAppBootstrap()
-        messaging().onMessage(onMessageReceived);
-        //messaging().setBackgroundMessageHandler(onMessageReceived);
-    }, [])
+    // useEffect(() => {
+    //     onAppBootstrap()
+    //     messaging().onMessage(onMessageReceived);
+    //     //messaging().setBackgroundMessageHandler(onMessageReceived);
+    // }, [])
 
 
     async function onAppBootstrap() {

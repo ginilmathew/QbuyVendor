@@ -15,7 +15,23 @@
 		46B3E8D32B0DBC3D00EAA58D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46B3E8D22B0DBC3D00EAA58D /* GoogleService-Info.plist */; };
 		46B3E9242B0DD78200EAA58D /* RNENVConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 46B3E9232B0DD78200EAA58D /* RNENVConfig.m */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		C8DBFEF418B0774C89AA1CFC /* Pods_QbuyStoreApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8684905843869593821555A6 /* Pods_QbuyStoreApp.framework */; };
+		8967E5361F914DDFD665929B /* libPods-QbuyStoreApp-QbuyStoreAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87658C0AEDA4671B604F5DEF /* libPods-QbuyStoreApp-QbuyStoreAppTests.a */; };
+		8E95B3F894D849A59FF180EF /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95807C5BF6A547BD9214FD54 /* Poppins-Medium.ttf */; };
+		90C61AB25FBA496CBD0D8C4D /* Poppins-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B0E888A05A37406C9FAFD326 /* Poppins-BoldItalic.ttf */; };
+		9821BB1F115C40FABE3E1BE9 /* Poppins-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1457613A793E499891E10D25 /* Poppins-BlackItalic.ttf */; };
+		99DB4158FD784541AB49689E /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DCE2CF635B464486B589CA54 /* Poppins-Bold.ttf */; };
+		9C82E7B0934E4D9CAD7C1E6C /* Quicksand-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4124BAA36E83470B91752C81 /* Quicksand-Light.ttf */; };
+		9F18F0A0E9B94FA1BF38CB68 /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E303EC5E6D8848D2B2CE4FEB /* Montserrat-ExtraBold.ttf */; };
+		A0B645A1CE69462E9F63F2D1 /* Nunito-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 97463CCE157B4CAFB088B2BF /* Nunito-Light.ttf */; };
+		A56BAE7C98AD4D43B267B24D /* Nunito-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9245175652984C079B862948 /* Nunito-ExtraBold.ttf */; };
+		B262357141D24B999F7D4095 /* Nunito-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 996B0437E9BF4FA19998C527 /* Nunito-SemiBold.ttf */; };
+		B32297251E9C5C57B90AC5CC /* libPods-QbuyStoreApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 268791EDDCFC3072909E0D6F /* libPods-QbuyStoreApp.a */; };
+		B37E0E150B4C454DBDEDFBE5 /* Poppins-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2BE5B71412DF4AE8B51E83DB /* Poppins-MediumItalic.ttf */; };
+		B569E2853A3C4303BD9C288F /* Montserrat-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F5D0B2DCB71485D9119727D /* Montserrat-ExtraLight.ttf */; };
+		BAAB26EF5F3E4AD9BAB7893B /* Nunito-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2467942B20ED4C789986968B /* Nunito-Bold.ttf */; };
+		C23DF320F06B4AD18D8C6770 /* Nunito-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 489219506C4147ABBCFA166A /* Nunito-Regular.ttf */; };
+		D4EE53CA6CE9455FB3281319 /* Quicksand-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C81DAD26CAA4EDB96BE93FC /* Quicksand-Regular.ttf */; };
+		DF17F70373C22A89AEC464A0 /* libPods-QbuyStoreApp-QbuyStoreAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A12CAE50DE3B15A47673BD38 /* libPods-QbuyStoreApp-QbuyStoreAppTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,38 +56,47 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = QbuyStoreApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = QbuyStoreApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = QbuyStoreApp/main.m; sourceTree = "<group>"; };
-		157672DFC38729615BF0CE01 /* Pods-QbuyStoreApp-QbuyStoreAppTests.releasepandaprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.releasepandaprod.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.releasepandaprod.xcconfig"; sourceTree = "<group>"; };
-		167E2185984C43D604581599 /* Pods-QbuyStoreApp.releasegreenprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.releasegreenprod.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.releasegreenprod.xcconfig"; sourceTree = "<group>"; };
-		1722FB987C2474DAC5517C8E /* Pods-QbuyStoreApp-QbuyStoreAppTests.debuggreenprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.debuggreenprod.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.debuggreenprod.xcconfig"; sourceTree = "<group>"; };
-		2A32474B3734D1ED8B1093BD /* Pods-QbuyStoreApp.debuggreenprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.debuggreenprod.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.debuggreenprod.xcconfig"; sourceTree = "<group>"; };
-		3A5EFA171B5EBA60D7F0248C /* Pods-QbuyStoreApp-QbuyStoreAppTests.debugpandadev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.debugpandadev.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.debugpandadev.xcconfig"; sourceTree = "<group>"; };
-		3B4392A12AC88292D35C810B /* Pods-QbuyStoreApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.debug.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.debug.xcconfig"; sourceTree = "<group>"; };
-		46B3E8D22B0DBC3D00EAA58D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "QbuyStoreApp/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		46B3E9212B0DCB8100EAA58D /* QbuyStoreApp copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "QbuyStoreApp copy-Info.plist"; path = "/Users/renjith/Documents/Diginest/QBuyPanda/QBuyVendor/ios/QbuyStoreApp copy-Info.plist"; sourceTree = "<absolute>"; };
-		46B3E9222B0DD78200EAA58D /* RNENVConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNENVConfig.h; sourceTree = "<group>"; };
-		46B3E9232B0DD78200EAA58D /* RNENVConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNENVConfig.m; sourceTree = "<group>"; };
-		4A0A41DC22B6DD45C46A81BD /* Pods_QbuyStoreApp_QbuyStoreAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QbuyStoreApp_QbuyStoreAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		563824D2062D718414FD1000 /* Pods-QbuyStoreApp.debugpandadev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.debugpandadev.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.debugpandadev.xcconfig"; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-QbuyStoreApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.release.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.release.xcconfig"; sourceTree = "<group>"; };
-		5B7EB9410499542E8C5724F5 /* Pods-QbuyStoreApp-QbuyStoreAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.debug.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5FB8FA15992BC217A9900FB3 /* Pods-QbuyStoreApp-QbuyStoreAppTests.releasegreendev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.releasegreendev.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.releasegreendev.xcconfig"; sourceTree = "<group>"; };
-		624FD44CD43098031BC940CD /* Pods-QbuyStoreApp.releasepandadev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.releasepandadev.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.releasepandadev.xcconfig"; sourceTree = "<group>"; };
-		658171794E82CBF7D36A6238 /* Pods-QbuyStoreApp-QbuyStoreAppTests.debugfashionprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.debugfashionprod.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.debugfashionprod.xcconfig"; sourceTree = "<group>"; };
-		6E8EDDF2D7822012EC57A7BF /* Pods-QbuyStoreApp.releasegreendev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.releasegreendev.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.releasegreendev.xcconfig"; sourceTree = "<group>"; };
-		704F278D3411A812A11EF7C3 /* Pods-QbuyStoreApp-QbuyStoreAppTests.releasefashiondev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.releasefashiondev.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.releasefashiondev.xcconfig"; sourceTree = "<group>"; };
-		71E1A2D3AE9887A9E5746D20 /* Pods-QbuyStoreApp-QbuyStoreAppTests.releasegreenprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.releasegreenprod.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.releasegreenprod.xcconfig"; sourceTree = "<group>"; };
+		1457613A793E499891E10D25 /* Poppins-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BlackItalic.ttf"; path = "../assets/fonts/Poppins-BlackItalic.ttf"; sourceTree = "<group>"; };
+		1FA9FEFDE9A411907DEF8892 /* libPods-QbuyStoreApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-QbuyStoreApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2467942B20ED4C789986968B /* Nunito-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Bold.ttf"; path = "../assets/fonts/Nunito-Bold.ttf"; sourceTree = "<group>"; };
+		268791EDDCFC3072909E0D6F /* libPods-QbuyStoreApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-QbuyStoreApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2BE5B71412DF4AE8B51E83DB /* Poppins-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-MediumItalic.ttf"; path = "../assets/fonts/Poppins-MediumItalic.ttf"; sourceTree = "<group>"; };
+		2E0B0F113DFC4F41B95F79F1 /* Quicksand-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Bold.ttf"; path = "../assets/fonts/Quicksand-Bold.ttf"; sourceTree = "<group>"; };
+		34AB0325BD61AC4874F15787 /* Pods-QbuyStoreApp-QbuyStoreAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.release.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		3F3FFF98967B44DD9A3EB748 /* Poppins-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Thin.ttf"; path = "../assets/fonts/Poppins-Thin.ttf"; sourceTree = "<group>"; };
+		4080BB416E79F7AB0C7C6744 /* Pods-QbuyStoreApp-QbuyStoreAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.release.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		4124BAA36E83470B91752C81 /* Quicksand-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Light.ttf"; path = "../assets/fonts/Quicksand-Light.ttf"; sourceTree = "<group>"; };
+		46046B41FF584422A33C5B4F /* Poppins-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Light.ttf"; path = "../assets/fonts/Poppins-Light.ttf"; sourceTree = "<group>"; };
+		4802FF98E8BF469E8C402DCE /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Bold.ttf"; path = "../assets/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		489219506C4147ABBCFA166A /* Nunito-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Regular.ttf"; path = "../assets/fonts/Nunito-Regular.ttf"; sourceTree = "<group>"; };
+		4B5FDE34F0E04DEA8D995A43 /* Quicksand-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-SemiBold.ttf"; path = "../assets/fonts/Quicksand-SemiBold.ttf"; sourceTree = "<group>"; };
+		4C81DAD26CAA4EDB96BE93FC /* Quicksand-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Regular.ttf"; path = "../assets/fonts/Quicksand-Regular.ttf"; sourceTree = "<group>"; };
+		4F5D0B2DCB71485D9119727D /* Montserrat-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraLight.ttf"; path = "../assets/fonts/Montserrat-ExtraLight.ttf"; sourceTree = "<group>"; };
+		6F573DDE63A84B418F92732D /* Nunito-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-ExtraLight.ttf"; path = "../assets/fonts/Nunito-ExtraLight.ttf"; sourceTree = "<group>"; };
+		7373A3514D34464FA3D7C72E /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBold.ttf"; path = "../assets/fonts/Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
+		7B95CED77EBE41ABBA19EABA /* Montserrat-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Light.ttf"; path = "../assets/fonts/Montserrat-Light.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = QbuyStoreApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		82B61E53172A1C6DA05B7A3C /* Pods-QbuyStoreApp.debuggreendev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.debuggreendev.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.debuggreendev.xcconfig"; sourceTree = "<group>"; };
-		858EF185BF420B79A3B247B1 /* Pods-QbuyStoreApp.debugfashionprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.debugfashionprod.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.debugfashionprod.xcconfig"; sourceTree = "<group>"; };
-		8684905843869593821555A6 /* Pods_QbuyStoreApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QbuyStoreApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		89C6BE57DB24E9ADA2F236DE /* Pods-QbuyStoreApp-QbuyStoreAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.release.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		8DB841081BA1420F4EFC1423 /* Pods-QbuyStoreApp.debugpandaprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.debugpandaprod.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.debugpandaprod.xcconfig"; sourceTree = "<group>"; };
-		8E0DCE14F21F3AF81C4EB2AD /* Pods-QbuyStoreApp-QbuyStoreAppTests.releasefashionprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.releasefashionprod.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.releasefashionprod.xcconfig"; sourceTree = "<group>"; };
-		9016463AA033AEF90C762134 /* Pods-QbuyStoreApp-QbuyStoreAppTests.debugpandaprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.debugpandaprod.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.debugpandaprod.xcconfig"; sourceTree = "<group>"; };
-		917A5B01931923F683AB7F1F /* Pods-QbuyStoreApp-QbuyStoreAppTests.debugfashiondev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.debugfashiondev.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.debugfashiondev.xcconfig"; sourceTree = "<group>"; };
-		B71CD27A2DF8015B74F6E3A8 /* Pods-QbuyStoreApp.debugfashiondev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.debugfashiondev.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.debugfashiondev.xcconfig"; sourceTree = "<group>"; };
-		BA6217C5840DDEEA1F830FA4 /* Pods-QbuyStoreApp.releasefashiondev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.releasefashiondev.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.releasefashiondev.xcconfig"; sourceTree = "<group>"; };
-		D7BC16AFBD84893A572B22B9 /* Pods-QbuyStoreApp.releasefashionprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.releasefashionprod.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.releasefashionprod.xcconfig"; sourceTree = "<group>"; };
+		87658C0AEDA4671B604F5DEF /* libPods-QbuyStoreApp-QbuyStoreAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-QbuyStoreApp-QbuyStoreAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8ABF7C8A08024CE7A6724E61 /* Poppins-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-LightItalic.ttf"; path = "../assets/fonts/Poppins-LightItalic.ttf"; sourceTree = "<group>"; };
+		8BCC725DF2F8E57988F1EBDC /* Pods-QbuyStoreApp-QbuyStoreAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.debug.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		9245175652984C079B862948 /* Nunito-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-ExtraBold.ttf"; path = "../assets/fonts/Nunito-ExtraBold.ttf"; sourceTree = "<group>"; };
+		95807C5BF6A547BD9214FD54 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
+		97463CCE157B4CAFB088B2BF /* Nunito-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Light.ttf"; path = "../assets/fonts/Nunito-Light.ttf"; sourceTree = "<group>"; };
+		996B0437E9BF4FA19998C527 /* Nunito-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-SemiBold.ttf"; path = "../assets/fonts/Nunito-SemiBold.ttf"; sourceTree = "<group>"; };
+		9CB36D873306494C97A083C8 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-SemiBold.ttf"; path = "../assets/fonts/Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
+		A12CAE50DE3B15A47673BD38 /* libPods-QbuyStoreApp-QbuyStoreAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-QbuyStoreApp-QbuyStoreAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A78120CAA42243ABAE1EA715 /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Medium.ttf"; path = "../assets/fonts/Montserrat-Medium.ttf"; sourceTree = "<group>"; };
+		B0E888A05A37406C9FAFD326 /* Poppins-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BoldItalic.ttf"; path = "../assets/fonts/Poppins-BoldItalic.ttf"; sourceTree = "<group>"; };
+		C1D2759D3F9D4222802251AA /* Nunito-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Medium.ttf"; path = "../assets/fonts/Nunito-Medium.ttf"; sourceTree = "<group>"; };
+		C2A4A68D058E44F541511748 /* Pods-QbuyStoreApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.release.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.release.xcconfig"; sourceTree = "<group>"; };
+		C95066D6BDDD48B2941FDFAE /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Regular.ttf"; path = "../assets/fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		CE5EF175E2F849AFAB80FC07 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
+		D16691A870314338A03934A2 /* Quicksand-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Quicksand-Medium.ttf"; path = "../assets/fonts/Quicksand-Medium.ttf"; sourceTree = "<group>"; };
+		DCE2CF635B464486B589CA54 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
+		E303EC5E6D8848D2B2CE4FEB /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraBold.ttf"; path = "../assets/fonts/Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; };
+		E7B7095CDD3D8D2675BF667F /* Pods-QbuyStoreApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp.debug.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp.debug.xcconfig"; sourceTree = "<group>"; };
+		E844F083ED7B747A95443302 /* Pods-QbuyStoreApp-QbuyStoreAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.debug.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E98A80315FE94D5296759017 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F30AC316333C927880F8F90B /* Pods-QbuyStoreApp-QbuyStoreAppTests.debuggreendev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QbuyStoreApp-QbuyStoreAppTests.debuggreendev.xcconfig"; path = "Target Support Files/Pods-QbuyStoreApp-QbuyStoreAppTests/Pods-QbuyStoreApp-QbuyStoreAppTests.debuggreendev.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -310,6 +335,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0070E586490166EAA9E105B9 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -410,15 +452,20 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-QbuyStoreApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-QbuyStoreApp/Pods-QbuyStoreApp-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
