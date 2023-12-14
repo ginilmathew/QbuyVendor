@@ -62,7 +62,7 @@ const Login = ({ navigation }) => {
 			}
 			loadingg.setLoading(false)
 		} catch (error) {
-			console.log("error=>", error);
+			// console.log("error=>", error);
 			loadingg.setLoading(false)
 			//if (has(error, "user_exist") && !error?.user_exist) {
 			if (error?.message === "Vendor Not Found") {
@@ -90,7 +90,7 @@ const Login = ({ navigation }) => {
 				});
 			} else {
 				Alert.alert("Message",
-					error,
+					error?.message,
 					[
 						{
 							text: 'OK',

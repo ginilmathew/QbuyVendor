@@ -23,6 +23,7 @@ import ImageGrid from '@baronha/react-native-image-grid';
 import { openPicker } from '@baronha/react-native-multiple-image-picker';
 import reactotron from 'reactotron-react-native';
 import CommonModal from '../../../Components/CommonModal';
+
 const CustomTextInput = ({ label = "", error, onChangeText, value, keyboardType = "default", editable = true }) => {
     return <View style={{ flex: 1 }}>
         <Text style={{
@@ -318,11 +319,7 @@ reactotron.log({data},'DATATAT')
                 body.append("id", item?._id)
             }
 
-<<<<<<< HEAD
-            body.append("variant", data?.variant ? data?.variant : false )
-=======
             body.append("variant", data?.variant ?  data?.variant : false)
->>>>>>> dipin
             if (data?.variant) {
                 const valid = validateData()
                 if (valid) {
