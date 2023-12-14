@@ -116,7 +116,7 @@ const AddNewProduct = ({ navigation, route }) => {
     const { setLoading, loading } = useContext(LoaderContext)
     const item = route?.params?.item || {}
 
-    reactotron.log(item, "ITEM!23")
+    // reactotron.log(item, "ITEM!23")
 
     const disabled = /* true// */item?.approval_status ? !(item?.approval_status == "pending") : false
     const [filePath, setFilePath] = useState(null);
@@ -390,7 +390,7 @@ const AddNewProduct = ({ navigation, route }) => {
 
     const addAttribute = () => {
         let error = {}
-        attributess.map((attribute, index) => {
+        attributess?.map((attribute, index) => {
             if (isEmpty(attribute?.name)) {
                 error.attribute = {}
                 error.attribute[index] = "Please enter attribute name"

@@ -8,6 +8,7 @@
     "start": "react-native start",
     "apk": "cd android && ./gradlew assembleRelease",
     "test": "jest",
+    "android:greendebug": "adb reverse tcp:9090 tcp:9090 && npx react-native run-android --mode=greenDebug --appIdSuffix=green",
     "lint": "eslint .",
     "release": "adb reverse tcp:9090 tcp:9090 && npx react-native run-android --variant=release",
     "clean-up": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
