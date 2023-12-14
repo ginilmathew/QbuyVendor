@@ -133,10 +133,20 @@ const CommonOrderCard = memo((props) => {
             //     return (<CustomButton onPress={() => navigation.navigate('Orders', { mode: 'complete' })} label={'Order Completed'} bg='#58D36E' mx={8} />)
 
             case "cancelled":
-                return (<CustomButton
-                    onPress={() => navigation.navigate('Orders', { mode: 'complete' })}
-                    label={'Order Cancelled'} bg='#FF7B7B' mx={8}
-                />)
+                return (
+                    null
+                // <CustomButton
+                //     onPress={() => navigation.navigate('Orders', { mode: 'complete' })}
+                //     label={'Order Cancelled'} bg='#FF7B7B' mx={8}
+                // />
+                )
+            case "readyTopickup":
+                return (
+                    <CustomButton
+                    onPress={null}
+                    label={'Ready To PickUp'} bg='#58D36E' mx={8}
+                />
+                )    
 
             default:
                 return 

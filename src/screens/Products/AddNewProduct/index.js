@@ -1,4 +1,4 @@
-import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Platform, TextInput, Pressable, Keyboard } from 'react-native'
+import { StyleSheet, Text, ScrollView, Switch, View, useWindowDimensions, Image, TouchableOpacity, Platform, TextInput, Pressable, Keyboard, Modal } from 'react-native'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import HeaderWithTitle from '../../../Components/HeaderWithTitle'
 import { useForm } from "react-hook-form";
@@ -22,6 +22,7 @@ import ImageGrid from '@baronha/react-native-image-grid';
 
 import { openPicker } from '@baronha/react-native-multiple-image-picker';
 import reactotron from 'reactotron-react-native';
+import CommonModal from '../../../Components/CommonModal';
 const CustomTextInput = ({ label = "", error, onChangeText, value, keyboardType = "default", editable = true }) => {
     return <View style={{ flex: 1 }}>
         <Text style={{
@@ -132,6 +133,8 @@ const AddNewProduct = ({ navigation, route }) => {
         setErrorFn({})
     }
 
+    reactotron.log(options, "filePathMultiple!23")
+
 
     const schema = yup.object({
         variant: yup.boolean(),
@@ -183,20 +186,20 @@ const AddNewProduct = ({ navigation, route }) => {
             }
             setFilePath({ uri: IMG_URL + item?.product_image })
 
-             if((item?.image && !item?.image.includes('null'))){
+            if ((item?.image && !item?.image.includes('null'))) {
                 const multiple = item?.image && item?.image?.map((res) => ({
                     uri: IMG_URL + res
                 })
-    
+
                 )
                 setFilePathMultiple(multiple)
-             }else{
+            } else {
                 setFilePathMultiple([])
-             }
-        
-       
-    
-   
+            }
+
+    reactotron.log({newData},'NEW DATATA')
+             
+
             reset(newData)
         }
     }, [])
@@ -289,7 +292,7 @@ const AddNewProduct = ({ navigation, route }) => {
 
 
     const onSubmit = async (data) => {
-
+reactotron.log({data},'DATATAT')
         Keyboard.dismiss()
 
         //console.log("data ==>", data);
@@ -307,15 +310,19 @@ const AddNewProduct = ({ navigation, route }) => {
                 type: data?.product_image?.type,
                 name: data?.product_image?.fileName,
             })
-        
-                body.append('image',images?.length  > 0 ? data?.image : null)
-            
+
+            body.append('image', images?.length > 0 ? data?.image : null)
+
 
             if (item?._id) {
                 body.append("id", item?._id)
             }
 
+<<<<<<< HEAD
             body.append("variant", data?.variant ? data?.variant : false )
+=======
+            body.append("variant", data?.variant ?  data?.variant : false)
+>>>>>>> dipin
             if (data?.variant) {
                 const valid = validateData()
                 if (valid) {
@@ -460,6 +467,19 @@ const AddNewProduct = ({ navigation, route }) => {
         setFilePathMultiple(filter)
     }
 
+    const [modalVisible, setModalVisible] = useState({ visible: false });
+    const [selectedImage, setSelectedImage] = useState(null)
+
+    const openModal = (index) => {
+        setSelectedImage(filePathMultiple[index])
+        setModalVisible({ visible: true })
+    }
+
+    const closeModal = useCallback(() => {
+        setModalVisible({ visible: false })
+        setSelectedImage(null)
+    }, [])
+
 
 
     return (
@@ -488,19 +508,22 @@ const AddNewProduct = ({ navigation, route }) => {
                         </View>
                     }
                 </TouchableOpacity>
+                {errors.product_image && <Text style={{ color: "#FF0000", fontSize: 11, fontFamily: "Poppins-Regular", marginTop: 2 }}>{errors.product_image.message}</Text>}
                 <View>
 
-                    {item?.approval_status === "pending" || isEmpty(item) ? (<TouchableOpacity onPress={imageGalleryLaunchMultiple} style={{ display: 'flex', justifyContent: 'center', width: width / 3, height: 30, alignItems: 'center', backgroundColor: '#58D36E', marginVertical: 5, borderRadius: 8 }}>
-                        <Text style={{ color: '#fff', letterSpacing: .5 }}>Upload Images</Text>
+                    {item?.approval_status === "pending" || isEmpty(item) ? (<TouchableOpacity onPress={imageGalleryLaunchMultiple} style={{ display: 'flex', justifyContent: 'center', width: width / 2, height: 35, alignItems: 'center', backgroundColor: '#58D36E', marginVertical: 5, borderRadius: 8 }}>
+                        <Text style={{ color: '#fff', letterSpacing: .5 }}>Upload Additional Images</Text>
                     </TouchableOpacity>) : null}
                     <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 5, marginTop: 5 }}>
-                        {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath) => (
+                        {filePathMultiple?.length > 0 && filePathMultiple?.map((filpath, index) => (
                             <View >
-                                <Image
-                                    style={{ width: 60, height: 60, borderRadius: 20, }}
-                                    alignSelf='center'
-                                    source={{ uri: filpath?.uri }} alt='img'
-                                />
+                                <TouchableOpacity key={index} onPress={() => openModal(index)}>
+                                    <Image
+                                        style={{ width: 60, height: 60, borderRadius: 20, }}
+                                        alignSelf='center'
+                                        source={{ uri: filpath?.uri }} alt='img'
+                                    />
+                                </TouchableOpacity>
 
                                 {item?.approval_status === "pending" || isEmpty(item) ? (<TouchableOpacity style={{ position: 'absolute', right: -2, top: -10 }} onPress={() => DeleteImages(filpath)}>
                                     <Ionicons name='close-circle' color='red' size={25} />
@@ -508,6 +531,17 @@ const AddNewProduct = ({ navigation, route }) => {
                             </View>
 
                         ))}
+                        <Modal style={{backgroundColor: "#000"}} transparent={true} animationType="slide" visible={modalVisible?.visible} >
+                            <View style={{ marginTop:height/3, backgroundColor: "red", alignSelf: "center", justifyContent: "center", width: 350, height:250, borderRadius: 20 }}>
+                                <TouchableOpacity onPress={closeModal} style={{ alignSelf: 'flex-end', padding: 10, zIndex: 1, position: "absolute", top: -5 }}>
+                                    <Ionicons name={'close-circle'} size={28} color={'#000'} />
+                                </TouchableOpacity>
+                                {selectedImage && <Image
+                                    style={{ width: '100%', height: '100%', borderRadius: 20, resizeMode: "cover" }}
+                                    source={selectedImage} alt='img'
+                                />}
+                            </View>
+                        </Modal>
 
                     </View>
 
