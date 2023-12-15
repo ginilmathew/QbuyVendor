@@ -6,6 +6,7 @@ import AuthContext from '../contexts/Auth';
 import { navigationRef } from '../Navigations/RootNavigation';
 import DeviceInfo from 'react-native-device-info';
 import { PermissionsAndroid, Platform } from 'react-native';
+import firebase from '@react-native-firebase/app';
 
 
 
@@ -14,8 +15,6 @@ const Notification = () => {
 	const auth = useContext(AuthContext)
 
 	useEffect(() => {
-		let bundleId = DeviceInfo.getBundleId();
-		console.log({ bundleId })
 		onAppBootstrap()
 		messaging().onMessage(onMessageReceived);
 		//messaging().setBackgroundMessageHandler(onMessageReceived);
@@ -24,6 +23,19 @@ const Notification = () => {
 
 	async function onAppBootstrap() {
 		// Register the device with FCM
+		// const firebaseConfig = {
+		// 	apiKey: "AIzaSyDtuAsjMGgYeJpAUxo8Szp_-lx76yDyjs8",
+		// 	authDomain: "qbuygreen-2185c.firebaseapp.com",
+		// 	projectId: "qbuygreen-2185c",
+		// 	storageBucket: "qbuygreen-2185c.appspot.com",
+		// 	messagingSenderId: "678656967091",
+		// 	appId: "1:678656967091:web:4117872d12f5c50b79cbc6",
+		// 	measurementId: "G-HMHGCFHDZG",
+		// 	databaseURL: ""
+		// };
+  
+
+		// await firebase.initializeApp(firebaseConfig)
 		await messaging().registerDeviceForRemoteMessages();
 		await notifee.requestPermission()
 		await notifee.createChannel({
