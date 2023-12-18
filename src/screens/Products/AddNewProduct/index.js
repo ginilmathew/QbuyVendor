@@ -118,7 +118,7 @@ const AddNewProduct = ({ navigation, route }) => {
     const { setLoading, loading } = useContext(LoaderContext)
     const item = route?.params?.item || {}
 
-    // reactotron.log(item, "ITEM!23")
+    reactotron.log(item, "ITEM!23")
 
     const disabled = /* true// */item?.approval_status ? !(item?.approval_status == "pending") : false
     const [filePath, setFilePath] = useState(null);
@@ -128,6 +128,8 @@ const AddNewProduct = ({ navigation, route }) => {
     const [error, setErrorFn] = useState({});
     const [options, setOptions] = useState(item?.variants || []);
     const [images, setImages] = useState([]);
+
+  console.log({options},'OPTIONS')
 
     const setFormData = (field, value) => {
         setAttributess([...value]);
@@ -425,12 +427,15 @@ reactotron.log({data},'DATATAT')
     useEffect(() => {
         if (attributess.length > 0) {
             let tmp = renderOptions(attributess?.map(({ options }) => options))
+            console.log({tmp},'TEMPPP')
 
             if (!isEmpty(item?.variants)) {
                 tmp.map((variant, i) => {
-                    tmp[i] = { ...item?.variants[i], ...variant }
+                    tmp[i] = { ...item?.variants[i], ...variant[i] }
                 })
             }
+
+        
 
             setOptions(tmp)
         }
