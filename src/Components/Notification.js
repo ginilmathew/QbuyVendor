@@ -5,6 +5,7 @@ import reactotron from 'reactotron-react-native';
 import AuthContext from '../contexts/Auth';
 import { navigationRef } from '../Navigations/RootNavigation';
 import DeviceInfo from 'react-native-device-info';
+import { PermissionsAndroid, Platform } from 'react-native';
 
 
 const Notification = () => {
@@ -14,8 +15,33 @@ const Notification = () => {
     // useEffect(() => {
     //     onAppBootstrap()
     //     messaging().onMessage(onMessageReceived);
+    //     requestUserPermission()
     //     //messaging().setBackgroundMessageHandler(onMessageReceived);
     // }, [])
+
+    useEffect(() => {
+      //getCurrentLocation()
+      requestUserPermission()
+      onAppBootstrap()
+  }, [])
+
+
+
+    async function requestUserPermission() {
+      if (Platform.OS === "android") {
+          const status = await PermissionsAndroid.requestMultiple([PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION]);
+      }
+      else{
+          const authStatus = await messaging().requestPermission();
+          const enabled =
+              authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+              authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+          if (enabled) {
+              //console.log(‘Authorization status:’, authStatus);
+          }
+      }
+      //getCurrentLocation()
+  }
 
 
     async function onAppBootstrap() {
@@ -101,6 +127,11 @@ const Notification = () => {
         });
       }, []);
       
+
+      useEffect(() => {
+        const unsubscribe = messaging().onMessage(onMessageReceived);
+        return unsubscribe;
+    }, []);
    
     
 

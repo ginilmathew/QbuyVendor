@@ -29,7 +29,7 @@ const Navigation = () => {
     }, []);
     
     const checkLogin = async () => {
-        // await AsyncStorage.clear()
+        //await AsyncStorage.clear()
         authContext.venderCategories()
         const token = await AsyncStorage.getItem("token");
         // reactotron.log({token})

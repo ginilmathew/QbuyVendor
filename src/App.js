@@ -19,12 +19,12 @@ const App = () => {
         <Provider store={store}>
             <LoadProvider>
                 <AuthProvider>
+                <Notification/>
                     <Navigation />
                     <Toast
                         position='bottom'
                         bottomOffset={20}
                     />
-                    <Notification />
                 </AuthProvider>
             </LoadProvider>
         </Provider>
