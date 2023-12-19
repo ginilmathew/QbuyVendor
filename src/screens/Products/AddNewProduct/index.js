@@ -306,7 +306,7 @@ reactotron.log({data},'DATATAT')
             body.append("store", JSON.stringify(userData?.store))
             body.append("franchisee", JSON.stringify(userData?.franchisee))
             body.append("name", data.name)
-            body.append("description", data.description)
+            body.append("description", data.description ? data.description : null)
             body.append("category", JSON.stringify(data.category))
             body.append("product_image", {
                 uri: data?.product_image?.uri,
